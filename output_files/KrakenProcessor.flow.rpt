@@ -1,5 +1,5 @@
 Flow report for KrakenProcessor
-Wed Nov 28 10:37:25 2018
+Mon Dec 03 17:50:43 2018
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -40,16 +40,16 @@ refer to the applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +---------------------------------+---------------------------------------------+
-; Flow Status                     ; Successful - Wed Nov 28 10:37:25 2018       ;
+; Flow Status                     ; Successful - Mon Dec 03 17:50:43 2018       ;
 ; Quartus Prime Version           ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                   ; KrakenProcessor                             ;
-; Top-level Entity Name           ; Count_PC                                    ;
+; Top-level Entity Name           ; REGBANK16                                   ;
 ; Family                          ; Cyclone V                                   ;
 ; Device                          ; 5CGXFC7C7F23C8                              ;
 ; Timing Models                   ; Final                                       ;
 ; Logic utilization (in ALMs)     ; N/A                                         ;
-; Total registers                 ; 16                                          ;
-; Total pins                      ; 33                                          ;
+; Total registers                 ; 256                                         ;
+; Total pins                      ; 62                                          ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 0                                           ;
 ; Total DSP Blocks                ; 0                                           ;
@@ -67,7 +67,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 11/28/2018 10:37:09 ;
+; Start date & time ; 12/03/2018 17:50:10 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; KrakenProcessor     ;
 +-------------------+---------------------+
@@ -78,17 +78,17 @@ refer to the applicable agreement for further details.
 +-------------------------------------+----------------------------------------+-----------------+-------------+----------------+
 ; Assignment Name                     ; Value                                  ; Default Value   ; Entity Name ; Section Id     ;
 +-------------------------------------+----------------------------------------+-----------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID               ; 10995770589207.154341582911600         ; --              ; --          ; --             ;
+; COMPILER_SIGNATURE_ID               ; 229335795576308.154387380916756        ; --              ; --          ; --             ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Vhdl                                   ; --              ; --          ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (VHDL)                 ; <None>          ; --          ; --             ;
 ; EDA_TIME_SCALE                      ; 1 ps                                   ; --              ; --          ; eda_simulation ;
 ; MAX_CORE_JUNCTION_TEMP              ; 85                                     ; --              ; --          ; --             ;
 ; MIN_CORE_JUNCTION_TEMP              ; 0                                      ; --              ; --          ; --             ;
-; PARTITION_COLOR                     ; -- (Not supported for targeted family) ; --              ; Count_PC    ; Top            ;
-; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family) ; --              ; Count_PC    ; Top            ;
-; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family) ; --              ; Count_PC    ; Top            ;
+; PARTITION_COLOR                     ; -- (Not supported for targeted family) ; --              ; REGBANK16   ; Top            ;
+; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family) ; --              ; REGBANK16   ; Top            ;
+; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family) ; --              ; REGBANK16   ; Top            ;
 ; PROJECT_OUTPUT_DIRECTORY            ; output_files                           ; --              ; --          ; --             ;
-; TOP_LEVEL_ENTITY                    ; Count_PC                               ; KrakenProcessor ; --          ; --             ;
+; TOP_LEVEL_ENTITY                    ; REGBANK16                              ; KrakenProcessor ; --          ; --             ;
 +-------------------------------------+----------------------------------------+-----------------+-------------+----------------+
 
 
@@ -97,8 +97,8 @@ refer to the applicable agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:16     ; 1.0                     ; 4869 MB             ; 00:00:28                           ;
-; Total                ; 00:00:16     ; --                      ; --                  ; 00:00:28                           ;
+; Analysis & Synthesis ; 00:00:33     ; 1.0                     ; 4885 MB             ; 00:00:34                           ;
+; Total                ; 00:00:33     ; --                      ; --                  ; 00:00:34                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

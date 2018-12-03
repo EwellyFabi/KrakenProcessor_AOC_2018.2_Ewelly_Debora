@@ -1,11 +1,11 @@
-Analysis & Synthesis Status : Successful - Wed Nov 28 10:37:25 2018
+Analysis & Synthesis Status : Successful - Mon Dec 03 17:50:43 2018
 Quartus Prime Version : 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 Revision Name : KrakenProcessor
-Top-level Entity Name : Count_PC
+Top-level Entity Name : REGBANK16
 Family : Cyclone V
 Logic utilization (in ALMs) : N/A
-Total registers : 16
-Total pins : 33
+Total registers : 256
+Total pins : 62
 Total virtual pins : 0
 Total block memory bits : 0
 Total DSP Blocks : 0

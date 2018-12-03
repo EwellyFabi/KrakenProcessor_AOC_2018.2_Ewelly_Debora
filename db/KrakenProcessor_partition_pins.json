@@ -4,71 +4,163 @@
 			"name" : "Top",
 			"pins" : [
 				{
-					"name" : "output[0]",
+					"name" : "dataRegA[0]",
 					"strict" : false
 				},
 				{
-					"name" : "output[1]",
+					"name" : "dataRegA[1]",
 					"strict" : false
 				},
 				{
-					"name" : "output[2]",
+					"name" : "dataRegA[2]",
 					"strict" : false
 				},
 				{
-					"name" : "output[3]",
+					"name" : "dataRegA[3]",
 					"strict" : false
 				},
 				{
-					"name" : "output[4]",
+					"name" : "dataRegA[4]",
 					"strict" : false
 				},
 				{
-					"name" : "output[5]",
+					"name" : "dataRegA[5]",
 					"strict" : false
 				},
 				{
-					"name" : "output[6]",
+					"name" : "dataRegA[6]",
 					"strict" : false
 				},
 				{
-					"name" : "output[7]",
+					"name" : "dataRegA[7]",
 					"strict" : false
 				},
 				{
-					"name" : "output[8]",
+					"name" : "dataRegA[8]",
 					"strict" : false
 				},
 				{
-					"name" : "output[9]",
+					"name" : "dataRegA[9]",
 					"strict" : false
 				},
 				{
-					"name" : "output[10]",
+					"name" : "dataRegA[10]",
 					"strict" : false
 				},
 				{
-					"name" : "output[11]",
+					"name" : "dataRegA[11]",
 					"strict" : false
 				},
 				{
-					"name" : "output[12]",
+					"name" : "dataRegA[12]",
 					"strict" : false
 				},
 				{
-					"name" : "output[13]",
+					"name" : "dataRegA[13]",
 					"strict" : false
 				},
 				{
-					"name" : "output[14]",
+					"name" : "dataRegA[14]",
 					"strict" : false
 				},
 				{
-					"name" : "output[15]",
+					"name" : "dataRegA[15]",
 					"strict" : false
 				},
 				{
-					"name" : "input[0]",
+					"name" : "dataRegB[0]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[1]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[2]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[3]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[4]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[5]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[6]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[7]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[8]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[9]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[10]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[11]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[12]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[13]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[14]",
+					"strict" : false
+				},
+				{
+					"name" : "dataRegB[15]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegA[0]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegA[1]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegA[2]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegA[3]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegB[0]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegB[1]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegB[2]",
+					"strict" : false
+				},
+				{
+					"name" : "addressRegB[3]",
 					"strict" : false
 				},
 				{
@@ -76,63 +168,71 @@
 					"strict" : false
 				},
 				{
-					"name" : "input[1]",
+					"name" : "dataIn[0]",
 					"strict" : false
 				},
 				{
-					"name" : "input[2]",
+					"name" : "writeReg",
 					"strict" : false
 				},
 				{
-					"name" : "input[3]",
+					"name" : "dataIn[1]",
 					"strict" : false
 				},
 				{
-					"name" : "input[4]",
+					"name" : "dataIn[2]",
 					"strict" : false
 				},
 				{
-					"name" : "input[5]",
+					"name" : "dataIn[3]",
 					"strict" : false
 				},
 				{
-					"name" : "input[6]",
+					"name" : "dataIn[4]",
 					"strict" : false
 				},
 				{
-					"name" : "input[7]",
+					"name" : "dataIn[5]",
 					"strict" : false
 				},
 				{
-					"name" : "input[8]",
+					"name" : "dataIn[6]",
 					"strict" : false
 				},
 				{
-					"name" : "input[9]",
+					"name" : "dataIn[7]",
 					"strict" : false
 				},
 				{
-					"name" : "input[10]",
+					"name" : "dataIn[8]",
 					"strict" : false
 				},
 				{
-					"name" : "input[11]",
+					"name" : "dataIn[9]",
 					"strict" : false
 				},
 				{
-					"name" : "input[12]",
+					"name" : "dataIn[10]",
 					"strict" : false
 				},
 				{
-					"name" : "input[13]",
+					"name" : "dataIn[11]",
 					"strict" : false
 				},
 				{
-					"name" : "input[14]",
+					"name" : "dataIn[12]",
 					"strict" : false
 				},
 				{
-					"name" : "input[15]",
+					"name" : "dataIn[13]",
+					"strict" : false
+				},
+				{
+					"name" : "dataIn[14]",
+					"strict" : false
+				},
+				{
+					"name" : "dataIn[15]",
 					"strict" : false
 				}
 			]

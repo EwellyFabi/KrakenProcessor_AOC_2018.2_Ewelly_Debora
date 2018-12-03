@@ -1,0 +1,39 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity REGBANK16 is 
+port(
+	A	:	in 	std_logic_vector(3 downto 0);
+	B	:	in 	std_logic_vector(3 downto 0);
+	RegDest	: 	in 	std_logic_vector(3 downto 0);
+	Dado:	in 	std_logic_vector(15 downto 0);
+	RegWrite	: 	in		std_logic;
+	SaidaA: 	out 	std_logic_vector(15 downto 0);
+	SaidaB:	out 	std_logic_vector(15 downto 0)
+);
+	
+end REGBANK16;
+
+architecture kraken of REGBANK16 is
+	
+TYPE REGBANK_ARRAY IS ARRAY (3 downto 0) OF STD_LOGIC_VECTOR (15 DOWNTO 0);
+SIGNAL reg: REGBANK_ARRAY;
+	
+begin 
+	
+	process(RegWrite)
+	
+	begin
+		if( RegWrite = '1' ) then  --escreve na posição do RegDest
+			
+			reg(conv_integer(unsigned(RegDest))) <= Dado;
+		end if;
+	end process;
+	
+	
+	SaidaA <= reg(conv_integer(unsigned(A)));
+	SaidaB <= reg(conv_integer(unsigned(B)));
+
+end kraken;
