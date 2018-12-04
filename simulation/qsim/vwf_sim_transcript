@@ -7,7 +7,7 @@ Note: if both ModelSim-Altera and ModelSim executables are available, ModelSim-A
 
 **** Generating the ModelSim Testbench ****
 
-quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off KrakenProcessor -c KrakenProcessor --vector_source="C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/CompMenor.vwf" --testbench_file="C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/CompMenor.vwf.vht"
+quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off KrakenProcessor -c KrakenProcessor --vector_source="C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/BoothMultiplier.vwf" --testbench_file="C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/BoothMultiplier.vwf.vht"
 
 Info: *******************************************************************
 Info: Running Quartus Prime EDA Netlist Writer
@@ -25,8 +25,8 @@ Info: Running Quartus Prime EDA Netlist Writer
     Info: the sole purpose of programming logic devices manufactured by
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details.
-    Info: Processing started: Wed Nov 28 10:15:05 2018
-Info: Command: quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off KrakenProcessor -c KrakenProcessor --vector_source=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/CompMenor.vwf --testbench_file=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/CompMenor.vwf.vht
+    Info: Processing started: Mon Dec 03 20:51:24 2018
+Info: Command: quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off KrakenProcessor -c KrakenProcessor --vector_source=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/BoothMultiplier.vwf --testbench_file=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/BoothMultiplier.vwf.vht
 Info (119006): Selected device 5CGXFC7C7F23C8 for design "KrakenProcessor"
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 
@@ -52,16 +52,16 @@ Info: Running Quartus Prime EDA Netlist Writer
     Info: the sole purpose of programming logic devices manufactured by
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details.
-    Info: Processing started: Wed Nov 28 10:15:07 2018
+    Info: Processing started: Mon Dec 03 20:51:26 2018
 Info: Command: quartus_eda --write_settings_files=off --simulation=on --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/ KrakenProcessor -c KrakenProcessor
 Info (119006): Selected device 5CGXFC7C7F23C8 for design "KrakenProcessor"
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (204019): Generated file KrakenProcessor.vho in folder "C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim//" for EDA simulation tool
 Info: Quartus Prime EDA Netlist Writer was successful. 0 errors, 1 warning
     Info: Peak virtual memory: 4738 megabytes
-    Info: Processing ended: Wed Nov 28 10:15:08 2018
-    Info: Elapsed time: 00:00:01
-    Info: Total CPU time (on all processors): 00:00:01
+    Info: Processing ended: Mon Dec 03 20:51:28 2018
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:02
 
 Completed successfully. 
 
@@ -84,65 +84,68 @@ Reading C:/intelFPGA_lite/17.1/modelsim_ase/tcl/vsim/pref.tcl
 
 # ** Warning: (vlib-34) Library already exists at "work".
 # Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 10:15:09 on Nov 28,2018
+# Start time: 20:51:29 on Dec 03,2018
 # vcom -work work KrakenProcessor.vho 
 # -- Loading package STANDARD
-
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
 # -- Loading package altera_lnsim_components
+
 # -- Loading package VITAL_Timing
 # -- Loading package VITAL_Primitives
 # -- Loading package cyclonev_atom_pack
 # -- Loading package cyclonev_components
-# -- Compiling entity Comparador
-# -- Compiling architecture structure of Comparador
-# End time: 10:15:09 on Nov 28,2018, Elapsed time: 0:00:00
+# -- Compiling entity BoothMultiplier
+# -- Compiling architecture structure of BoothMultiplier
+
+# End time: 20:51:29 on Dec 03,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
-
-# Start time: 10:15:09 on Nov 28,2018
-# vcom -work work CompMenor.vwf.vht 
+# Start time: 20:51:30 on Dec 03,2018
+# vcom -work work BoothMultiplier.vwf.vht 
 # -- Loading package STANDARD
+
 # -- Loading package TEXTIO
 # -- Loading package std_logic_1164
-# -- Compiling entity Comparador_vhd_vec_tst
-# -- Compiling architecture Comparador_arch of Comparador_vhd_vec_tst
-# End time: 10:15:09 on Nov 28,2018, Elapsed time: 0:00:00
+# -- Compiling entity BoothMultiplier_vhd_vec_tst
+# -- Compiling architecture BoothMultiplier_arch of BoothMultiplier_vhd_vec_tst
+# End time: 20:51:30 on Dec 03,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 
-# vsim -novopt -c -t 1ps -L cyclonev -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.Comparador_vhd_vec_tst 
-# Start time: 10:15:09 on Nov 28,2018
+# vsim -novopt -c -t 1ps -L cyclonev -L altera -L altera_mf -L 220model -L sgate -L altera_lnsim work.BoothMultiplier_vhd_vec_tst 
+# Start time: 20:51:30 on Dec 03,2018
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
-# Loading work.comparador_vhd_vec_tst(comparador_arch)
+# Loading work.boothmultiplier_vhd_vec_tst(boothmultiplier_arch)
 # Loading altera_lnsim.altera_lnsim_components
 # Loading ieee.vital_timing(body)
 # Loading ieee.vital_primitives(body)
 # Loading cyclonev.cyclonev_atom_pack(body)
 # Loading cyclonev.cyclonev_components
-# Loading work.comparador(structure)
+# Loading work.boothmultiplier(structure)
 # Loading ieee.std_logic_arith(body)
 # Loading cyclonev.cyclonev_io_obuf(arch)
 # Loading cyclonev.cyclonev_io_ibuf(arch)
 # Loading cyclonev.cyclonev_lcell_comb(vital_lcell_comb)
+# ** Warning: Design size of 44997 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Expect performance to be adversely affected.
 # after#32
 
-# End time: 10:15:10 on Nov 28,2018, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 0
+# End time: 20:51:30 on Dec 03,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
 
 Completed successfully. 
 
 **** Converting ModelSim VCD to vector waveform ****
 
-Reading C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/CompMenor.vwf...
+Reading C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/BoothMultiplier.vwf...
 
 Reading C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/KrakenProcessor.msim.vcd...
 
 Processing channel transitions... 
 
-Writing the resulting VWF to C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/KrakenProcessor_20181128101510.sim.vwf
+Writing the resulting VWF to C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/KrakenProcessor_20181203205131.sim.vwf
 
 Finished VCD to VWF conversion.
 

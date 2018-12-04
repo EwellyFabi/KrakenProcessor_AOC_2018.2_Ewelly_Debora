@@ -8,8 +8,8 @@ z2
 !i10f 100
 cModel Technology
 Z0 dC:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim
-Ecomparador
-Z1 w1543414508
+Eboothmultiplier
+Z1 w1543884688
 Z2 DPx4 ieee 16 vital_primitives 0 22 G>kiXP8Q9dRClKfK1Zn7j1
 Z3 DPx8 cyclonev 18 cyclonev_atom_pack 0 22 YZlobdkPHzE;N99jHfcMc3
 Z4 DPx4 ieee 12 vital_timing 0 22 J>EBealN09f8GzldA[z2>3
@@ -22,18 +22,106 @@ Z9 8KrakenProcessor.vho
 Z10 FKrakenProcessor.vho
 l0
 L36
-VS>I?:cW?<]6lknf1LU=b51
-!s100 :z=oLzf8Q1N8B[<KaHkjG3
+V8Ji0:G^mnEogfEXm1fcjk3
+!s100 4ieL;NHlkd69U]LoYUYBH1
 Z11 OV;C;10.5b;63
 32
-Z12 !s110 1543414509
+Z12 !s110 1543884689
 !i10b 1
-Z13 !s108 1543414509.000000
+Z13 !s108 1543884689.000000
 Z14 !s90 -work|work|KrakenProcessor.vho|
 Z15 !s107 KrakenProcessor.vho|
 !i113 1
 Z16 o-work work
 Z17 tExplicit 1 CvgOpt 0
+Astructure
+R2
+R3
+R4
+R5
+R6
+R7
+R8
+DEx4 work 15 boothmultiplier 0 22 8Ji0:G^mnEogfEXm1fcjk3
+l594
+L44
+VYSRfe1MmFFPX_VOQgibW]0
+!s100 >JUNOcW72ko4LDgOJjI;23
+R11
+32
+R12
+!i10b 1
+R13
+R14
+R15
+!i113 1
+R16
+R17
+Eboothmultiplier_vhd_vec_tst
+Z18 w1543884685
+R6
+R7
+R0
+Z19 8BoothMultiplier.vwf.vht
+Z20 FBoothMultiplier.vwf.vht
+l0
+L31
+VE4]F1DlY3XWlGPL_j[5dQ3
+!s100 C>4`^jQiIcPTAf=f<PbZ:1
+R11
+32
+Z21 !s110 1543884690
+!i10b 1
+Z22 !s108 1543884690.000000
+Z23 !s90 -work|work|BoothMultiplier.vwf.vht|
+Z24 !s107 BoothMultiplier.vwf.vht|
+!i113 1
+R16
+R17
+Aboothmultiplier_arch
+R6
+R7
+Z25 DEx4 work 27 boothmultiplier_vhd_vec_tst 0 22 E4]F1DlY3XWlGPL_j[5dQ3
+l46
+L33
+VET2ck:meN?gB6YK0m^fBG0
+!s100 `g[jJQI6BJT@>ii<oN60o2
+R11
+32
+R21
+!i10b 1
+R22
+R23
+R24
+!i113 1
+R16
+R17
+Ecomparador
+Z26 w1543414508
+R2
+R3
+R4
+R5
+R6
+R7
+R8
+R0
+R9
+R10
+l0
+L36
+VS>I?:cW?<]6lknf1LU=b51
+!s100 :z=oLzf8Q1N8B[<KaHkjG3
+R11
+32
+Z27 !s110 1543414509
+!i10b 1
+Z28 !s108 1543414509.000000
+R14
+R15
+!i113 1
+R16
+R17
 Astructure
 R2
 R3
@@ -49,50 +137,50 @@ VM8dQNNdJWLh3732SlND6U0
 !s100 7Fl<?]AWLbk3hTVM_?[8A2
 R11
 32
-R12
+R27
 !i10b 1
-R13
+R28
 R14
 R15
 !i113 1
 R16
 R17
 Ecomparador_vhd_vec_tst
-Z18 w1543414506
+Z29 w1543414506
 R6
 R7
 R0
-Z19 8CompMenor.vwf.vht
-Z20 FCompMenor.vwf.vht
+Z30 8CompMenor.vwf.vht
+Z31 FCompMenor.vwf.vht
 l0
 L31
 VdCoDdoQBjSiRWoZ1PMDeE2
 !s100 4=S8_?`[P_SocX5HZ94gD2
 R11
 32
-R12
+R27
 !i10b 1
-R13
-Z21 !s90 -work|work|CompMenor.vwf.vht|
-Z22 !s107 CompMenor.vwf.vht|
+R28
+Z32 !s90 -work|work|CompMenor.vwf.vht|
+Z33 !s107 CompMenor.vwf.vht|
 !i113 1
 R16
 R17
 Acomparador_arch
 R6
 R7
-Z23 DEx4 work 22 comparador_vhd_vec_tst 0 22 dCoDdoQBjSiRWoZ1PMDeE2
+DEx4 work 22 comparador_vhd_vec_tst 0 22 dCoDdoQBjSiRWoZ1PMDeE2
 l46
 L33
 Vz8Fi[=AT6907=5k]=Bb:B3
 !s100 SFiXUWLaLA1N2QdZbgh:m1
 R11
 32
-R12
+R27
 !i10b 1
-R13
-R21
-R22
+R28
+R32
+R33
 !i113 1
 R16
 R17

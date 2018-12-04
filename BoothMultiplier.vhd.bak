@@ -1,0 +1,47 @@
+Library ieee;
+use ieee.std_logic_1164.all;
+
+entity BoothMultiplier is 
+	port (
+		inputA, inputB : IN STD_LOGIC_VECTOR(7 downto 0);
+		Saida: OUT STD_LOGIC_VECTOR(15 downto 0)
+	);	
+end BoothMultiplier;
+
+architecture kraken of BoothMultiplier is
+	
+	variable C : 		 std_logic;
+	variable S:     std_logic_vector(7  downto 0);
+	variable A:     std_logic_vector(7  downto 0);
+	variable P:     std_logic_vector(15  downto 0);
+	
+	begin
+	
+	process(inputA,inputB)
+		
+		A := inputA;
+		S := not(A) + 1;
+		
+		P := "00000000" & inputB;
+		
+		C := '0';
+		
+		for i in 0 to 7 loop	
+			if   (P(0) = '0' and C = '1') then	
+				C := P(0);
+				P := P + A;
+				P := '0' & P(15 downto 1);
+				
+			elsif (Prod(0) = '1' and C = '0') then				
+				C := P(0);
+				P := P + S;
+				P := '0' & P(15 downto 1);
+			else
+				P := '0' & P(15 downto 1);
+			end if;
+			
+		End loop;
+		
+	Saida <= P;
+	
+END kraken;

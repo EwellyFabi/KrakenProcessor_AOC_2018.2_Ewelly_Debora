@@ -6,7 +6,7 @@ entity ULA_16 is
 		opcode : IN STD_LOGIC_VECTOR(2 downto 0);
 		negate : IN STD_LOGIC;
 		A, B : IN STD_LOGIC_VECTOR(15 downto 0);
-		Saida, overflow : OUT STD_LOGIC_VECTOR(15 downto 0)
+		Saida: OUT STD_LOGIC_VECTOR(15 downto 0)
 	);	
 end ULA_16;
 
@@ -61,6 +61,13 @@ Architecture kraken of ULA_16 is
 			);
 	End COMPONENT;
 	
+	COMPONENT BoothMultiplier is 
+	port (
+		A, B : IN STD_LOGIC_VECTOR(7 downto 0);
+		Saida: OUT STD_LOGIC_VECTOR(15 downto 0)
+	);	
+	end COMPONENT;
+	
 	COMPONENT Multiplexer3_8 is
      Port ( 
 			Seletor : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -70,7 +77,8 @@ Architecture kraken of ULA_16 is
 
 
 	signal output0, output1, output2, output3, output4, output5, output6, output7, output: STD_LOGIC_VECTOR(15 DOWNTO 0);
-	signal carryoutAddSub : STD_LOGIC;
+	signal cout : STD_LOGIC;
+	signal multA, multB : STD_LOGIC_VECTOR(7 DOWNTO 0);
 	signal outputand, outputor, outputxor : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
 	BEGIN
@@ -119,7 +127,7 @@ Architecture kraken of ULA_16 is
 		-- op: 011
 		-- Soma (negate: 0) e Subtração (negate: 1)
 		
-		P4: Somador_16 PORT MAP(A, B, negate, carryoutAddSub, output3);
+		P4: Somador_16 PORT MAP(A, B, negate, cout, output3);
 		
 		-- op: 100
 		-- NOT A
@@ -131,7 +139,11 @@ Architecture kraken of ULA_16 is
 		-- op: 110
 		P7: RigthShift_2_16 port map(A, output6);
 		
-		-- P8:  multiplicação output7
+		multA <= A(7 downto 0);
+		multB <= B(7 downto 0);
+		
+		-- op: 111
+		P8: BoothMultiplier PORT MAP(multA, multB, output7);
 		
 		P9: Multiplexer3_8 port map (opcode, output0, output1, output2, output3, output4, output5, output6, output7, output);
 	
