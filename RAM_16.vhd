@@ -28,8 +28,6 @@ begin
 				
 			end if;
 			
-			--read_address <= address;
-			
 		end if;
 	end process ;
 

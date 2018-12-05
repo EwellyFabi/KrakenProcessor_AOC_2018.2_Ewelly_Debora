@@ -1,5 +1,5 @@
 Flow report for KrakenProcessor
-Tue Dec 04 07:38:20 2018
+Tue Dec 04 23:31:37 2018
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -40,16 +40,16 @@ refer to the applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +---------------------------------+---------------------------------------------+
-; Flow Status                     ; Successful - Tue Dec 04 07:38:20 2018       ;
+; Flow Status                     ; Successful - Tue Dec 04 23:31:37 2018       ;
 ; Quartus Prime Version           ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                   ; KrakenProcessor                             ;
-; Top-level Entity Name           ; Comparador                                  ;
+; Top-level Entity Name           ; ULA_16                                      ;
 ; Family                          ; Cyclone V                                   ;
 ; Device                          ; 5CGXFC7C7F23C8                              ;
 ; Timing Models                   ; Final                                       ;
 ; Logic utilization (in ALMs)     ; N/A                                         ;
 ; Total registers                 ; 0                                           ;
-; Total pins                      ; 48                                          ;
+; Total pins                      ; 52                                          ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 0                                           ;
 ; Total DSP Blocks                ; 0                                           ;
@@ -67,7 +67,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 12/04/2018 07:38:03 ;
+; Start date & time ; 12/04/2018 23:24:46 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; KrakenProcessor     ;
 +-------------------+---------------------+
@@ -78,17 +78,17 @@ refer to the applicable agreement for further details.
 +-------------------------------------+----------------------------------------+-----------------+-------------+----------------+
 ; Assignment Name                     ; Value                                  ; Default Value   ; Entity Name ; Section Id     ;
 +-------------------------------------+----------------------------------------+-----------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID               ; 229335795576308.154392348221144        ; --              ; --          ; --             ;
+; COMPILER_SIGNATURE_ID               ; 229335795576308.154398028516008        ; --              ; --          ; --             ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Vhdl                                   ; --              ; --          ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (VHDL)                 ; <None>          ; --          ; --             ;
 ; EDA_TIME_SCALE                      ; 1 ps                                   ; --              ; --          ; eda_simulation ;
 ; MAX_CORE_JUNCTION_TEMP              ; 85                                     ; --              ; --          ; --             ;
 ; MIN_CORE_JUNCTION_TEMP              ; 0                                      ; --              ; --          ; --             ;
-; PARTITION_COLOR                     ; -- (Not supported for targeted family) ; --              ; Comparador  ; Top            ;
-; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family) ; --              ; Comparador  ; Top            ;
-; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family) ; --              ; Comparador  ; Top            ;
+; PARTITION_COLOR                     ; -- (Not supported for targeted family) ; --              ; ULA_16      ; Top            ;
+; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family) ; --              ; ULA_16      ; Top            ;
+; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family) ; --              ; ULA_16      ; Top            ;
 ; PROJECT_OUTPUT_DIRECTORY            ; output_files                           ; --              ; --          ; --             ;
-; TOP_LEVEL_ENTITY                    ; Comparador                             ; KrakenProcessor ; --          ; --             ;
+; TOP_LEVEL_ENTITY                    ; ULA_16                                 ; KrakenProcessor ; --          ; --             ;
 +-------------------------------------+----------------------------------------+-----------------+-------------+----------------+
 
 
@@ -97,8 +97,10 @@ refer to the applicable agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:18     ; 1.0                     ; 4874 MB             ; 00:00:30                           ;
-; Total                ; 00:00:18     ; --                      ; --                  ; 00:00:30                           ;
+; Analysis & Synthesis ; 00:00:26     ; 1.0                     ; 4875 MB             ; 00:00:46                           ;
+; EDA Netlist Writer   ; 00:00:04     ; 1.0                     ; 4736 MB             ; 00:00:03                           ;
+; EDA Netlist Writer   ; 00:00:03     ; 1.0                     ; 4737 MB             ; 00:00:02                           ;
+; Total                ; 00:00:33     ; --                      ; --                  ; 00:00:51                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
@@ -108,6 +110,8 @@ refer to the applicable agreement for further details.
 ; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
 +----------------------+------------------+------------+------------+----------------+
 ; Analysis & Synthesis ; DESKTOP-1I4V2GQ  ; Windows 10 ; 10.0       ; x86_64         ;
+; EDA Netlist Writer   ; DESKTOP-1I4V2GQ  ; Windows 10 ; 10.0       ; x86_64         ;
+; EDA Netlist Writer   ; DESKTOP-1I4V2GQ  ; Windows 10 ; 10.0       ; x86_64         ;
 +----------------------+------------------+------------+------------+----------------+
 
 
@@ -115,6 +119,8 @@ refer to the applicable agreement for further details.
 ; Flow Log ;
 ------------
 quartus_map --read_settings_files=on --write_settings_files=off KrakenProcessor -c KrakenProcessor
+quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off KrakenProcessor -c KrakenProcessor --vector_source=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/ULA_Mult.vwf --testbench_file=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/ULA_Mult.vwf.vht
+quartus_eda --write_settings_files=off --simulation=on --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory=C:/Github/KrakenProcessor_AOC_2018.2_Ewelly_Debora/simulation/qsim/ KrakenProcessor -c KrakenProcessor
 
 
 

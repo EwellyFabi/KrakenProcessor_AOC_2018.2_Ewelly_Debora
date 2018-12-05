@@ -68,19 +68,27 @@
 					"strict" : false
 				},
 				{
+					"name" : "negate",
+					"strict" : false
+				},
+				{
+					"name" : "opcode[0]",
+					"strict" : false
+				},
+				{
+					"name" : "B[0]",
+					"strict" : false
+				},
+				{
+					"name" : "A[0]",
+					"strict" : false
+				},
+				{
 					"name" : "A[15]",
 					"strict" : false
 				},
 				{
 					"name" : "B[15]",
-					"strict" : false
-				},
-				{
-					"name" : "A[11]",
-					"strict" : false
-				},
-				{
-					"name" : "B[11]",
 					"strict" : false
 				},
 				{
@@ -108,6 +116,14 @@
 					"strict" : false
 				},
 				{
+					"name" : "A[11]",
+					"strict" : false
+				},
+				{
+					"name" : "B[11]",
+					"strict" : false
+				},
+				{
 					"name" : "A[10]",
 					"strict" : false
 				},
@@ -129,6 +145,38 @@
 				},
 				{
 					"name" : "B[8]",
+					"strict" : false
+				},
+				{
+					"name" : "A[7]",
+					"strict" : false
+				},
+				{
+					"name" : "B[7]",
+					"strict" : false
+				},
+				{
+					"name" : "A[6]",
+					"strict" : false
+				},
+				{
+					"name" : "B[6]",
+					"strict" : false
+				},
+				{
+					"name" : "A[5]",
+					"strict" : false
+				},
+				{
+					"name" : "B[5]",
+					"strict" : false
+				},
+				{
+					"name" : "A[4]",
+					"strict" : false
+				},
+				{
+					"name" : "B[4]",
 					"strict" : false
 				},
 				{
@@ -156,43 +204,11 @@
 					"strict" : false
 				},
 				{
-					"name" : "A[0]",
+					"name" : "opcode[1]",
 					"strict" : false
 				},
 				{
-					"name" : "B[0]",
-					"strict" : false
-				},
-				{
-					"name" : "A[5]",
-					"strict" : false
-				},
-				{
-					"name" : "B[5]",
-					"strict" : false
-				},
-				{
-					"name" : "A[7]",
-					"strict" : false
-				},
-				{
-					"name" : "B[7]",
-					"strict" : false
-				},
-				{
-					"name" : "A[6]",
-					"strict" : false
-				},
-				{
-					"name" : "B[6]",
-					"strict" : false
-				},
-				{
-					"name" : "A[4]",
-					"strict" : false
-				},
-				{
-					"name" : "B[4]",
+					"name" : "opcode[2]",
 					"strict" : false
 				}
 			]

@@ -3,11 +3,10 @@ use ieee.std_logic_1164.all;
 
 ENTITY Unidade_de_controle is 
 	Port (
-		opcode : in STD_LOGIC_VECTOR(3 downto 0);
-		funct : in STD_LOGIC_VECTOR(3 downto 0);	
+		opcode : in STD_LOGIC_VECTOR(3 downto 0);	
 		ulaop : out std_logic_vector(2 downto 0);
 		jump, aluSrc, memWrite, memRead, memToReg,  branch : out std_logic;
-		regWrite, regDest : out std_logic
+		regWrite: out std_logic
 	);
 END Unidade_de_controle;
 	
@@ -56,6 +55,13 @@ BEGIN
 		with opcode select
 				  branch <=	'1' when "0011",
 								'1' when "0100",
-								'0' when others;	
+								'0' when others;
+		
+		with opcode select
+				  regWrite <=	'1' when "0000",
+									'1' when "0101",
+									'1' when "0111",
+									'1' when "1000",
+									'0' when others;	
 	
 END kraken;

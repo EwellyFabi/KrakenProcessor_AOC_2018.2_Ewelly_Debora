@@ -16,7 +16,7 @@
 -- PROGRAM "Quartus Prime"
 -- VERSION "Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition"
 
--- DATE "12/03/2018 20:51:28"
+-- DATE "12/04/2018 23:31:36"
 
 -- 
 -- Device: Altera 5CGXFC7C7F23C8 Package FBGA484
@@ -33,15 +33,17 @@ USE ALTERA_LNSIM.ALTERA_LNSIM_COMPONENTS.ALL;
 USE CYCLONEV.CYCLONEV_COMPONENTS.ALL;
 USE IEEE.STD_LOGIC_1164.ALL;
 
-ENTITY 	BoothMultiplier IS
+ENTITY 	ULA_16 IS
     PORT (
-	inputA : IN std_logic_vector(7 DOWNTO 0);
-	inputB : IN std_logic_vector(7 DOWNTO 0);
-	Saida : OUT std_logic_vector(15 DOWNTO 0)
+	opcode : IN std_logic_vector(2 DOWNTO 0);
+	negate : IN std_logic;
+	A : IN std_logic_vector(15 DOWNTO 0);
+	B : IN std_logic_vector(15 DOWNTO 0);
+	Saida : BUFFER std_logic_vector(15 DOWNTO 0)
 	);
-END BoothMultiplier;
+END ULA_16;
 
-ARCHITECTURE structure OF BoothMultiplier IS
+ARCHITECTURE structure OF ULA_16 IS
 SIGNAL gnd : std_logic := '0';
 SIGNAL vcc : std_logic := '1';
 SIGNAL unknown : std_logic := 'X';
@@ -51,8 +53,10 @@ SIGNAL devpor : std_logic := '1';
 SIGNAL ww_devoe : std_logic;
 SIGNAL ww_devclrn : std_logic;
 SIGNAL ww_devpor : std_logic;
-SIGNAL ww_inputA : std_logic_vector(7 DOWNTO 0);
-SIGNAL ww_inputB : std_logic_vector(7 DOWNTO 0);
+SIGNAL ww_opcode : std_logic_vector(2 DOWNTO 0);
+SIGNAL ww_negate : std_logic;
+SIGNAL ww_A : std_logic_vector(15 DOWNTO 0);
+SIGNAL ww_B : std_logic_vector(15 DOWNTO 0);
 SIGNAL ww_Saida : std_logic_vector(15 DOWNTO 0);
 SIGNAL \Saida[0]~output_o\ : std_logic;
 SIGNAL \Saida[1]~output_o\ : std_logic;
@@ -70,735 +74,1059 @@ SIGNAL \Saida[12]~output_o\ : std_logic;
 SIGNAL \Saida[13]~output_o\ : std_logic;
 SIGNAL \Saida[14]~output_o\ : std_logic;
 SIGNAL \Saida[15]~output_o\ : std_logic;
-SIGNAL \inputB[0]~input_o\ : std_logic;
-SIGNAL \inputA[0]~input_o\ : std_logic;
-SIGNAL \Add0~1_sumout\ : std_logic;
-SIGNAL \P~0_combout\ : std_logic;
-SIGNAL \inputB[1]~input_o\ : std_logic;
-SIGNAL \inputA[1]~input_o\ : std_logic;
-SIGNAL \Add0~2\ : std_logic;
-SIGNAL \Add0~5_sumout\ : std_logic;
-SIGNAL \Add1~1_sumout\ : std_logic;
-SIGNAL \Add2~1_sumout\ : std_logic;
-SIGNAL \P~1_combout\ : std_logic;
-SIGNAL \inputA[2]~input_o\ : std_logic;
-SIGNAL \Add0~6\ : std_logic;
-SIGNAL \Add0~9_sumout\ : std_logic;
-SIGNAL \Add2~2\ : std_logic;
-SIGNAL \Add2~5_sumout\ : std_logic;
-SIGNAL \P~2_combout\ : std_logic;
-SIGNAL \Add1~2\ : std_logic;
-SIGNAL \Add1~5_sumout\ : std_logic;
-SIGNAL \Add4~1_sumout\ : std_logic;
-SIGNAL \inputB[2]~input_o\ : std_logic;
-SIGNAL \Add3~1_sumout\ : std_logic;
-SIGNAL \P~92_combout\ : std_logic;
-SIGNAL \process_0~0_combout\ : std_logic;
-SIGNAL \process_0~2_combout\ : std_logic;
-SIGNAL \inputA[3]~input_o\ : std_logic;
-SIGNAL \Add0~10\ : std_logic;
-SIGNAL \Add0~13_sumout\ : std_logic;
-SIGNAL \Add1~6\ : std_logic;
-SIGNAL \Add1~9_sumout\ : std_logic;
-SIGNAL \Add2~6\ : std_logic;
-SIGNAL \Add2~9_sumout\ : std_logic;
-SIGNAL \P~3_combout\ : std_logic;
-SIGNAL \Add4~2\ : std_logic;
-SIGNAL \Add4~5_sumout\ : std_logic;
-SIGNAL \P~4_combout\ : std_logic;
-SIGNAL \Add3~2\ : std_logic;
-SIGNAL \Add3~5_sumout\ : std_logic;
-SIGNAL \Add6~1_sumout\ : std_logic;
-SIGNAL \inputB[3]~input_o\ : std_logic;
-SIGNAL \Add5~1_sumout\ : std_logic;
-SIGNAL \P~88_combout\ : std_logic;
-SIGNAL \process_0~1_combout\ : std_logic;
-SIGNAL \process_0~4_combout\ : std_logic;
-SIGNAL \inputA[4]~input_o\ : std_logic;
-SIGNAL \Add0~14\ : std_logic;
-SIGNAL \Add0~17_sumout\ : std_logic;
-SIGNAL \Add1~10\ : std_logic;
-SIGNAL \Add1~13_sumout\ : std_logic;
-SIGNAL \Add2~10\ : std_logic;
-SIGNAL \Add2~13_sumout\ : std_logic;
-SIGNAL \P~5_combout\ : std_logic;
-SIGNAL \Add3~6\ : std_logic;
-SIGNAL \Add3~9_sumout\ : std_logic;
-SIGNAL \Add4~6\ : std_logic;
-SIGNAL \Add4~9_sumout\ : std_logic;
-SIGNAL \P~6_combout\ : std_logic;
-SIGNAL \Add6~2\ : std_logic;
-SIGNAL \Add6~5_sumout\ : std_logic;
-SIGNAL \P~7_combout\ : std_logic;
-SIGNAL \Add5~2\ : std_logic;
-SIGNAL \Add5~5_sumout\ : std_logic;
-SIGNAL \Add8~1_sumout\ : std_logic;
-SIGNAL \inputB[4]~input_o\ : std_logic;
-SIGNAL \Add7~1_sumout\ : std_logic;
-SIGNAL \P~84_combout\ : std_logic;
-SIGNAL \process_0~3_combout\ : std_logic;
-SIGNAL \process_0~6_combout\ : std_logic;
-SIGNAL \inputA[5]~input_o\ : std_logic;
-SIGNAL \Add0~18\ : std_logic;
-SIGNAL \Add0~21_sumout\ : std_logic;
-SIGNAL \Add1~14\ : std_logic;
-SIGNAL \Add1~17_sumout\ : std_logic;
-SIGNAL \Add2~14\ : std_logic;
-SIGNAL \Add2~17_sumout\ : std_logic;
-SIGNAL \P~8_combout\ : std_logic;
-SIGNAL \Add3~10\ : std_logic;
-SIGNAL \Add3~13_sumout\ : std_logic;
-SIGNAL \Add4~10\ : std_logic;
-SIGNAL \Add4~13_sumout\ : std_logic;
-SIGNAL \P~9_combout\ : std_logic;
-SIGNAL \Add5~6\ : std_logic;
-SIGNAL \Add5~9_sumout\ : std_logic;
-SIGNAL \Add6~6\ : std_logic;
-SIGNAL \Add6~9_sumout\ : std_logic;
-SIGNAL \P~10_combout\ : std_logic;
-SIGNAL \Add8~2\ : std_logic;
-SIGNAL \Add8~5_sumout\ : std_logic;
-SIGNAL \P~11_combout\ : std_logic;
-SIGNAL \Add7~2\ : std_logic;
-SIGNAL \Add7~5_sumout\ : std_logic;
-SIGNAL \Add10~1_sumout\ : std_logic;
-SIGNAL \inputB[5]~input_o\ : std_logic;
-SIGNAL \Add9~1_sumout\ : std_logic;
-SIGNAL \P~80_combout\ : std_logic;
-SIGNAL \inputA[6]~input_o\ : std_logic;
-SIGNAL \Add0~22\ : std_logic;
-SIGNAL \Add0~25_sumout\ : std_logic;
-SIGNAL \Add1~18\ : std_logic;
-SIGNAL \Add1~21_sumout\ : std_logic;
-SIGNAL \Add2~18\ : std_logic;
-SIGNAL \Add2~21_sumout\ : std_logic;
-SIGNAL \P~12_combout\ : std_logic;
-SIGNAL \Add3~14\ : std_logic;
-SIGNAL \Add3~17_sumout\ : std_logic;
-SIGNAL \Add4~14\ : std_logic;
-SIGNAL \Add4~17_sumout\ : std_logic;
-SIGNAL \P~13_combout\ : std_logic;
-SIGNAL \Add5~10\ : std_logic;
-SIGNAL \Add5~13_sumout\ : std_logic;
-SIGNAL \Add6~10\ : std_logic;
-SIGNAL \Add6~13_sumout\ : std_logic;
-SIGNAL \P~14_combout\ : std_logic;
-SIGNAL \Add7~6\ : std_logic;
-SIGNAL \Add7~9_sumout\ : std_logic;
-SIGNAL \Add8~6\ : std_logic;
-SIGNAL \Add8~9_sumout\ : std_logic;
-SIGNAL \P~15_combout\ : std_logic;
-SIGNAL \Add9~2\ : std_logic;
-SIGNAL \Add9~5_sumout\ : std_logic;
-SIGNAL \process_0~5_combout\ : std_logic;
-SIGNAL \process_0~8_combout\ : std_logic;
-SIGNAL \Add10~2\ : std_logic;
-SIGNAL \Add10~5_sumout\ : std_logic;
-SIGNAL \P~49_combout\ : std_logic;
-SIGNAL \Add12~1_sumout\ : std_logic;
-SIGNAL \P~16_combout\ : std_logic;
-SIGNAL \inputB[6]~input_o\ : std_logic;
-SIGNAL \Add11~1_sumout\ : std_logic;
-SIGNAL \P~76_combout\ : std_logic;
-SIGNAL \inputA[7]~input_o\ : std_logic;
-SIGNAL \Add0~26\ : std_logic;
-SIGNAL \Add0~29_sumout\ : std_logic;
-SIGNAL \Add1~22\ : std_logic;
-SIGNAL \Add1~25_sumout\ : std_logic;
-SIGNAL \Add2~22\ : std_logic;
-SIGNAL \Add2~25_sumout\ : std_logic;
-SIGNAL \P~17_combout\ : std_logic;
-SIGNAL \Add3~18\ : std_logic;
-SIGNAL \Add3~21_sumout\ : std_logic;
-SIGNAL \Add4~18\ : std_logic;
-SIGNAL \Add4~21_sumout\ : std_logic;
-SIGNAL \P~18_combout\ : std_logic;
-SIGNAL \Add5~14\ : std_logic;
-SIGNAL \Add5~17_sumout\ : std_logic;
-SIGNAL \Add6~14\ : std_logic;
-SIGNAL \Add6~17_sumout\ : std_logic;
-SIGNAL \P~19_combout\ : std_logic;
-SIGNAL \Add7~10\ : std_logic;
-SIGNAL \Add7~13_sumout\ : std_logic;
-SIGNAL \Add8~10\ : std_logic;
-SIGNAL \Add8~13_sumout\ : std_logic;
-SIGNAL \P~20_combout\ : std_logic;
-SIGNAL \Add9~6\ : std_logic;
-SIGNAL \Add9~9_sumout\ : std_logic;
-SIGNAL \Add10~6\ : std_logic;
-SIGNAL \Add10~9_sumout\ : std_logic;
-SIGNAL \P~21_combout\ : std_logic;
-SIGNAL \Add11~2\ : std_logic;
-SIGNAL \Add11~5_sumout\ : std_logic;
-SIGNAL \process_0~7_combout\ : std_logic;
-SIGNAL \process_0~9_combout\ : std_logic;
-SIGNAL \Add12~2\ : std_logic;
-SIGNAL \Add12~5_sumout\ : std_logic;
-SIGNAL \P~50_combout\ : std_logic;
-SIGNAL \Add14~1_sumout\ : std_logic;
-SIGNAL \P~22_combout\ : std_logic;
-SIGNAL \inputB[7]~input_o\ : std_logic;
-SIGNAL \Add13~1_sumout\ : std_logic;
-SIGNAL \P~72_combout\ : std_logic;
-SIGNAL \Add1~26\ : std_logic;
-SIGNAL \Add1~29_sumout\ : std_logic;
-SIGNAL \Add2~26\ : std_logic;
-SIGNAL \Add2~29_sumout\ : std_logic;
-SIGNAL \P~23_combout\ : std_logic;
-SIGNAL \Add3~22\ : std_logic;
-SIGNAL \Add3~25_sumout\ : std_logic;
-SIGNAL \Add4~22\ : std_logic;
-SIGNAL \Add4~25_sumout\ : std_logic;
-SIGNAL \P~24_combout\ : std_logic;
-SIGNAL \Add5~18\ : std_logic;
-SIGNAL \Add5~21_sumout\ : std_logic;
-SIGNAL \Add6~18\ : std_logic;
-SIGNAL \Add6~21_sumout\ : std_logic;
-SIGNAL \P~25_combout\ : std_logic;
-SIGNAL \Add7~14\ : std_logic;
-SIGNAL \Add7~17_sumout\ : std_logic;
-SIGNAL \Add8~14\ : std_logic;
-SIGNAL \Add8~17_sumout\ : std_logic;
-SIGNAL \P~26_combout\ : std_logic;
-SIGNAL \Add9~10\ : std_logic;
-SIGNAL \Add9~13_sumout\ : std_logic;
-SIGNAL \Add10~10\ : std_logic;
-SIGNAL \Add10~13_sumout\ : std_logic;
-SIGNAL \P~27_combout\ : std_logic;
-SIGNAL \Add11~6\ : std_logic;
-SIGNAL \Add11~9_sumout\ : std_logic;
-SIGNAL \Add12~6\ : std_logic;
-SIGNAL \Add12~9_sumout\ : std_logic;
-SIGNAL \P~51_combout\ : std_logic;
-SIGNAL \Add14~2\ : std_logic;
-SIGNAL \Add14~5_sumout\ : std_logic;
-SIGNAL \P~28_combout\ : std_logic;
-SIGNAL \Add13~2\ : std_logic;
-SIGNAL \Add13~5_sumout\ : std_logic;
-SIGNAL \P~68_combout\ : std_logic;
-SIGNAL \Add3~26\ : std_logic;
-SIGNAL \Add3~29_sumout\ : std_logic;
-SIGNAL \Add4~26\ : std_logic;
-SIGNAL \Add4~29_sumout\ : std_logic;
-SIGNAL \P~29_combout\ : std_logic;
-SIGNAL \Add5~22\ : std_logic;
-SIGNAL \Add5~25_sumout\ : std_logic;
-SIGNAL \Add6~22\ : std_logic;
-SIGNAL \Add6~25_sumout\ : std_logic;
-SIGNAL \P~30_combout\ : std_logic;
-SIGNAL \Add7~18\ : std_logic;
-SIGNAL \Add7~21_sumout\ : std_logic;
-SIGNAL \Add8~18\ : std_logic;
-SIGNAL \Add8~21_sumout\ : std_logic;
-SIGNAL \P~31_combout\ : std_logic;
-SIGNAL \Add9~14\ : std_logic;
-SIGNAL \Add9~17_sumout\ : std_logic;
-SIGNAL \Add10~14\ : std_logic;
-SIGNAL \Add10~17_sumout\ : std_logic;
-SIGNAL \P~32_combout\ : std_logic;
-SIGNAL \Add11~10\ : std_logic;
-SIGNAL \Add11~13_sumout\ : std_logic;
-SIGNAL \Add12~10\ : std_logic;
-SIGNAL \Add12~13_sumout\ : std_logic;
-SIGNAL \P~52_combout\ : std_logic;
-SIGNAL \Add14~6\ : std_logic;
-SIGNAL \Add14~9_sumout\ : std_logic;
-SIGNAL \P~33_combout\ : std_logic;
-SIGNAL \Add13~6\ : std_logic;
-SIGNAL \Add13~9_sumout\ : std_logic;
-SIGNAL \P~64_combout\ : std_logic;
-SIGNAL \Add5~26\ : std_logic;
-SIGNAL \Add5~29_sumout\ : std_logic;
-SIGNAL \Add6~26\ : std_logic;
-SIGNAL \Add6~29_sumout\ : std_logic;
-SIGNAL \P~34_combout\ : std_logic;
-SIGNAL \Add7~22\ : std_logic;
-SIGNAL \Add7~25_sumout\ : std_logic;
-SIGNAL \Add8~22\ : std_logic;
-SIGNAL \Add8~25_sumout\ : std_logic;
-SIGNAL \P~35_combout\ : std_logic;
-SIGNAL \Add9~18\ : std_logic;
-SIGNAL \Add9~21_sumout\ : std_logic;
-SIGNAL \Add10~18\ : std_logic;
-SIGNAL \Add10~21_sumout\ : std_logic;
-SIGNAL \P~36_combout\ : std_logic;
-SIGNAL \Add11~14\ : std_logic;
-SIGNAL \Add11~17_sumout\ : std_logic;
-SIGNAL \Add12~14\ : std_logic;
-SIGNAL \Add12~17_sumout\ : std_logic;
-SIGNAL \P~53_combout\ : std_logic;
-SIGNAL \Add14~10\ : std_logic;
-SIGNAL \Add14~13_sumout\ : std_logic;
-SIGNAL \P~37_combout\ : std_logic;
-SIGNAL \Add13~10\ : std_logic;
-SIGNAL \Add13~13_sumout\ : std_logic;
-SIGNAL \P~60_combout\ : std_logic;
-SIGNAL \Add7~26\ : std_logic;
-SIGNAL \Add7~29_sumout\ : std_logic;
-SIGNAL \Add8~26\ : std_logic;
-SIGNAL \Add8~29_sumout\ : std_logic;
-SIGNAL \P~56_combout\ : std_logic;
-SIGNAL \Add9~22\ : std_logic;
-SIGNAL \Add9~25_sumout\ : std_logic;
-SIGNAL \Add10~22\ : std_logic;
-SIGNAL \Add10~25_sumout\ : std_logic;
-SIGNAL \P~38_combout\ : std_logic;
-SIGNAL \P~39_combout\ : std_logic;
-SIGNAL \P~55_combout\ : std_logic;
-SIGNAL \Add11~18\ : std_logic;
-SIGNAL \Add11~21_sumout\ : std_logic;
-SIGNAL \Add12~18\ : std_logic;
-SIGNAL \Add12~21_sumout\ : std_logic;
-SIGNAL \P~40_combout\ : std_logic;
-SIGNAL \P~54_combout\ : std_logic;
-SIGNAL \Add13~14\ : std_logic;
-SIGNAL \Add13~17_sumout\ : std_logic;
-SIGNAL \Add14~14\ : std_logic;
-SIGNAL \Add14~17_sumout\ : std_logic;
-SIGNAL \P~41_combout\ : std_logic;
-SIGNAL \P~42_combout\ : std_logic;
-SIGNAL \Add9~26\ : std_logic;
-SIGNAL \Add9~29_sumout\ : std_logic;
-SIGNAL \Add10~26\ : std_logic;
-SIGNAL \Add10~29_sumout\ : std_logic;
-SIGNAL \P~58_combout\ : std_logic;
-SIGNAL \Add11~22\ : std_logic;
-SIGNAL \Add11~25_sumout\ : std_logic;
-SIGNAL \Add12~22\ : std_logic;
-SIGNAL \Add12~25_sumout\ : std_logic;
-SIGNAL \P~43_combout\ : std_logic;
-SIGNAL \P~57_combout\ : std_logic;
-SIGNAL \Add13~18\ : std_logic;
-SIGNAL \Add13~21_sumout\ : std_logic;
-SIGNAL \Add14~18\ : std_logic;
-SIGNAL \Add14~21_sumout\ : std_logic;
-SIGNAL \P~44_combout\ : std_logic;
-SIGNAL \P~45_combout\ : std_logic;
-SIGNAL \Add11~26\ : std_logic;
-SIGNAL \Add11~29_sumout\ : std_logic;
-SIGNAL \Add12~26\ : std_logic;
-SIGNAL \Add12~29_sumout\ : std_logic;
-SIGNAL \P~59_combout\ : std_logic;
-SIGNAL \Add13~22\ : std_logic;
-SIGNAL \Add13~25_sumout\ : std_logic;
-SIGNAL \Add14~22\ : std_logic;
-SIGNAL \Add14~25_sumout\ : std_logic;
-SIGNAL \P~46_combout\ : std_logic;
-SIGNAL \P~47_combout\ : std_logic;
-SIGNAL \Add13~26\ : std_logic;
-SIGNAL \Add13~29_sumout\ : std_logic;
-SIGNAL \Add14~26\ : std_logic;
-SIGNAL \Add14~29_sumout\ : std_logic;
-SIGNAL \P~48_combout\ : std_logic;
-SIGNAL \ALT_INV_P~10_combout\ : std_logic;
-SIGNAL \ALT_INV_P~9_combout\ : std_logic;
-SIGNAL \ALT_INV_P~8_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~6_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~5_combout\ : std_logic;
-SIGNAL \ALT_INV_P~7_combout\ : std_logic;
-SIGNAL \ALT_INV_P~6_combout\ : std_logic;
-SIGNAL \ALT_INV_P~5_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~4_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~3_combout\ : std_logic;
-SIGNAL \ALT_INV_P~4_combout\ : std_logic;
-SIGNAL \ALT_INV_P~3_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~2_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~1_combout\ : std_logic;
-SIGNAL \ALT_INV_P~2_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~0_combout\ : std_logic;
-SIGNAL \ALT_INV_Add14~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add14~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add10~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add14~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add10~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add14~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add10~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add14~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add10~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add14~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add10~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add14~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_inputA[7]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputA[6]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputA[5]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputA[4]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputA[3]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputA[2]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputA[1]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputA[0]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[7]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[6]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[5]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[4]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[3]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[2]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[1]~input_o\ : std_logic;
-SIGNAL \ALT_INV_inputB[0]~input_o\ : std_logic;
-SIGNAL \ALT_INV_P~59_combout\ : std_logic;
-SIGNAL \ALT_INV_P~58_combout\ : std_logic;
-SIGNAL \ALT_INV_P~57_combout\ : std_logic;
-SIGNAL \ALT_INV_P~56_combout\ : std_logic;
-SIGNAL \ALT_INV_P~55_combout\ : std_logic;
-SIGNAL \ALT_INV_P~54_combout\ : std_logic;
-SIGNAL \ALT_INV_P~53_combout\ : std_logic;
-SIGNAL \ALT_INV_P~52_combout\ : std_logic;
-SIGNAL \ALT_INV_P~51_combout\ : std_logic;
-SIGNAL \ALT_INV_P~50_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~9_combout\ : std_logic;
-SIGNAL \ALT_INV_P~49_combout\ : std_logic;
-SIGNAL \ALT_INV_P~46_combout\ : std_logic;
-SIGNAL \ALT_INV_P~44_combout\ : std_logic;
-SIGNAL \ALT_INV_P~43_combout\ : std_logic;
-SIGNAL \ALT_INV_P~41_combout\ : std_logic;
-SIGNAL \ALT_INV_P~40_combout\ : std_logic;
-SIGNAL \ALT_INV_P~39_combout\ : std_logic;
-SIGNAL \ALT_INV_P~38_combout\ : std_logic;
-SIGNAL \ALT_INV_P~37_combout\ : std_logic;
-SIGNAL \ALT_INV_P~36_combout\ : std_logic;
-SIGNAL \ALT_INV_P~35_combout\ : std_logic;
-SIGNAL \ALT_INV_P~34_combout\ : std_logic;
-SIGNAL \ALT_INV_P~33_combout\ : std_logic;
-SIGNAL \ALT_INV_P~32_combout\ : std_logic;
-SIGNAL \ALT_INV_P~31_combout\ : std_logic;
-SIGNAL \ALT_INV_P~30_combout\ : std_logic;
-SIGNAL \ALT_INV_P~29_combout\ : std_logic;
-SIGNAL \ALT_INV_P~28_combout\ : std_logic;
-SIGNAL \ALT_INV_P~27_combout\ : std_logic;
-SIGNAL \ALT_INV_P~26_combout\ : std_logic;
-SIGNAL \ALT_INV_P~25_combout\ : std_logic;
-SIGNAL \ALT_INV_P~24_combout\ : std_logic;
-SIGNAL \ALT_INV_P~23_combout\ : std_logic;
-SIGNAL \ALT_INV_P~22_combout\ : std_logic;
-SIGNAL \ALT_INV_P~21_combout\ : std_logic;
-SIGNAL \ALT_INV_P~20_combout\ : std_logic;
-SIGNAL \ALT_INV_P~19_combout\ : std_logic;
-SIGNAL \ALT_INV_P~18_combout\ : std_logic;
-SIGNAL \ALT_INV_P~17_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~8_combout\ : std_logic;
-SIGNAL \ALT_INV_P~16_combout\ : std_logic;
-SIGNAL \ALT_INV_P~15_combout\ : std_logic;
-SIGNAL \ALT_INV_P~14_combout\ : std_logic;
-SIGNAL \ALT_INV_P~13_combout\ : std_logic;
-SIGNAL \ALT_INV_P~12_combout\ : std_logic;
-SIGNAL \ALT_INV_process_0~7_combout\ : std_logic;
-SIGNAL \ALT_INV_P~11_combout\ : std_logic;
-SIGNAL \ALT_INV_Add10~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~29_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add14~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add13~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add10~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~25_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add12~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add11~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~21_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add10~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add9~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~17_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add8~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add7~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~13_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add6~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add5~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~9_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add4~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add3~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add2~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add1~1_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~5_sumout\ : std_logic;
-SIGNAL \ALT_INV_Add0~1_sumout\ : std_logic;
+SIGNAL \negate~input_o\ : std_logic;
+SIGNAL \opcode[0]~input_o\ : std_logic;
+SIGNAL \B[0]~input_o\ : std_logic;
+SIGNAL \A[0]~input_o\ : std_logic;
+SIGNAL \P9|Mux15~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~1_combout\ : std_logic;
+SIGNAL \A[15]~input_o\ : std_logic;
+SIGNAL \B[15]~input_o\ : std_logic;
+SIGNAL \A[14]~input_o\ : std_logic;
+SIGNAL \B[14]~input_o\ : std_logic;
+SIGNAL \A[13]~input_o\ : std_logic;
+SIGNAL \B[13]~input_o\ : std_logic;
+SIGNAL \A[12]~input_o\ : std_logic;
+SIGNAL \B[12]~input_o\ : std_logic;
+SIGNAL \A[11]~input_o\ : std_logic;
+SIGNAL \B[11]~input_o\ : std_logic;
+SIGNAL \A[10]~input_o\ : std_logic;
+SIGNAL \B[10]~input_o\ : std_logic;
+SIGNAL \A[9]~input_o\ : std_logic;
+SIGNAL \B[9]~input_o\ : std_logic;
+SIGNAL \A[8]~input_o\ : std_logic;
+SIGNAL \B[8]~input_o\ : std_logic;
+SIGNAL \A[7]~input_o\ : std_logic;
+SIGNAL \B[7]~input_o\ : std_logic;
+SIGNAL \A[6]~input_o\ : std_logic;
+SIGNAL \B[6]~input_o\ : std_logic;
+SIGNAL \A[5]~input_o\ : std_logic;
+SIGNAL \B[5]~input_o\ : std_logic;
+SIGNAL \A[4]~input_o\ : std_logic;
+SIGNAL \B[4]~input_o\ : std_logic;
+SIGNAL \A[3]~input_o\ : std_logic;
+SIGNAL \B[3]~input_o\ : std_logic;
+SIGNAL \A[2]~input_o\ : std_logic;
+SIGNAL \B[2]~input_o\ : std_logic;
+SIGNAL \A[1]~input_o\ : std_logic;
+SIGNAL \B[1]~input_o\ : std_logic;
+SIGNAL \P5|LessThan0~0_combout\ : std_logic;
+SIGNAL \P5|LessThan0~1_combout\ : std_logic;
+SIGNAL \P5|LessThan0~2_combout\ : std_logic;
+SIGNAL \P5|LessThan0~3_combout\ : std_logic;
+SIGNAL \P5|LessThan0~4_combout\ : std_logic;
+SIGNAL \P5|LessThan0~5_combout\ : std_logic;
+SIGNAL \P5|LessThan0~6_combout\ : std_logic;
+SIGNAL \P9|Mux15~2_combout\ : std_logic;
+SIGNAL \P8|Add0~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~3_combout\ : std_logic;
+SIGNAL \opcode[1]~input_o\ : std_logic;
+SIGNAL \opcode[2]~input_o\ : std_logic;
+SIGNAL \P9|Mux15~4_combout\ : std_logic;
+SIGNAL \P9|Mux15~5_combout\ : std_logic;
+SIGNAL \P9|Mux15~6_combout\ : std_logic;
+SIGNAL \P8|Add0~2\ : std_logic;
+SIGNAL \P8|Add0~5_sumout\ : std_logic;
+SIGNAL \P8|Add2~1_sumout\ : std_logic;
+SIGNAL \P8|Add1~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~80_combout\ : std_logic;
+SIGNAL \P9|Mux14~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~7_combout\ : std_logic;
+SIGNAL \P4|C~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~8_combout\ : std_logic;
+SIGNAL \P9|Mux15~9_combout\ : std_logic;
+SIGNAL \P8|process_0~0_combout\ : std_logic;
+SIGNAL \P8|Add0~6\ : std_logic;
+SIGNAL \P8|Add0~9_sumout\ : std_logic;
+SIGNAL \P8|Add1~2\ : std_logic;
+SIGNAL \P8|Add1~5_sumout\ : std_logic;
+SIGNAL \P8|Add2~2\ : std_logic;
+SIGNAL \P8|Add2~5_sumout\ : std_logic;
+SIGNAL \P8|P~0_combout\ : std_logic;
+SIGNAL \P8|Add3~1_sumout\ : std_logic;
+SIGNAL \P8|process_0~1_combout\ : std_logic;
+SIGNAL \P8|process_0~2_combout\ : std_logic;
+SIGNAL \P8|Add4~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~10_combout\ : std_logic;
+SIGNAL \P9|Mux15~11_combout\ : std_logic;
+SIGNAL \P9|Mux13~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~12_combout\ : std_logic;
+SIGNAL \P4|C~1_combout\ : std_logic;
+SIGNAL \P9|Mux15~13_combout\ : std_logic;
+SIGNAL \P9|Mux15~14_combout\ : std_logic;
+SIGNAL \P8|process_0~3_combout\ : std_logic;
+SIGNAL \P8|Add0~10\ : std_logic;
+SIGNAL \P8|Add0~13_sumout\ : std_logic;
+SIGNAL \P8|Add1~6\ : std_logic;
+SIGNAL \P8|Add1~9_sumout\ : std_logic;
+SIGNAL \P8|Add2~6\ : std_logic;
+SIGNAL \P8|Add2~9_sumout\ : std_logic;
+SIGNAL \P8|P~1_combout\ : std_logic;
+SIGNAL \P8|Add3~2\ : std_logic;
+SIGNAL \P8|Add3~5_sumout\ : std_logic;
+SIGNAL \P8|Add4~2\ : std_logic;
+SIGNAL \P8|Add4~5_sumout\ : std_logic;
+SIGNAL \P8|P~2_combout\ : std_logic;
+SIGNAL \P8|Add5~1_sumout\ : std_logic;
+SIGNAL \P8|process_0~4_combout\ : std_logic;
+SIGNAL \P8|Add6~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~15_combout\ : std_logic;
+SIGNAL \P9|Mux15~16_combout\ : std_logic;
+SIGNAL \P9|Mux12~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~17_combout\ : std_logic;
+SIGNAL \P4|C~2_combout\ : std_logic;
+SIGNAL \P9|Mux15~18_combout\ : std_logic;
+SIGNAL \P9|Mux15~19_combout\ : std_logic;
+SIGNAL \P8|process_0~5_combout\ : std_logic;
+SIGNAL \P8|Add0~14\ : std_logic;
+SIGNAL \P8|Add0~17_sumout\ : std_logic;
+SIGNAL \P8|Add1~10\ : std_logic;
+SIGNAL \P8|Add1~13_sumout\ : std_logic;
+SIGNAL \P8|Add2~10\ : std_logic;
+SIGNAL \P8|Add2~13_sumout\ : std_logic;
+SIGNAL \P8|P~3_combout\ : std_logic;
+SIGNAL \P8|Add3~6\ : std_logic;
+SIGNAL \P8|Add3~9_sumout\ : std_logic;
+SIGNAL \P8|Add4~6\ : std_logic;
+SIGNAL \P8|Add4~9_sumout\ : std_logic;
+SIGNAL \P8|P~4_combout\ : std_logic;
+SIGNAL \P8|Add5~2\ : std_logic;
+SIGNAL \P8|Add5~5_sumout\ : std_logic;
+SIGNAL \P8|Add6~2\ : std_logic;
+SIGNAL \P8|Add6~5_sumout\ : std_logic;
+SIGNAL \P8|P~5_combout\ : std_logic;
+SIGNAL \P8|Add7~1_sumout\ : std_logic;
+SIGNAL \P8|process_0~6_combout\ : std_logic;
+SIGNAL \P8|Add8~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~20_combout\ : std_logic;
+SIGNAL \P9|Mux15~21_combout\ : std_logic;
+SIGNAL \P9|Mux11~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~22_combout\ : std_logic;
+SIGNAL \P4|C~3_combout\ : std_logic;
+SIGNAL \P9|Mux15~23_combout\ : std_logic;
+SIGNAL \P9|Mux15~24_combout\ : std_logic;
+SIGNAL \P8|process_0~7_combout\ : std_logic;
+SIGNAL \P8|Add0~18\ : std_logic;
+SIGNAL \P8|Add0~21_sumout\ : std_logic;
+SIGNAL \P8|Add1~14\ : std_logic;
+SIGNAL \P8|Add1~17_sumout\ : std_logic;
+SIGNAL \P8|Add2~14\ : std_logic;
+SIGNAL \P8|Add2~17_sumout\ : std_logic;
+SIGNAL \P8|P~6_combout\ : std_logic;
+SIGNAL \P8|Add3~10\ : std_logic;
+SIGNAL \P8|Add3~13_sumout\ : std_logic;
+SIGNAL \P8|Add4~10\ : std_logic;
+SIGNAL \P8|Add4~13_sumout\ : std_logic;
+SIGNAL \P8|P~7_combout\ : std_logic;
+SIGNAL \P8|Add5~6\ : std_logic;
+SIGNAL \P8|Add5~9_sumout\ : std_logic;
+SIGNAL \P8|Add6~6\ : std_logic;
+SIGNAL \P8|Add6~9_sumout\ : std_logic;
+SIGNAL \P8|P~8_combout\ : std_logic;
+SIGNAL \P8|Add7~2\ : std_logic;
+SIGNAL \P8|Add7~5_sumout\ : std_logic;
+SIGNAL \P8|Add8~2\ : std_logic;
+SIGNAL \P8|Add8~5_sumout\ : std_logic;
+SIGNAL \P8|P~9_combout\ : std_logic;
+SIGNAL \P8|Add9~1_sumout\ : std_logic;
+SIGNAL \P8|process_0~8_combout\ : std_logic;
+SIGNAL \P8|Add10~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~25_combout\ : std_logic;
+SIGNAL \P9|Mux15~26_combout\ : std_logic;
+SIGNAL \P9|Mux10~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~27_combout\ : std_logic;
+SIGNAL \P4|C~4_combout\ : std_logic;
+SIGNAL \P9|Mux15~28_combout\ : std_logic;
+SIGNAL \P9|Mux15~29_combout\ : std_logic;
+SIGNAL \P8|process_0~9_combout\ : std_logic;
+SIGNAL \P8|Add0~22\ : std_logic;
+SIGNAL \P8|Add0~25_sumout\ : std_logic;
+SIGNAL \P8|Add1~18\ : std_logic;
+SIGNAL \P8|Add1~21_sumout\ : std_logic;
+SIGNAL \P8|Add2~18\ : std_logic;
+SIGNAL \P8|Add2~21_sumout\ : std_logic;
+SIGNAL \P8|P~10_combout\ : std_logic;
+SIGNAL \P8|Add3~14\ : std_logic;
+SIGNAL \P8|Add3~17_sumout\ : std_logic;
+SIGNAL \P8|Add4~14\ : std_logic;
+SIGNAL \P8|Add4~17_sumout\ : std_logic;
+SIGNAL \P8|P~11_combout\ : std_logic;
+SIGNAL \P8|Add5~10\ : std_logic;
+SIGNAL \P8|Add5~13_sumout\ : std_logic;
+SIGNAL \P8|Add6~10\ : std_logic;
+SIGNAL \P8|Add6~13_sumout\ : std_logic;
+SIGNAL \P8|P~12_combout\ : std_logic;
+SIGNAL \P8|Add7~6\ : std_logic;
+SIGNAL \P8|Add7~9_sumout\ : std_logic;
+SIGNAL \P8|Add8~6\ : std_logic;
+SIGNAL \P8|Add8~9_sumout\ : std_logic;
+SIGNAL \P8|P~13_combout\ : std_logic;
+SIGNAL \P8|Add9~2\ : std_logic;
+SIGNAL \P8|Add9~5_sumout\ : std_logic;
+SIGNAL \P8|Add10~2\ : std_logic;
+SIGNAL \P8|Add10~5_sumout\ : std_logic;
+SIGNAL \P8|P~14_combout\ : std_logic;
+SIGNAL \P8|Add11~1_sumout\ : std_logic;
+SIGNAL \P8|process_0~10_combout\ : std_logic;
+SIGNAL \P8|Add12~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~30_combout\ : std_logic;
+SIGNAL \P9|Mux15~31_combout\ : std_logic;
+SIGNAL \P9|Mux9~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~32_combout\ : std_logic;
+SIGNAL \P4|C~5_combout\ : std_logic;
+SIGNAL \P9|Mux15~33_combout\ : std_logic;
+SIGNAL \P9|Mux15~34_combout\ : std_logic;
+SIGNAL \P8|Add0~26\ : std_logic;
+SIGNAL \P8|Add0~29_sumout\ : std_logic;
+SIGNAL \P8|Add1~22\ : std_logic;
+SIGNAL \P8|Add1~25_sumout\ : std_logic;
+SIGNAL \P8|Add2~22\ : std_logic;
+SIGNAL \P8|Add2~25_sumout\ : std_logic;
+SIGNAL \P8|P~15_combout\ : std_logic;
+SIGNAL \P8|Add3~18\ : std_logic;
+SIGNAL \P8|Add3~21_sumout\ : std_logic;
+SIGNAL \P8|Add4~18\ : std_logic;
+SIGNAL \P8|Add4~21_sumout\ : std_logic;
+SIGNAL \P8|P~16_combout\ : std_logic;
+SIGNAL \P8|Add5~14\ : std_logic;
+SIGNAL \P8|Add5~17_sumout\ : std_logic;
+SIGNAL \P8|Add6~14\ : std_logic;
+SIGNAL \P8|Add6~17_sumout\ : std_logic;
+SIGNAL \P8|P~17_combout\ : std_logic;
+SIGNAL \P8|Add7~10\ : std_logic;
+SIGNAL \P8|Add7~13_sumout\ : std_logic;
+SIGNAL \P8|Add8~10\ : std_logic;
+SIGNAL \P8|Add8~13_sumout\ : std_logic;
+SIGNAL \P8|P~18_combout\ : std_logic;
+SIGNAL \P8|Add9~6\ : std_logic;
+SIGNAL \P8|Add9~9_sumout\ : std_logic;
+SIGNAL \P8|Add10~6\ : std_logic;
+SIGNAL \P8|Add10~9_sumout\ : std_logic;
+SIGNAL \P8|P~19_combout\ : std_logic;
+SIGNAL \P8|Add11~2\ : std_logic;
+SIGNAL \P8|Add11~5_sumout\ : std_logic;
+SIGNAL \P8|Add12~2\ : std_logic;
+SIGNAL \P8|Add12~5_sumout\ : std_logic;
+SIGNAL \P8|P~20_combout\ : std_logic;
+SIGNAL \P8|Add13~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~35_combout\ : std_logic;
+SIGNAL \P8|Add14~1_sumout\ : std_logic;
+SIGNAL \P9|Mux15~36_combout\ : std_logic;
+SIGNAL \P9|Mux15~37_combout\ : std_logic;
+SIGNAL \P9|Mux15~38_combout\ : std_logic;
+SIGNAL \P9|Mux15~39_combout\ : std_logic;
+SIGNAL \P9|Mux8~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~40_combout\ : std_logic;
+SIGNAL \P4|C~6_combout\ : std_logic;
+SIGNAL \P9|Mux15~41_combout\ : std_logic;
+SIGNAL \P9|Mux15~42_combout\ : std_logic;
+SIGNAL \P8|Add1~26\ : std_logic;
+SIGNAL \P8|Add1~29_sumout\ : std_logic;
+SIGNAL \P8|Add2~26\ : std_logic;
+SIGNAL \P8|Add2~29_sumout\ : std_logic;
+SIGNAL \P8|P~21_combout\ : std_logic;
+SIGNAL \P8|Add3~22\ : std_logic;
+SIGNAL \P8|Add3~25_sumout\ : std_logic;
+SIGNAL \P8|Add4~22\ : std_logic;
+SIGNAL \P8|Add4~25_sumout\ : std_logic;
+SIGNAL \P8|P~22_combout\ : std_logic;
+SIGNAL \P8|Add5~18\ : std_logic;
+SIGNAL \P8|Add5~21_sumout\ : std_logic;
+SIGNAL \P8|Add6~18\ : std_logic;
+SIGNAL \P8|Add6~21_sumout\ : std_logic;
+SIGNAL \P8|P~23_combout\ : std_logic;
+SIGNAL \P8|Add7~14\ : std_logic;
+SIGNAL \P8|Add7~17_sumout\ : std_logic;
+SIGNAL \P8|Add8~14\ : std_logic;
+SIGNAL \P8|Add8~17_sumout\ : std_logic;
+SIGNAL \P8|P~24_combout\ : std_logic;
+SIGNAL \P8|Add9~10\ : std_logic;
+SIGNAL \P8|Add9~13_sumout\ : std_logic;
+SIGNAL \P8|Add10~10\ : std_logic;
+SIGNAL \P8|Add10~13_sumout\ : std_logic;
+SIGNAL \P8|P~25_combout\ : std_logic;
+SIGNAL \P8|Add11~6\ : std_logic;
+SIGNAL \P8|Add11~9_sumout\ : std_logic;
+SIGNAL \P8|Add12~6\ : std_logic;
+SIGNAL \P8|Add12~9_sumout\ : std_logic;
+SIGNAL \P8|P~26_combout\ : std_logic;
+SIGNAL \P8|Add13~2\ : std_logic;
+SIGNAL \P8|Add13~5_sumout\ : std_logic;
+SIGNAL \P8|Add14~2\ : std_logic;
+SIGNAL \P8|Add14~5_sumout\ : std_logic;
+SIGNAL \P9|Mux15~43_combout\ : std_logic;
+SIGNAL \P9|Mux15~44_combout\ : std_logic;
+SIGNAL \P9|Mux7~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~45_combout\ : std_logic;
+SIGNAL \P4|C~7_combout\ : std_logic;
+SIGNAL \P9|Mux15~46_combout\ : std_logic;
+SIGNAL \P9|Mux15~47_combout\ : std_logic;
+SIGNAL \P8|Add3~26\ : std_logic;
+SIGNAL \P8|Add3~29_sumout\ : std_logic;
+SIGNAL \P8|Add4~26\ : std_logic;
+SIGNAL \P8|Add4~29_sumout\ : std_logic;
+SIGNAL \P8|P~27_combout\ : std_logic;
+SIGNAL \P8|Add5~22\ : std_logic;
+SIGNAL \P8|Add5~25_sumout\ : std_logic;
+SIGNAL \P8|Add6~22\ : std_logic;
+SIGNAL \P8|Add6~25_sumout\ : std_logic;
+SIGNAL \P8|P~28_combout\ : std_logic;
+SIGNAL \P8|Add7~18\ : std_logic;
+SIGNAL \P8|Add7~21_sumout\ : std_logic;
+SIGNAL \P8|Add8~18\ : std_logic;
+SIGNAL \P8|Add8~21_sumout\ : std_logic;
+SIGNAL \P8|P~29_combout\ : std_logic;
+SIGNAL \P8|Add9~14\ : std_logic;
+SIGNAL \P8|Add9~17_sumout\ : std_logic;
+SIGNAL \P8|Add10~14\ : std_logic;
+SIGNAL \P8|Add10~17_sumout\ : std_logic;
+SIGNAL \P8|P~30_combout\ : std_logic;
+SIGNAL \P8|Add11~10\ : std_logic;
+SIGNAL \P8|Add11~13_sumout\ : std_logic;
+SIGNAL \P8|Add12~10\ : std_logic;
+SIGNAL \P8|Add12~13_sumout\ : std_logic;
+SIGNAL \P8|P~31_combout\ : std_logic;
+SIGNAL \P8|Add13~6\ : std_logic;
+SIGNAL \P8|Add13~9_sumout\ : std_logic;
+SIGNAL \P8|Add14~6\ : std_logic;
+SIGNAL \P8|Add14~9_sumout\ : std_logic;
+SIGNAL \P9|Mux15~48_combout\ : std_logic;
+SIGNAL \P9|Mux15~49_combout\ : std_logic;
+SIGNAL \P9|Mux6~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~50_combout\ : std_logic;
+SIGNAL \P4|C~8_combout\ : std_logic;
+SIGNAL \P9|Mux15~51_combout\ : std_logic;
+SIGNAL \P9|Mux15~52_combout\ : std_logic;
+SIGNAL \P8|Add5~26\ : std_logic;
+SIGNAL \P8|Add5~29_sumout\ : std_logic;
+SIGNAL \P8|Add6~26\ : std_logic;
+SIGNAL \P8|Add6~29_sumout\ : std_logic;
+SIGNAL \P8|P~32_combout\ : std_logic;
+SIGNAL \P8|Add7~22\ : std_logic;
+SIGNAL \P8|Add7~25_sumout\ : std_logic;
+SIGNAL \P8|Add8~22\ : std_logic;
+SIGNAL \P8|Add8~25_sumout\ : std_logic;
+SIGNAL \P8|P~33_combout\ : std_logic;
+SIGNAL \P8|Add9~18\ : std_logic;
+SIGNAL \P8|Add9~21_sumout\ : std_logic;
+SIGNAL \P8|Add10~18\ : std_logic;
+SIGNAL \P8|Add10~21_sumout\ : std_logic;
+SIGNAL \P8|P~34_combout\ : std_logic;
+SIGNAL \P8|Add11~14\ : std_logic;
+SIGNAL \P8|Add11~17_sumout\ : std_logic;
+SIGNAL \P8|Add12~14\ : std_logic;
+SIGNAL \P8|Add12~17_sumout\ : std_logic;
+SIGNAL \P8|P~35_combout\ : std_logic;
+SIGNAL \P8|Add13~10\ : std_logic;
+SIGNAL \P8|Add13~13_sumout\ : std_logic;
+SIGNAL \P8|Add14~10\ : std_logic;
+SIGNAL \P8|Add14~13_sumout\ : std_logic;
+SIGNAL \P9|Mux15~53_combout\ : std_logic;
+SIGNAL \P9|Mux15~54_combout\ : std_logic;
+SIGNAL \P9|Mux5~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~55_combout\ : std_logic;
+SIGNAL \P4|C~9_combout\ : std_logic;
+SIGNAL \P9|Mux15~56_combout\ : std_logic;
+SIGNAL \P9|Mux15~57_combout\ : std_logic;
+SIGNAL \P8|Add7~26\ : std_logic;
+SIGNAL \P8|Add7~29_sumout\ : std_logic;
+SIGNAL \P8|Add8~26\ : std_logic;
+SIGNAL \P8|Add8~29_sumout\ : std_logic;
+SIGNAL \P8|P~36_combout\ : std_logic;
+SIGNAL \P8|Add9~22\ : std_logic;
+SIGNAL \P8|Add9~25_sumout\ : std_logic;
+SIGNAL \P8|Add10~22\ : std_logic;
+SIGNAL \P8|Add10~25_sumout\ : std_logic;
+SIGNAL \P8|P~37_combout\ : std_logic;
+SIGNAL \P8|Add11~18\ : std_logic;
+SIGNAL \P8|Add11~21_sumout\ : std_logic;
+SIGNAL \P8|Add12~18\ : std_logic;
+SIGNAL \P8|Add12~21_sumout\ : std_logic;
+SIGNAL \P8|P~38_combout\ : std_logic;
+SIGNAL \P8|Add13~14\ : std_logic;
+SIGNAL \P8|Add13~17_sumout\ : std_logic;
+SIGNAL \P8|Add14~14\ : std_logic;
+SIGNAL \P8|Add14~17_sumout\ : std_logic;
+SIGNAL \P9|Mux15~58_combout\ : std_logic;
+SIGNAL \P9|Mux15~59_combout\ : std_logic;
+SIGNAL \P9|Mux4~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~60_combout\ : std_logic;
+SIGNAL \P4|C~10_combout\ : std_logic;
+SIGNAL \P9|Mux15~61_combout\ : std_logic;
+SIGNAL \P9|Mux15~62_combout\ : std_logic;
+SIGNAL \P8|Add9~26\ : std_logic;
+SIGNAL \P8|Add9~29_sumout\ : std_logic;
+SIGNAL \P8|Add10~26\ : std_logic;
+SIGNAL \P8|Add10~29_sumout\ : std_logic;
+SIGNAL \P8|P~39_combout\ : std_logic;
+SIGNAL \P8|Add11~22\ : std_logic;
+SIGNAL \P8|Add11~25_sumout\ : std_logic;
+SIGNAL \P8|Add12~22\ : std_logic;
+SIGNAL \P8|Add12~25_sumout\ : std_logic;
+SIGNAL \P8|P~40_combout\ : std_logic;
+SIGNAL \P8|Add13~18\ : std_logic;
+SIGNAL \P8|Add13~21_sumout\ : std_logic;
+SIGNAL \P8|Add14~18\ : std_logic;
+SIGNAL \P8|Add14~21_sumout\ : std_logic;
+SIGNAL \P9|Mux15~63_combout\ : std_logic;
+SIGNAL \P9|Mux15~64_combout\ : std_logic;
+SIGNAL \P9|Mux3~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~65_combout\ : std_logic;
+SIGNAL \P4|C~11_combout\ : std_logic;
+SIGNAL \P9|Mux15~66_combout\ : std_logic;
+SIGNAL \P9|Mux15~67_combout\ : std_logic;
+SIGNAL \P8|Add11~26\ : std_logic;
+SIGNAL \P8|Add11~29_sumout\ : std_logic;
+SIGNAL \P8|Add12~26\ : std_logic;
+SIGNAL \P8|Add12~29_sumout\ : std_logic;
+SIGNAL \P8|P~41_combout\ : std_logic;
+SIGNAL \P8|Add13~22\ : std_logic;
+SIGNAL \P8|Add13~25_sumout\ : std_logic;
+SIGNAL \P9|Mux15~68_combout\ : std_logic;
+SIGNAL \P8|Add14~22\ : std_logic;
+SIGNAL \P8|Add14~25_sumout\ : std_logic;
+SIGNAL \P9|Mux15~76_combout\ : std_logic;
+SIGNAL \P9|Mux2~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~69_combout\ : std_logic;
+SIGNAL \P4|C~12_combout\ : std_logic;
+SIGNAL \P9|Mux15~70_combout\ : std_logic;
+SIGNAL \P9|Mux15~71_combout\ : std_logic;
+SIGNAL \P8|Add13~26\ : std_logic;
+SIGNAL \P8|Add13~29_sumout\ : std_logic;
+SIGNAL \P8|Add14~26\ : std_logic;
+SIGNAL \P8|Add14~29_sumout\ : std_logic;
+SIGNAL \P9|Mux15~72_combout\ : std_logic;
+SIGNAL \P9|Mux1~0_combout\ : std_logic;
+SIGNAL \P9|Mux15~73_combout\ : std_logic;
+SIGNAL \P5|LessThan0~7_combout\ : std_logic;
+SIGNAL \P9|Mux15~74_combout\ : std_logic;
+SIGNAL \P9|Mux15~75_combout\ : std_logic;
+SIGNAL \P9|Mux0~0_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~1_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~1_sumout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~6_combout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~5_combout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~4_combout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~3_combout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~2_combout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~1_combout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~0_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~1_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~0_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~80_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~76_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add5~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add7~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add9~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add11~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add14~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add13~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add12~5_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add10~9_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add8~13_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add6~17_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add4~21_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add2~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add0~29_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add1~25_sumout\ : std_logic;
+SIGNAL \P8|ALT_INV_Add3~21_sumout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~58_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~38_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~37_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~36_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~57_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~56_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~9_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~55_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~54_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~53_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~35_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~34_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~33_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~32_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~52_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~51_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~8_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~50_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~49_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~48_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~31_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~30_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~29_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~28_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~27_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~47_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~46_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~7_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~45_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~44_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~43_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~26_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~25_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~24_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~23_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~22_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~21_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~42_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~41_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~6_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~40_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~39_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~38_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~37_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~20_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~19_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~18_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~17_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~16_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~15_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~36_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~35_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~34_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~33_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~5_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~32_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~31_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~30_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~10_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~14_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~13_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~12_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~11_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~10_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~9_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~29_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~28_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~4_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~27_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~26_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~25_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~8_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~9_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~8_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~7_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~6_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~7_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~24_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~23_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~3_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~22_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~21_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~20_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~6_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~5_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~4_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~3_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~5_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~19_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~18_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~2_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~17_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~16_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~15_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~4_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~2_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~1_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~3_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~14_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~13_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~1_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~12_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~11_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~10_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~2_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~0_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~1_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_process_0~0_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~9_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~8_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~0_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~7_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~6_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~5_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~3_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~2_combout\ : std_logic;
+SIGNAL \ALT_INV_opcode[2]~input_o\ : std_logic;
+SIGNAL \ALT_INV_opcode[1]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[1]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[1]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[2]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[2]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[3]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[3]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[4]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[4]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[5]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[5]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[6]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[6]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[7]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[7]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[8]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[8]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[9]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[9]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[10]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[10]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[11]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[11]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[12]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[12]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[13]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[13]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[14]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[14]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[15]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[15]~input_o\ : std_logic;
+SIGNAL \ALT_INV_A[0]~input_o\ : std_logic;
+SIGNAL \ALT_INV_B[0]~input_o\ : std_logic;
+SIGNAL \ALT_INV_opcode[0]~input_o\ : std_logic;
+SIGNAL \ALT_INV_negate~input_o\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~75_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~74_combout\ : std_logic;
+SIGNAL \P5|ALT_INV_LessThan0~7_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~73_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~72_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~71_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~70_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~12_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~69_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~68_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~41_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~67_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~66_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~11_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~65_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~64_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~63_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~40_combout\ : std_logic;
+SIGNAL \P8|ALT_INV_P~39_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~62_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~61_combout\ : std_logic;
+SIGNAL \P4|ALT_INV_C~10_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~60_combout\ : std_logic;
+SIGNAL \P9|ALT_INV_Mux15~59_combout\ : std_logic;
 
 BEGIN
 
-ww_inputA <= inputA;
-ww_inputB <= inputB;
+ww_opcode <= opcode;
+ww_negate <= negate;
+ww_A <= A;
+ww_B <= B;
 Saida <= ww_Saida;
 ww_devoe <= devoe;
 ww_devclrn <= devclrn;
 ww_devpor <= devpor;
-\ALT_INV_P~10_combout\ <= NOT \P~10_combout\;
-\ALT_INV_P~9_combout\ <= NOT \P~9_combout\;
-\ALT_INV_P~8_combout\ <= NOT \P~8_combout\;
-\ALT_INV_process_0~6_combout\ <= NOT \process_0~6_combout\;
-\ALT_INV_process_0~5_combout\ <= NOT \process_0~5_combout\;
-\ALT_INV_P~7_combout\ <= NOT \P~7_combout\;
-\ALT_INV_P~6_combout\ <= NOT \P~6_combout\;
-\ALT_INV_P~5_combout\ <= NOT \P~5_combout\;
-\ALT_INV_process_0~4_combout\ <= NOT \process_0~4_combout\;
-\ALT_INV_process_0~3_combout\ <= NOT \process_0~3_combout\;
-\ALT_INV_P~4_combout\ <= NOT \P~4_combout\;
-\ALT_INV_P~3_combout\ <= NOT \P~3_combout\;
-\ALT_INV_process_0~2_combout\ <= NOT \process_0~2_combout\;
-\ALT_INV_process_0~1_combout\ <= NOT \process_0~1_combout\;
-\ALT_INV_P~2_combout\ <= NOT \P~2_combout\;
-\ALT_INV_process_0~0_combout\ <= NOT \process_0~0_combout\;
-\ALT_INV_Add14~29_sumout\ <= NOT \Add14~29_sumout\;
-\ALT_INV_Add13~29_sumout\ <= NOT \Add13~29_sumout\;
-\ALT_INV_Add12~29_sumout\ <= NOT \Add12~29_sumout\;
-\ALT_INV_Add11~29_sumout\ <= NOT \Add11~29_sumout\;
-\ALT_INV_Add14~25_sumout\ <= NOT \Add14~25_sumout\;
-\ALT_INV_Add13~25_sumout\ <= NOT \Add13~25_sumout\;
-\ALT_INV_Add10~29_sumout\ <= NOT \Add10~29_sumout\;
-\ALT_INV_Add9~29_sumout\ <= NOT \Add9~29_sumout\;
-\ALT_INV_Add12~25_sumout\ <= NOT \Add12~25_sumout\;
-\ALT_INV_Add11~25_sumout\ <= NOT \Add11~25_sumout\;
-\ALT_INV_Add14~21_sumout\ <= NOT \Add14~21_sumout\;
-\ALT_INV_Add13~21_sumout\ <= NOT \Add13~21_sumout\;
-\ALT_INV_Add8~29_sumout\ <= NOT \Add8~29_sumout\;
-\ALT_INV_Add7~29_sumout\ <= NOT \Add7~29_sumout\;
-\ALT_INV_Add10~25_sumout\ <= NOT \Add10~25_sumout\;
-\ALT_INV_Add9~25_sumout\ <= NOT \Add9~25_sumout\;
-\ALT_INV_Add12~21_sumout\ <= NOT \Add12~21_sumout\;
-\ALT_INV_Add11~21_sumout\ <= NOT \Add11~21_sumout\;
-\ALT_INV_Add14~17_sumout\ <= NOT \Add14~17_sumout\;
-\ALT_INV_Add13~17_sumout\ <= NOT \Add13~17_sumout\;
-\ALT_INV_Add12~17_sumout\ <= NOT \Add12~17_sumout\;
-\ALT_INV_Add10~21_sumout\ <= NOT \Add10~21_sumout\;
-\ALT_INV_Add8~25_sumout\ <= NOT \Add8~25_sumout\;
-\ALT_INV_Add6~29_sumout\ <= NOT \Add6~29_sumout\;
-\ALT_INV_Add5~29_sumout\ <= NOT \Add5~29_sumout\;
-\ALT_INV_Add7~25_sumout\ <= NOT \Add7~25_sumout\;
-\ALT_INV_Add9~21_sumout\ <= NOT \Add9~21_sumout\;
-\ALT_INV_Add11~17_sumout\ <= NOT \Add11~17_sumout\;
-\ALT_INV_Add14~13_sumout\ <= NOT \Add14~13_sumout\;
-\ALT_INV_Add13~13_sumout\ <= NOT \Add13~13_sumout\;
-\ALT_INV_Add12~13_sumout\ <= NOT \Add12~13_sumout\;
-\ALT_INV_Add10~17_sumout\ <= NOT \Add10~17_sumout\;
-\ALT_INV_Add8~21_sumout\ <= NOT \Add8~21_sumout\;
-\ALT_INV_Add6~25_sumout\ <= NOT \Add6~25_sumout\;
-\ALT_INV_Add4~29_sumout\ <= NOT \Add4~29_sumout\;
-\ALT_INV_Add3~29_sumout\ <= NOT \Add3~29_sumout\;
-\ALT_INV_Add5~25_sumout\ <= NOT \Add5~25_sumout\;
-\ALT_INV_Add7~21_sumout\ <= NOT \Add7~21_sumout\;
-\ALT_INV_Add9~17_sumout\ <= NOT \Add9~17_sumout\;
-\ALT_INV_Add11~13_sumout\ <= NOT \Add11~13_sumout\;
-\ALT_INV_Add14~9_sumout\ <= NOT \Add14~9_sumout\;
-\ALT_INV_Add13~9_sumout\ <= NOT \Add13~9_sumout\;
-\ALT_INV_Add12~9_sumout\ <= NOT \Add12~9_sumout\;
-\ALT_INV_Add10~13_sumout\ <= NOT \Add10~13_sumout\;
-\ALT_INV_Add8~17_sumout\ <= NOT \Add8~17_sumout\;
-\ALT_INV_Add6~21_sumout\ <= NOT \Add6~21_sumout\;
-\ALT_INV_Add4~25_sumout\ <= NOT \Add4~25_sumout\;
-\ALT_INV_Add2~29_sumout\ <= NOT \Add2~29_sumout\;
-\ALT_INV_Add1~29_sumout\ <= NOT \Add1~29_sumout\;
-\ALT_INV_Add3~25_sumout\ <= NOT \Add3~25_sumout\;
-\ALT_INV_Add5~21_sumout\ <= NOT \Add5~21_sumout\;
-\ALT_INV_Add7~17_sumout\ <= NOT \Add7~17_sumout\;
-\ALT_INV_Add9~13_sumout\ <= NOT \Add9~13_sumout\;
-\ALT_INV_Add11~9_sumout\ <= NOT \Add11~9_sumout\;
-\ALT_INV_Add14~5_sumout\ <= NOT \Add14~5_sumout\;
-\ALT_INV_Add13~5_sumout\ <= NOT \Add13~5_sumout\;
-\ALT_INV_Add12~5_sumout\ <= NOT \Add12~5_sumout\;
-\ALT_INV_inputA[7]~input_o\ <= NOT \inputA[7]~input_o\;
-\ALT_INV_inputA[6]~input_o\ <= NOT \inputA[6]~input_o\;
-\ALT_INV_inputA[5]~input_o\ <= NOT \inputA[5]~input_o\;
-\ALT_INV_inputA[4]~input_o\ <= NOT \inputA[4]~input_o\;
-\ALT_INV_inputA[3]~input_o\ <= NOT \inputA[3]~input_o\;
-\ALT_INV_inputA[2]~input_o\ <= NOT \inputA[2]~input_o\;
-\ALT_INV_inputA[1]~input_o\ <= NOT \inputA[1]~input_o\;
-\ALT_INV_inputA[0]~input_o\ <= NOT \inputA[0]~input_o\;
-\ALT_INV_inputB[7]~input_o\ <= NOT \inputB[7]~input_o\;
-\ALT_INV_inputB[6]~input_o\ <= NOT \inputB[6]~input_o\;
-\ALT_INV_inputB[5]~input_o\ <= NOT \inputB[5]~input_o\;
-\ALT_INV_inputB[4]~input_o\ <= NOT \inputB[4]~input_o\;
-\ALT_INV_inputB[3]~input_o\ <= NOT \inputB[3]~input_o\;
-\ALT_INV_inputB[2]~input_o\ <= NOT \inputB[2]~input_o\;
-\ALT_INV_inputB[1]~input_o\ <= NOT \inputB[1]~input_o\;
-\ALT_INV_inputB[0]~input_o\ <= NOT \inputB[0]~input_o\;
-\ALT_INV_P~59_combout\ <= NOT \P~59_combout\;
-\ALT_INV_P~58_combout\ <= NOT \P~58_combout\;
-\ALT_INV_P~57_combout\ <= NOT \P~57_combout\;
-\ALT_INV_P~56_combout\ <= NOT \P~56_combout\;
-\ALT_INV_P~55_combout\ <= NOT \P~55_combout\;
-\ALT_INV_P~54_combout\ <= NOT \P~54_combout\;
-\ALT_INV_P~53_combout\ <= NOT \P~53_combout\;
-\ALT_INV_P~52_combout\ <= NOT \P~52_combout\;
-\ALT_INV_P~51_combout\ <= NOT \P~51_combout\;
-\ALT_INV_P~50_combout\ <= NOT \P~50_combout\;
-\ALT_INV_process_0~9_combout\ <= NOT \process_0~9_combout\;
-\ALT_INV_P~49_combout\ <= NOT \P~49_combout\;
-\ALT_INV_P~46_combout\ <= NOT \P~46_combout\;
-\ALT_INV_P~44_combout\ <= NOT \P~44_combout\;
-\ALT_INV_P~43_combout\ <= NOT \P~43_combout\;
-\ALT_INV_P~41_combout\ <= NOT \P~41_combout\;
-\ALT_INV_P~40_combout\ <= NOT \P~40_combout\;
-\ALT_INV_P~39_combout\ <= NOT \P~39_combout\;
-\ALT_INV_P~38_combout\ <= NOT \P~38_combout\;
-\ALT_INV_P~37_combout\ <= NOT \P~37_combout\;
-\ALT_INV_P~36_combout\ <= NOT \P~36_combout\;
-\ALT_INV_P~35_combout\ <= NOT \P~35_combout\;
-\ALT_INV_P~34_combout\ <= NOT \P~34_combout\;
-\ALT_INV_P~33_combout\ <= NOT \P~33_combout\;
-\ALT_INV_P~32_combout\ <= NOT \P~32_combout\;
-\ALT_INV_P~31_combout\ <= NOT \P~31_combout\;
-\ALT_INV_P~30_combout\ <= NOT \P~30_combout\;
-\ALT_INV_P~29_combout\ <= NOT \P~29_combout\;
-\ALT_INV_P~28_combout\ <= NOT \P~28_combout\;
-\ALT_INV_P~27_combout\ <= NOT \P~27_combout\;
-\ALT_INV_P~26_combout\ <= NOT \P~26_combout\;
-\ALT_INV_P~25_combout\ <= NOT \P~25_combout\;
-\ALT_INV_P~24_combout\ <= NOT \P~24_combout\;
-\ALT_INV_P~23_combout\ <= NOT \P~23_combout\;
-\ALT_INV_P~22_combout\ <= NOT \P~22_combout\;
-\ALT_INV_P~21_combout\ <= NOT \P~21_combout\;
-\ALT_INV_P~20_combout\ <= NOT \P~20_combout\;
-\ALT_INV_P~19_combout\ <= NOT \P~19_combout\;
-\ALT_INV_P~18_combout\ <= NOT \P~18_combout\;
-\ALT_INV_P~17_combout\ <= NOT \P~17_combout\;
-\ALT_INV_process_0~8_combout\ <= NOT \process_0~8_combout\;
-\ALT_INV_P~16_combout\ <= NOT \P~16_combout\;
-\ALT_INV_P~15_combout\ <= NOT \P~15_combout\;
-\ALT_INV_P~14_combout\ <= NOT \P~14_combout\;
-\ALT_INV_P~13_combout\ <= NOT \P~13_combout\;
-\ALT_INV_P~12_combout\ <= NOT \P~12_combout\;
-\ALT_INV_process_0~7_combout\ <= NOT \process_0~7_combout\;
-\ALT_INV_P~11_combout\ <= NOT \P~11_combout\;
-\ALT_INV_Add10~9_sumout\ <= NOT \Add10~9_sumout\;
-\ALT_INV_Add8~13_sumout\ <= NOT \Add8~13_sumout\;
-\ALT_INV_Add6~17_sumout\ <= NOT \Add6~17_sumout\;
-\ALT_INV_Add4~21_sumout\ <= NOT \Add4~21_sumout\;
-\ALT_INV_Add2~25_sumout\ <= NOT \Add2~25_sumout\;
-\ALT_INV_Add0~29_sumout\ <= NOT \Add0~29_sumout\;
-\ALT_INV_Add1~25_sumout\ <= NOT \Add1~25_sumout\;
-\ALT_INV_Add3~21_sumout\ <= NOT \Add3~21_sumout\;
-\ALT_INV_Add5~17_sumout\ <= NOT \Add5~17_sumout\;
-\ALT_INV_Add7~13_sumout\ <= NOT \Add7~13_sumout\;
-\ALT_INV_Add9~9_sumout\ <= NOT \Add9~9_sumout\;
-\ALT_INV_Add11~5_sumout\ <= NOT \Add11~5_sumout\;
-\ALT_INV_Add14~1_sumout\ <= NOT \Add14~1_sumout\;
-\ALT_INV_Add13~1_sumout\ <= NOT \Add13~1_sumout\;
-\ALT_INV_Add10~5_sumout\ <= NOT \Add10~5_sumout\;
-\ALT_INV_Add8~9_sumout\ <= NOT \Add8~9_sumout\;
-\ALT_INV_Add6~13_sumout\ <= NOT \Add6~13_sumout\;
-\ALT_INV_Add4~17_sumout\ <= NOT \Add4~17_sumout\;
-\ALT_INV_Add2~21_sumout\ <= NOT \Add2~21_sumout\;
-\ALT_INV_Add0~25_sumout\ <= NOT \Add0~25_sumout\;
-\ALT_INV_Add1~21_sumout\ <= NOT \Add1~21_sumout\;
-\ALT_INV_Add3~17_sumout\ <= NOT \Add3~17_sumout\;
-\ALT_INV_Add5~13_sumout\ <= NOT \Add5~13_sumout\;
-\ALT_INV_Add7~9_sumout\ <= NOT \Add7~9_sumout\;
-\ALT_INV_Add9~5_sumout\ <= NOT \Add9~5_sumout\;
-\ALT_INV_Add12~1_sumout\ <= NOT \Add12~1_sumout\;
-\ALT_INV_Add11~1_sumout\ <= NOT \Add11~1_sumout\;
-\ALT_INV_Add8~5_sumout\ <= NOT \Add8~5_sumout\;
-\ALT_INV_Add6~9_sumout\ <= NOT \Add6~9_sumout\;
-\ALT_INV_Add4~13_sumout\ <= NOT \Add4~13_sumout\;
-\ALT_INV_Add2~17_sumout\ <= NOT \Add2~17_sumout\;
-\ALT_INV_Add0~21_sumout\ <= NOT \Add0~21_sumout\;
-\ALT_INV_Add1~17_sumout\ <= NOT \Add1~17_sumout\;
-\ALT_INV_Add3~13_sumout\ <= NOT \Add3~13_sumout\;
-\ALT_INV_Add5~9_sumout\ <= NOT \Add5~9_sumout\;
-\ALT_INV_Add7~5_sumout\ <= NOT \Add7~5_sumout\;
-\ALT_INV_Add10~1_sumout\ <= NOT \Add10~1_sumout\;
-\ALT_INV_Add9~1_sumout\ <= NOT \Add9~1_sumout\;
-\ALT_INV_Add6~5_sumout\ <= NOT \Add6~5_sumout\;
-\ALT_INV_Add4~9_sumout\ <= NOT \Add4~9_sumout\;
-\ALT_INV_Add2~13_sumout\ <= NOT \Add2~13_sumout\;
-\ALT_INV_Add0~17_sumout\ <= NOT \Add0~17_sumout\;
-\ALT_INV_Add1~13_sumout\ <= NOT \Add1~13_sumout\;
-\ALT_INV_Add3~9_sumout\ <= NOT \Add3~9_sumout\;
-\ALT_INV_Add5~5_sumout\ <= NOT \Add5~5_sumout\;
-\ALT_INV_Add8~1_sumout\ <= NOT \Add8~1_sumout\;
-\ALT_INV_Add7~1_sumout\ <= NOT \Add7~1_sumout\;
-\ALT_INV_Add4~5_sumout\ <= NOT \Add4~5_sumout\;
-\ALT_INV_Add2~9_sumout\ <= NOT \Add2~9_sumout\;
-\ALT_INV_Add0~13_sumout\ <= NOT \Add0~13_sumout\;
-\ALT_INV_Add1~9_sumout\ <= NOT \Add1~9_sumout\;
-\ALT_INV_Add3~5_sumout\ <= NOT \Add3~5_sumout\;
-\ALT_INV_Add6~1_sumout\ <= NOT \Add6~1_sumout\;
-\ALT_INV_Add5~1_sumout\ <= NOT \Add5~1_sumout\;
-\ALT_INV_Add2~5_sumout\ <= NOT \Add2~5_sumout\;
-\ALT_INV_Add0~9_sumout\ <= NOT \Add0~9_sumout\;
-\ALT_INV_Add1~5_sumout\ <= NOT \Add1~5_sumout\;
-\ALT_INV_Add4~1_sumout\ <= NOT \Add4~1_sumout\;
-\ALT_INV_Add3~1_sumout\ <= NOT \Add3~1_sumout\;
-\ALT_INV_Add2~1_sumout\ <= NOT \Add2~1_sumout\;
-\ALT_INV_Add1~1_sumout\ <= NOT \Add1~1_sumout\;
-\ALT_INV_Add0~5_sumout\ <= NOT \Add0~5_sumout\;
-\ALT_INV_Add0~1_sumout\ <= NOT \Add0~1_sumout\;
+\P8|ALT_INV_Add5~17_sumout\ <= NOT \P8|Add5~17_sumout\;
+\P8|ALT_INV_Add7~13_sumout\ <= NOT \P8|Add7~13_sumout\;
+\P8|ALT_INV_Add9~9_sumout\ <= NOT \P8|Add9~9_sumout\;
+\P8|ALT_INV_Add11~5_sumout\ <= NOT \P8|Add11~5_sumout\;
+\P8|ALT_INV_Add14~1_sumout\ <= NOT \P8|Add14~1_sumout\;
+\P8|ALT_INV_Add13~1_sumout\ <= NOT \P8|Add13~1_sumout\;
+\P8|ALT_INV_Add12~1_sumout\ <= NOT \P8|Add12~1_sumout\;
+\P8|ALT_INV_Add10~5_sumout\ <= NOT \P8|Add10~5_sumout\;
+\P8|ALT_INV_Add8~9_sumout\ <= NOT \P8|Add8~9_sumout\;
+\P8|ALT_INV_Add6~13_sumout\ <= NOT \P8|Add6~13_sumout\;
+\P8|ALT_INV_Add4~17_sumout\ <= NOT \P8|Add4~17_sumout\;
+\P8|ALT_INV_Add2~21_sumout\ <= NOT \P8|Add2~21_sumout\;
+\P8|ALT_INV_Add0~25_sumout\ <= NOT \P8|Add0~25_sumout\;
+\P8|ALT_INV_Add1~21_sumout\ <= NOT \P8|Add1~21_sumout\;
+\P8|ALT_INV_Add3~17_sumout\ <= NOT \P8|Add3~17_sumout\;
+\P8|ALT_INV_Add5~13_sumout\ <= NOT \P8|Add5~13_sumout\;
+\P8|ALT_INV_Add7~9_sumout\ <= NOT \P8|Add7~9_sumout\;
+\P8|ALT_INV_Add9~5_sumout\ <= NOT \P8|Add9~5_sumout\;
+\P8|ALT_INV_Add11~1_sumout\ <= NOT \P8|Add11~1_sumout\;
+\P8|ALT_INV_Add10~1_sumout\ <= NOT \P8|Add10~1_sumout\;
+\P8|ALT_INV_Add8~5_sumout\ <= NOT \P8|Add8~5_sumout\;
+\P8|ALT_INV_Add6~9_sumout\ <= NOT \P8|Add6~9_sumout\;
+\P8|ALT_INV_Add4~13_sumout\ <= NOT \P8|Add4~13_sumout\;
+\P8|ALT_INV_Add2~17_sumout\ <= NOT \P8|Add2~17_sumout\;
+\P8|ALT_INV_Add0~21_sumout\ <= NOT \P8|Add0~21_sumout\;
+\P8|ALT_INV_Add1~17_sumout\ <= NOT \P8|Add1~17_sumout\;
+\P8|ALT_INV_Add3~13_sumout\ <= NOT \P8|Add3~13_sumout\;
+\P8|ALT_INV_Add5~9_sumout\ <= NOT \P8|Add5~9_sumout\;
+\P8|ALT_INV_Add7~5_sumout\ <= NOT \P8|Add7~5_sumout\;
+\P8|ALT_INV_Add9~1_sumout\ <= NOT \P8|Add9~1_sumout\;
+\P8|ALT_INV_Add8~1_sumout\ <= NOT \P8|Add8~1_sumout\;
+\P8|ALT_INV_Add6~5_sumout\ <= NOT \P8|Add6~5_sumout\;
+\P8|ALT_INV_Add4~9_sumout\ <= NOT \P8|Add4~9_sumout\;
+\P8|ALT_INV_Add2~13_sumout\ <= NOT \P8|Add2~13_sumout\;
+\P8|ALT_INV_Add0~17_sumout\ <= NOT \P8|Add0~17_sumout\;
+\P8|ALT_INV_Add1~13_sumout\ <= NOT \P8|Add1~13_sumout\;
+\P8|ALT_INV_Add3~9_sumout\ <= NOT \P8|Add3~9_sumout\;
+\P8|ALT_INV_Add5~5_sumout\ <= NOT \P8|Add5~5_sumout\;
+\P8|ALT_INV_Add7~1_sumout\ <= NOT \P8|Add7~1_sumout\;
+\P8|ALT_INV_Add6~1_sumout\ <= NOT \P8|Add6~1_sumout\;
+\P8|ALT_INV_Add4~5_sumout\ <= NOT \P8|Add4~5_sumout\;
+\P8|ALT_INV_Add2~9_sumout\ <= NOT \P8|Add2~9_sumout\;
+\P8|ALT_INV_Add0~13_sumout\ <= NOT \P8|Add0~13_sumout\;
+\P8|ALT_INV_Add1~9_sumout\ <= NOT \P8|Add1~9_sumout\;
+\P8|ALT_INV_Add3~5_sumout\ <= NOT \P8|Add3~5_sumout\;
+\P8|ALT_INV_Add5~1_sumout\ <= NOT \P8|Add5~1_sumout\;
+\P8|ALT_INV_Add4~1_sumout\ <= NOT \P8|Add4~1_sumout\;
+\P8|ALT_INV_Add2~5_sumout\ <= NOT \P8|Add2~5_sumout\;
+\P8|ALT_INV_Add0~9_sumout\ <= NOT \P8|Add0~9_sumout\;
+\P8|ALT_INV_Add1~5_sumout\ <= NOT \P8|Add1~5_sumout\;
+\P8|ALT_INV_Add3~1_sumout\ <= NOT \P8|Add3~1_sumout\;
+\P8|ALT_INV_Add2~1_sumout\ <= NOT \P8|Add2~1_sumout\;
+\P8|ALT_INV_Add1~1_sumout\ <= NOT \P8|Add1~1_sumout\;
+\P8|ALT_INV_Add0~5_sumout\ <= NOT \P8|Add0~5_sumout\;
+\P8|ALT_INV_Add0~1_sumout\ <= NOT \P8|Add0~1_sumout\;
+\P5|ALT_INV_LessThan0~6_combout\ <= NOT \P5|LessThan0~6_combout\;
+\P5|ALT_INV_LessThan0~5_combout\ <= NOT \P5|LessThan0~5_combout\;
+\P5|ALT_INV_LessThan0~4_combout\ <= NOT \P5|LessThan0~4_combout\;
+\P5|ALT_INV_LessThan0~3_combout\ <= NOT \P5|LessThan0~3_combout\;
+\P5|ALT_INV_LessThan0~2_combout\ <= NOT \P5|LessThan0~2_combout\;
+\P5|ALT_INV_LessThan0~1_combout\ <= NOT \P5|LessThan0~1_combout\;
+\P5|ALT_INV_LessThan0~0_combout\ <= NOT \P5|LessThan0~0_combout\;
+\P9|ALT_INV_Mux15~1_combout\ <= NOT \P9|Mux15~1_combout\;
+\P9|ALT_INV_Mux15~0_combout\ <= NOT \P9|Mux15~0_combout\;
+\P9|ALT_INV_Mux15~80_combout\ <= NOT \P9|Mux15~80_combout\;
+\P9|ALT_INV_Mux15~76_combout\ <= NOT \P9|Mux15~76_combout\;
+\P8|ALT_INV_Add14~29_sumout\ <= NOT \P8|Add14~29_sumout\;
+\P8|ALT_INV_Add13~29_sumout\ <= NOT \P8|Add13~29_sumout\;
+\P8|ALT_INV_Add12~29_sumout\ <= NOT \P8|Add12~29_sumout\;
+\P8|ALT_INV_Add11~29_sumout\ <= NOT \P8|Add11~29_sumout\;
+\P8|ALT_INV_Add14~25_sumout\ <= NOT \P8|Add14~25_sumout\;
+\P8|ALT_INV_Add13~25_sumout\ <= NOT \P8|Add13~25_sumout\;
+\P8|ALT_INV_Add12~25_sumout\ <= NOT \P8|Add12~25_sumout\;
+\P8|ALT_INV_Add10~29_sumout\ <= NOT \P8|Add10~29_sumout\;
+\P8|ALT_INV_Add9~29_sumout\ <= NOT \P8|Add9~29_sumout\;
+\P8|ALT_INV_Add11~25_sumout\ <= NOT \P8|Add11~25_sumout\;
+\P8|ALT_INV_Add14~21_sumout\ <= NOT \P8|Add14~21_sumout\;
+\P8|ALT_INV_Add13~21_sumout\ <= NOT \P8|Add13~21_sumout\;
+\P8|ALT_INV_Add12~21_sumout\ <= NOT \P8|Add12~21_sumout\;
+\P8|ALT_INV_Add10~25_sumout\ <= NOT \P8|Add10~25_sumout\;
+\P8|ALT_INV_Add8~29_sumout\ <= NOT \P8|Add8~29_sumout\;
+\P8|ALT_INV_Add7~29_sumout\ <= NOT \P8|Add7~29_sumout\;
+\P8|ALT_INV_Add9~25_sumout\ <= NOT \P8|Add9~25_sumout\;
+\P8|ALT_INV_Add11~21_sumout\ <= NOT \P8|Add11~21_sumout\;
+\P8|ALT_INV_Add14~17_sumout\ <= NOT \P8|Add14~17_sumout\;
+\P8|ALT_INV_Add13~17_sumout\ <= NOT \P8|Add13~17_sumout\;
+\P8|ALT_INV_Add12~17_sumout\ <= NOT \P8|Add12~17_sumout\;
+\P8|ALT_INV_Add10~21_sumout\ <= NOT \P8|Add10~21_sumout\;
+\P8|ALT_INV_Add8~25_sumout\ <= NOT \P8|Add8~25_sumout\;
+\P8|ALT_INV_Add6~29_sumout\ <= NOT \P8|Add6~29_sumout\;
+\P8|ALT_INV_Add5~29_sumout\ <= NOT \P8|Add5~29_sumout\;
+\P8|ALT_INV_Add7~25_sumout\ <= NOT \P8|Add7~25_sumout\;
+\P8|ALT_INV_Add9~21_sumout\ <= NOT \P8|Add9~21_sumout\;
+\P8|ALT_INV_Add11~17_sumout\ <= NOT \P8|Add11~17_sumout\;
+\P8|ALT_INV_Add14~13_sumout\ <= NOT \P8|Add14~13_sumout\;
+\P8|ALT_INV_Add13~13_sumout\ <= NOT \P8|Add13~13_sumout\;
+\P8|ALT_INV_Add12~13_sumout\ <= NOT \P8|Add12~13_sumout\;
+\P8|ALT_INV_Add10~17_sumout\ <= NOT \P8|Add10~17_sumout\;
+\P8|ALT_INV_Add8~21_sumout\ <= NOT \P8|Add8~21_sumout\;
+\P8|ALT_INV_Add6~25_sumout\ <= NOT \P8|Add6~25_sumout\;
+\P8|ALT_INV_Add4~29_sumout\ <= NOT \P8|Add4~29_sumout\;
+\P8|ALT_INV_Add3~29_sumout\ <= NOT \P8|Add3~29_sumout\;
+\P8|ALT_INV_Add5~25_sumout\ <= NOT \P8|Add5~25_sumout\;
+\P8|ALT_INV_Add7~21_sumout\ <= NOT \P8|Add7~21_sumout\;
+\P8|ALT_INV_Add9~17_sumout\ <= NOT \P8|Add9~17_sumout\;
+\P8|ALT_INV_Add11~13_sumout\ <= NOT \P8|Add11~13_sumout\;
+\P8|ALT_INV_Add14~9_sumout\ <= NOT \P8|Add14~9_sumout\;
+\P8|ALT_INV_Add13~9_sumout\ <= NOT \P8|Add13~9_sumout\;
+\P8|ALT_INV_Add12~9_sumout\ <= NOT \P8|Add12~9_sumout\;
+\P8|ALT_INV_Add10~13_sumout\ <= NOT \P8|Add10~13_sumout\;
+\P8|ALT_INV_Add8~17_sumout\ <= NOT \P8|Add8~17_sumout\;
+\P8|ALT_INV_Add6~21_sumout\ <= NOT \P8|Add6~21_sumout\;
+\P8|ALT_INV_Add4~25_sumout\ <= NOT \P8|Add4~25_sumout\;
+\P8|ALT_INV_Add2~29_sumout\ <= NOT \P8|Add2~29_sumout\;
+\P8|ALT_INV_Add1~29_sumout\ <= NOT \P8|Add1~29_sumout\;
+\P8|ALT_INV_Add3~25_sumout\ <= NOT \P8|Add3~25_sumout\;
+\P8|ALT_INV_Add5~21_sumout\ <= NOT \P8|Add5~21_sumout\;
+\P8|ALT_INV_Add7~17_sumout\ <= NOT \P8|Add7~17_sumout\;
+\P8|ALT_INV_Add9~13_sumout\ <= NOT \P8|Add9~13_sumout\;
+\P8|ALT_INV_Add11~9_sumout\ <= NOT \P8|Add11~9_sumout\;
+\P8|ALT_INV_Add14~5_sumout\ <= NOT \P8|Add14~5_sumout\;
+\P8|ALT_INV_Add13~5_sumout\ <= NOT \P8|Add13~5_sumout\;
+\P8|ALT_INV_Add12~5_sumout\ <= NOT \P8|Add12~5_sumout\;
+\P8|ALT_INV_Add10~9_sumout\ <= NOT \P8|Add10~9_sumout\;
+\P8|ALT_INV_Add8~13_sumout\ <= NOT \P8|Add8~13_sumout\;
+\P8|ALT_INV_Add6~17_sumout\ <= NOT \P8|Add6~17_sumout\;
+\P8|ALT_INV_Add4~21_sumout\ <= NOT \P8|Add4~21_sumout\;
+\P8|ALT_INV_Add2~25_sumout\ <= NOT \P8|Add2~25_sumout\;
+\P8|ALT_INV_Add0~29_sumout\ <= NOT \P8|Add0~29_sumout\;
+\P8|ALT_INV_Add1~25_sumout\ <= NOT \P8|Add1~25_sumout\;
+\P8|ALT_INV_Add3~21_sumout\ <= NOT \P8|Add3~21_sumout\;
+\P9|ALT_INV_Mux15~58_combout\ <= NOT \P9|Mux15~58_combout\;
+\P8|ALT_INV_P~38_combout\ <= NOT \P8|P~38_combout\;
+\P8|ALT_INV_P~37_combout\ <= NOT \P8|P~37_combout\;
+\P8|ALT_INV_P~36_combout\ <= NOT \P8|P~36_combout\;
+\P9|ALT_INV_Mux15~57_combout\ <= NOT \P9|Mux15~57_combout\;
+\P9|ALT_INV_Mux15~56_combout\ <= NOT \P9|Mux15~56_combout\;
+\P4|ALT_INV_C~9_combout\ <= NOT \P4|C~9_combout\;
+\P9|ALT_INV_Mux15~55_combout\ <= NOT \P9|Mux15~55_combout\;
+\P9|ALT_INV_Mux15~54_combout\ <= NOT \P9|Mux15~54_combout\;
+\P9|ALT_INV_Mux15~53_combout\ <= NOT \P9|Mux15~53_combout\;
+\P8|ALT_INV_P~35_combout\ <= NOT \P8|P~35_combout\;
+\P8|ALT_INV_P~34_combout\ <= NOT \P8|P~34_combout\;
+\P8|ALT_INV_P~33_combout\ <= NOT \P8|P~33_combout\;
+\P8|ALT_INV_P~32_combout\ <= NOT \P8|P~32_combout\;
+\P9|ALT_INV_Mux15~52_combout\ <= NOT \P9|Mux15~52_combout\;
+\P9|ALT_INV_Mux15~51_combout\ <= NOT \P9|Mux15~51_combout\;
+\P4|ALT_INV_C~8_combout\ <= NOT \P4|C~8_combout\;
+\P9|ALT_INV_Mux15~50_combout\ <= NOT \P9|Mux15~50_combout\;
+\P9|ALT_INV_Mux15~49_combout\ <= NOT \P9|Mux15~49_combout\;
+\P9|ALT_INV_Mux15~48_combout\ <= NOT \P9|Mux15~48_combout\;
+\P8|ALT_INV_P~31_combout\ <= NOT \P8|P~31_combout\;
+\P8|ALT_INV_P~30_combout\ <= NOT \P8|P~30_combout\;
+\P8|ALT_INV_P~29_combout\ <= NOT \P8|P~29_combout\;
+\P8|ALT_INV_P~28_combout\ <= NOT \P8|P~28_combout\;
+\P8|ALT_INV_P~27_combout\ <= NOT \P8|P~27_combout\;
+\P9|ALT_INV_Mux15~47_combout\ <= NOT \P9|Mux15~47_combout\;
+\P9|ALT_INV_Mux15~46_combout\ <= NOT \P9|Mux15~46_combout\;
+\P4|ALT_INV_C~7_combout\ <= NOT \P4|C~7_combout\;
+\P9|ALT_INV_Mux15~45_combout\ <= NOT \P9|Mux15~45_combout\;
+\P9|ALT_INV_Mux15~44_combout\ <= NOT \P9|Mux15~44_combout\;
+\P9|ALT_INV_Mux15~43_combout\ <= NOT \P9|Mux15~43_combout\;
+\P8|ALT_INV_P~26_combout\ <= NOT \P8|P~26_combout\;
+\P8|ALT_INV_P~25_combout\ <= NOT \P8|P~25_combout\;
+\P8|ALT_INV_P~24_combout\ <= NOT \P8|P~24_combout\;
+\P8|ALT_INV_P~23_combout\ <= NOT \P8|P~23_combout\;
+\P8|ALT_INV_P~22_combout\ <= NOT \P8|P~22_combout\;
+\P8|ALT_INV_P~21_combout\ <= NOT \P8|P~21_combout\;
+\P9|ALT_INV_Mux15~42_combout\ <= NOT \P9|Mux15~42_combout\;
+\P9|ALT_INV_Mux15~41_combout\ <= NOT \P9|Mux15~41_combout\;
+\P4|ALT_INV_C~6_combout\ <= NOT \P4|C~6_combout\;
+\P9|ALT_INV_Mux15~40_combout\ <= NOT \P9|Mux15~40_combout\;
+\P9|ALT_INV_Mux15~39_combout\ <= NOT \P9|Mux15~39_combout\;
+\P9|ALT_INV_Mux15~38_combout\ <= NOT \P9|Mux15~38_combout\;
+\P9|ALT_INV_Mux15~37_combout\ <= NOT \P9|Mux15~37_combout\;
+\P8|ALT_INV_P~20_combout\ <= NOT \P8|P~20_combout\;
+\P8|ALT_INV_P~19_combout\ <= NOT \P8|P~19_combout\;
+\P8|ALT_INV_P~18_combout\ <= NOT \P8|P~18_combout\;
+\P8|ALT_INV_P~17_combout\ <= NOT \P8|P~17_combout\;
+\P8|ALT_INV_P~16_combout\ <= NOT \P8|P~16_combout\;
+\P8|ALT_INV_P~15_combout\ <= NOT \P8|P~15_combout\;
+\P9|ALT_INV_Mux15~36_combout\ <= NOT \P9|Mux15~36_combout\;
+\P9|ALT_INV_Mux15~35_combout\ <= NOT \P9|Mux15~35_combout\;
+\P9|ALT_INV_Mux15~34_combout\ <= NOT \P9|Mux15~34_combout\;
+\P9|ALT_INV_Mux15~33_combout\ <= NOT \P9|Mux15~33_combout\;
+\P4|ALT_INV_C~5_combout\ <= NOT \P4|C~5_combout\;
+\P9|ALT_INV_Mux15~32_combout\ <= NOT \P9|Mux15~32_combout\;
+\P9|ALT_INV_Mux15~31_combout\ <= NOT \P9|Mux15~31_combout\;
+\P9|ALT_INV_Mux15~30_combout\ <= NOT \P9|Mux15~30_combout\;
+\P8|ALT_INV_process_0~10_combout\ <= NOT \P8|process_0~10_combout\;
+\P8|ALT_INV_P~14_combout\ <= NOT \P8|P~14_combout\;
+\P8|ALT_INV_P~13_combout\ <= NOT \P8|P~13_combout\;
+\P8|ALT_INV_P~12_combout\ <= NOT \P8|P~12_combout\;
+\P8|ALT_INV_P~11_combout\ <= NOT \P8|P~11_combout\;
+\P8|ALT_INV_P~10_combout\ <= NOT \P8|P~10_combout\;
+\P8|ALT_INV_process_0~9_combout\ <= NOT \P8|process_0~9_combout\;
+\P9|ALT_INV_Mux15~29_combout\ <= NOT \P9|Mux15~29_combout\;
+\P9|ALT_INV_Mux15~28_combout\ <= NOT \P9|Mux15~28_combout\;
+\P4|ALT_INV_C~4_combout\ <= NOT \P4|C~4_combout\;
+\P9|ALT_INV_Mux15~27_combout\ <= NOT \P9|Mux15~27_combout\;
+\P9|ALT_INV_Mux15~26_combout\ <= NOT \P9|Mux15~26_combout\;
+\P9|ALT_INV_Mux15~25_combout\ <= NOT \P9|Mux15~25_combout\;
+\P8|ALT_INV_process_0~8_combout\ <= NOT \P8|process_0~8_combout\;
+\P8|ALT_INV_P~9_combout\ <= NOT \P8|P~9_combout\;
+\P8|ALT_INV_P~8_combout\ <= NOT \P8|P~8_combout\;
+\P8|ALT_INV_P~7_combout\ <= NOT \P8|P~7_combout\;
+\P8|ALT_INV_P~6_combout\ <= NOT \P8|P~6_combout\;
+\P8|ALT_INV_process_0~7_combout\ <= NOT \P8|process_0~7_combout\;
+\P9|ALT_INV_Mux15~24_combout\ <= NOT \P9|Mux15~24_combout\;
+\P9|ALT_INV_Mux15~23_combout\ <= NOT \P9|Mux15~23_combout\;
+\P4|ALT_INV_C~3_combout\ <= NOT \P4|C~3_combout\;
+\P9|ALT_INV_Mux15~22_combout\ <= NOT \P9|Mux15~22_combout\;
+\P9|ALT_INV_Mux15~21_combout\ <= NOT \P9|Mux15~21_combout\;
+\P9|ALT_INV_Mux15~20_combout\ <= NOT \P9|Mux15~20_combout\;
+\P8|ALT_INV_process_0~6_combout\ <= NOT \P8|process_0~6_combout\;
+\P8|ALT_INV_P~5_combout\ <= NOT \P8|P~5_combout\;
+\P8|ALT_INV_P~4_combout\ <= NOT \P8|P~4_combout\;
+\P8|ALT_INV_P~3_combout\ <= NOT \P8|P~3_combout\;
+\P8|ALT_INV_process_0~5_combout\ <= NOT \P8|process_0~5_combout\;
+\P9|ALT_INV_Mux15~19_combout\ <= NOT \P9|Mux15~19_combout\;
+\P9|ALT_INV_Mux15~18_combout\ <= NOT \P9|Mux15~18_combout\;
+\P4|ALT_INV_C~2_combout\ <= NOT \P4|C~2_combout\;
+\P9|ALT_INV_Mux15~17_combout\ <= NOT \P9|Mux15~17_combout\;
+\P9|ALT_INV_Mux15~16_combout\ <= NOT \P9|Mux15~16_combout\;
+\P9|ALT_INV_Mux15~15_combout\ <= NOT \P9|Mux15~15_combout\;
+\P8|ALT_INV_process_0~4_combout\ <= NOT \P8|process_0~4_combout\;
+\P8|ALT_INV_P~2_combout\ <= NOT \P8|P~2_combout\;
+\P8|ALT_INV_P~1_combout\ <= NOT \P8|P~1_combout\;
+\P8|ALT_INV_process_0~3_combout\ <= NOT \P8|process_0~3_combout\;
+\P9|ALT_INV_Mux15~14_combout\ <= NOT \P9|Mux15~14_combout\;
+\P9|ALT_INV_Mux15~13_combout\ <= NOT \P9|Mux15~13_combout\;
+\P4|ALT_INV_C~1_combout\ <= NOT \P4|C~1_combout\;
+\P9|ALT_INV_Mux15~12_combout\ <= NOT \P9|Mux15~12_combout\;
+\P9|ALT_INV_Mux15~11_combout\ <= NOT \P9|Mux15~11_combout\;
+\P9|ALT_INV_Mux15~10_combout\ <= NOT \P9|Mux15~10_combout\;
+\P8|ALT_INV_process_0~2_combout\ <= NOT \P8|process_0~2_combout\;
+\P8|ALT_INV_P~0_combout\ <= NOT \P8|P~0_combout\;
+\P8|ALT_INV_process_0~1_combout\ <= NOT \P8|process_0~1_combout\;
+\P8|ALT_INV_process_0~0_combout\ <= NOT \P8|process_0~0_combout\;
+\P9|ALT_INV_Mux15~9_combout\ <= NOT \P9|Mux15~9_combout\;
+\P9|ALT_INV_Mux15~8_combout\ <= NOT \P9|Mux15~8_combout\;
+\P4|ALT_INV_C~0_combout\ <= NOT \P4|C~0_combout\;
+\P9|ALT_INV_Mux15~7_combout\ <= NOT \P9|Mux15~7_combout\;
+\P9|ALT_INV_Mux15~6_combout\ <= NOT \P9|Mux15~6_combout\;
+\P9|ALT_INV_Mux15~5_combout\ <= NOT \P9|Mux15~5_combout\;
+\P9|ALT_INV_Mux15~3_combout\ <= NOT \P9|Mux15~3_combout\;
+\P9|ALT_INV_Mux15~2_combout\ <= NOT \P9|Mux15~2_combout\;
+\ALT_INV_opcode[2]~input_o\ <= NOT \opcode[2]~input_o\;
+\ALT_INV_opcode[1]~input_o\ <= NOT \opcode[1]~input_o\;
+\ALT_INV_B[1]~input_o\ <= NOT \B[1]~input_o\;
+\ALT_INV_A[1]~input_o\ <= NOT \A[1]~input_o\;
+\ALT_INV_B[2]~input_o\ <= NOT \B[2]~input_o\;
+\ALT_INV_A[2]~input_o\ <= NOT \A[2]~input_o\;
+\ALT_INV_B[3]~input_o\ <= NOT \B[3]~input_o\;
+\ALT_INV_A[3]~input_o\ <= NOT \A[3]~input_o\;
+\ALT_INV_B[4]~input_o\ <= NOT \B[4]~input_o\;
+\ALT_INV_A[4]~input_o\ <= NOT \A[4]~input_o\;
+\ALT_INV_B[5]~input_o\ <= NOT \B[5]~input_o\;
+\ALT_INV_A[5]~input_o\ <= NOT \A[5]~input_o\;
+\ALT_INV_B[6]~input_o\ <= NOT \B[6]~input_o\;
+\ALT_INV_A[6]~input_o\ <= NOT \A[6]~input_o\;
+\ALT_INV_B[7]~input_o\ <= NOT \B[7]~input_o\;
+\ALT_INV_A[7]~input_o\ <= NOT \A[7]~input_o\;
+\ALT_INV_B[8]~input_o\ <= NOT \B[8]~input_o\;
+\ALT_INV_A[8]~input_o\ <= NOT \A[8]~input_o\;
+\ALT_INV_B[9]~input_o\ <= NOT \B[9]~input_o\;
+\ALT_INV_A[9]~input_o\ <= NOT \A[9]~input_o\;
+\ALT_INV_B[10]~input_o\ <= NOT \B[10]~input_o\;
+\ALT_INV_A[10]~input_o\ <= NOT \A[10]~input_o\;
+\ALT_INV_B[11]~input_o\ <= NOT \B[11]~input_o\;
+\ALT_INV_A[11]~input_o\ <= NOT \A[11]~input_o\;
+\ALT_INV_B[12]~input_o\ <= NOT \B[12]~input_o\;
+\ALT_INV_A[12]~input_o\ <= NOT \A[12]~input_o\;
+\ALT_INV_B[13]~input_o\ <= NOT \B[13]~input_o\;
+\ALT_INV_A[13]~input_o\ <= NOT \A[13]~input_o\;
+\ALT_INV_B[14]~input_o\ <= NOT \B[14]~input_o\;
+\ALT_INV_A[14]~input_o\ <= NOT \A[14]~input_o\;
+\ALT_INV_B[15]~input_o\ <= NOT \B[15]~input_o\;
+\ALT_INV_A[15]~input_o\ <= NOT \A[15]~input_o\;
+\ALT_INV_A[0]~input_o\ <= NOT \A[0]~input_o\;
+\ALT_INV_B[0]~input_o\ <= NOT \B[0]~input_o\;
+\ALT_INV_opcode[0]~input_o\ <= NOT \opcode[0]~input_o\;
+\ALT_INV_negate~input_o\ <= NOT \negate~input_o\;
+\P9|ALT_INV_Mux15~75_combout\ <= NOT \P9|Mux15~75_combout\;
+\P9|ALT_INV_Mux15~74_combout\ <= NOT \P9|Mux15~74_combout\;
+\P5|ALT_INV_LessThan0~7_combout\ <= NOT \P5|LessThan0~7_combout\;
+\P9|ALT_INV_Mux15~73_combout\ <= NOT \P9|Mux15~73_combout\;
+\P9|ALT_INV_Mux15~72_combout\ <= NOT \P9|Mux15~72_combout\;
+\P9|ALT_INV_Mux15~71_combout\ <= NOT \P9|Mux15~71_combout\;
+\P9|ALT_INV_Mux15~70_combout\ <= NOT \P9|Mux15~70_combout\;
+\P4|ALT_INV_C~12_combout\ <= NOT \P4|C~12_combout\;
+\P9|ALT_INV_Mux15~69_combout\ <= NOT \P9|Mux15~69_combout\;
+\P9|ALT_INV_Mux15~68_combout\ <= NOT \P9|Mux15~68_combout\;
+\P8|ALT_INV_P~41_combout\ <= NOT \P8|P~41_combout\;
+\P9|ALT_INV_Mux15~67_combout\ <= NOT \P9|Mux15~67_combout\;
+\P9|ALT_INV_Mux15~66_combout\ <= NOT \P9|Mux15~66_combout\;
+\P4|ALT_INV_C~11_combout\ <= NOT \P4|C~11_combout\;
+\P9|ALT_INV_Mux15~65_combout\ <= NOT \P9|Mux15~65_combout\;
+\P9|ALT_INV_Mux15~64_combout\ <= NOT \P9|Mux15~64_combout\;
+\P9|ALT_INV_Mux15~63_combout\ <= NOT \P9|Mux15~63_combout\;
+\P8|ALT_INV_P~40_combout\ <= NOT \P8|P~40_combout\;
+\P8|ALT_INV_P~39_combout\ <= NOT \P8|P~39_combout\;
+\P9|ALT_INV_Mux15~62_combout\ <= NOT \P9|Mux15~62_combout\;
+\P9|ALT_INV_Mux15~61_combout\ <= NOT \P9|Mux15~61_combout\;
+\P4|ALT_INV_C~10_combout\ <= NOT \P4|C~10_combout\;
+\P9|ALT_INV_Mux15~60_combout\ <= NOT \P9|Mux15~60_combout\;
+\P9|ALT_INV_Mux15~59_combout\ <= NOT \P9|Mux15~59_combout\;
 
 \Saida[0]~output\ : cyclonev_io_obuf
 -- pragma translate_off
@@ -808,7 +1136,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~0_combout\,
+	i => \P9|Mux15~4_combout\,
 	devoe => ww_devoe,
 	o => \Saida[0]~output_o\);
 
@@ -820,7 +1148,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~1_combout\,
+	i => \P9|Mux14~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[1]~output_o\);
 
@@ -832,7 +1160,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~92_combout\,
+	i => \P9|Mux13~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[2]~output_o\);
 
@@ -844,7 +1172,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~88_combout\,
+	i => \P9|Mux12~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[3]~output_o\);
 
@@ -856,7 +1184,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~84_combout\,
+	i => \P9|Mux11~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[4]~output_o\);
 
@@ -868,7 +1196,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~80_combout\,
+	i => \P9|Mux10~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[5]~output_o\);
 
@@ -880,7 +1208,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~76_combout\,
+	i => \P9|Mux9~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[6]~output_o\);
 
@@ -892,7 +1220,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~72_combout\,
+	i => \P9|Mux8~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[7]~output_o\);
 
@@ -904,7 +1232,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~68_combout\,
+	i => \P9|Mux7~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[8]~output_o\);
 
@@ -916,7 +1244,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~64_combout\,
+	i => \P9|Mux6~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[9]~output_o\);
 
@@ -928,7 +1256,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~60_combout\,
+	i => \P9|Mux5~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[10]~output_o\);
 
@@ -940,7 +1268,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~42_combout\,
+	i => \P9|Mux4~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[11]~output_o\);
 
@@ -952,7 +1280,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~45_combout\,
+	i => \P9|Mux3~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[12]~output_o\);
 
@@ -964,7 +1292,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~47_combout\,
+	i => \P9|Mux2~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[13]~output_o\);
 
@@ -976,7 +1304,7 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~48_combout\,
+	i => \P9|Mux1~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[14]~output_o\);
 
@@ -988,34 +1316,540 @@ GENERIC MAP (
 	shift_series_termination_control => "false")
 -- pragma translate_on
 PORT MAP (
-	i => \P~48_combout\,
+	i => \P9|Mux0~0_combout\,
 	devoe => ww_devoe,
 	o => \Saida[15]~output_o\);
 
-\inputB[0]~input\ : cyclonev_io_ibuf
+\negate~input\ : cyclonev_io_ibuf
 -- pragma translate_off
 GENERIC MAP (
 	bus_hold => "false",
 	simulate_z_as => "z")
 -- pragma translate_on
 PORT MAP (
-	i => ww_inputB(0),
-	o => \inputB[0]~input_o\);
+	i => ww_negate,
+	o => \negate~input_o\);
 
-\inputA[0]~input\ : cyclonev_io_ibuf
+\opcode[0]~input\ : cyclonev_io_ibuf
 -- pragma translate_off
 GENERIC MAP (
 	bus_hold => "false",
 	simulate_z_as => "z")
 -- pragma translate_on
 PORT MAP (
-	i => ww_inputA(0),
-	o => \inputA[0]~input_o\);
+	i => ww_opcode(0),
+	o => \opcode[0]~input_o\);
 
-\Add0~1\ : cyclonev_lcell_comb
+\B[0]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(0),
+	o => \B[0]~input_o\);
+
+\A[0]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(0),
+	o => \A[0]~input_o\);
+
+\P9|Mux15~0\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add0~1_sumout\ = SUM(( !\inputA[0]~input_o\ ) + ( VCC ) + ( !VCC ))
--- \Add0~2\ = CARRY(( !\inputA[0]~input_o\ ) + ( VCC ) + ( !VCC ))
+-- \P9|Mux15~0_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\B[0]~input_o\) # (!\A[0]~input_o\))) # (\opcode[0]~input_o\ & (!\B[0]~input_o\ & !\A[0]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_B[0]~input_o\,
+	datad => \ALT_INV_A[0]~input_o\,
+	combout => \P9|Mux15~0_combout\);
+
+\P9|Mux15~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~1_combout\ = !\B[0]~input_o\ $ (!\A[0]~input_o\ $ (((\negate~input_o\ & !\opcode[0]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0100101110110100010010111011010001001011101101000100101110110100",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_B[0]~input_o\,
+	datad => \ALT_INV_A[0]~input_o\,
+	combout => \P9|Mux15~1_combout\);
+
+\A[15]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(15),
+	o => \A[15]~input_o\);
+
+\B[15]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(15),
+	o => \B[15]~input_o\);
+
+\A[14]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(14),
+	o => \A[14]~input_o\);
+
+\B[14]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(14),
+	o => \B[14]~input_o\);
+
+\A[13]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(13),
+	o => \A[13]~input_o\);
+
+\B[13]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(13),
+	o => \B[13]~input_o\);
+
+\A[12]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(12),
+	o => \A[12]~input_o\);
+
+\B[12]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(12),
+	o => \B[12]~input_o\);
+
+\A[11]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(11),
+	o => \A[11]~input_o\);
+
+\B[11]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(11),
+	o => \B[11]~input_o\);
+
+\A[10]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(10),
+	o => \A[10]~input_o\);
+
+\B[10]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(10),
+	o => \B[10]~input_o\);
+
+\A[9]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(9),
+	o => \A[9]~input_o\);
+
+\B[9]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(9),
+	o => \B[9]~input_o\);
+
+\A[8]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(8),
+	o => \A[8]~input_o\);
+
+\B[8]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(8),
+	o => \B[8]~input_o\);
+
+\A[7]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(7),
+	o => \A[7]~input_o\);
+
+\B[7]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(7),
+	o => \B[7]~input_o\);
+
+\A[6]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(6),
+	o => \A[6]~input_o\);
+
+\B[6]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(6),
+	o => \B[6]~input_o\);
+
+\A[5]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(5),
+	o => \A[5]~input_o\);
+
+\B[5]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(5),
+	o => \B[5]~input_o\);
+
+\A[4]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(4),
+	o => \A[4]~input_o\);
+
+\B[4]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(4),
+	o => \B[4]~input_o\);
+
+\A[3]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(3),
+	o => \A[3]~input_o\);
+
+\B[3]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(3),
+	o => \B[3]~input_o\);
+
+\A[2]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(2),
+	o => \A[2]~input_o\);
+
+\B[2]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(2),
+	o => \B[2]~input_o\);
+
+\A[1]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_A(1),
+	o => \A[1]~input_o\);
+
+\B[1]~input\ : cyclonev_io_ibuf
+-- pragma translate_off
+GENERIC MAP (
+	bus_hold => "false",
+	simulate_z_as => "z")
+-- pragma translate_on
+PORT MAP (
+	i => ww_B(1),
+	o => \B[1]~input_o\);
+
+\P5|LessThan0~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P5|LessThan0~0_combout\ = (!\A[1]~input_o\ & (((\B[0]~input_o\ & !\A[0]~input_o\)) # (\B[1]~input_o\))) # (\A[1]~input_o\ & (\B[0]~input_o\ & (!\A[0]~input_o\ & \B[1]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0100000011110100010000001111010001000000111101000100000011110100",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_A[0]~input_o\,
+	datac => \ALT_INV_A[1]~input_o\,
+	datad => \ALT_INV_B[1]~input_o\,
+	combout => \P5|LessThan0~0_combout\);
+
+\P5|LessThan0~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P5|LessThan0~1_combout\ = ( \P5|LessThan0~0_combout\ & ( (!\A[3]~input_o\ & (((!\A[2]~input_o\) # (\B[2]~input_o\)) # (\B[3]~input_o\))) # (\A[3]~input_o\ & (\B[3]~input_o\ & ((!\A[2]~input_o\) # (\B[2]~input_o\)))) ) ) # ( !\P5|LessThan0~0_combout\ & ( 
+-- (!\A[3]~input_o\ & (((!\A[2]~input_o\ & \B[2]~input_o\)) # (\B[3]~input_o\))) # (\A[3]~input_o\ & (\B[3]~input_o\ & (!\A[2]~input_o\ & \B[2]~input_o\))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001010110010101100101011101100100010101100101011001010111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_A[3]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \ALT_INV_A[2]~input_o\,
+	datad => \ALT_INV_B[2]~input_o\,
+	datae => \P5|ALT_INV_LessThan0~0_combout\,
+	combout => \P5|LessThan0~1_combout\);
+
+\P5|LessThan0~2\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P5|LessThan0~2_combout\ = ( \P5|LessThan0~1_combout\ & ( (!\A[5]~input_o\ & (((!\A[4]~input_o\) # (\B[4]~input_o\)) # (\B[5]~input_o\))) # (\A[5]~input_o\ & (\B[5]~input_o\ & ((!\A[4]~input_o\) # (\B[4]~input_o\)))) ) ) # ( !\P5|LessThan0~1_combout\ & ( 
+-- (!\A[5]~input_o\ & (((!\A[4]~input_o\ & \B[4]~input_o\)) # (\B[5]~input_o\))) # (\A[5]~input_o\ & (\B[5]~input_o\ & (!\A[4]~input_o\ & \B[4]~input_o\))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001010110010101100101011101100100010101100101011001010111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_A[5]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \ALT_INV_A[4]~input_o\,
+	datad => \ALT_INV_B[4]~input_o\,
+	datae => \P5|ALT_INV_LessThan0~1_combout\,
+	combout => \P5|LessThan0~2_combout\);
+
+\P5|LessThan0~3\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P5|LessThan0~3_combout\ = ( \P5|LessThan0~2_combout\ & ( (!\A[7]~input_o\ & (((!\A[6]~input_o\) # (\B[6]~input_o\)) # (\B[7]~input_o\))) # (\A[7]~input_o\ & (\B[7]~input_o\ & ((!\A[6]~input_o\) # (\B[6]~input_o\)))) ) ) # ( !\P5|LessThan0~2_combout\ & ( 
+-- (!\A[7]~input_o\ & (((!\A[6]~input_o\ & \B[6]~input_o\)) # (\B[7]~input_o\))) # (\A[7]~input_o\ & (\B[7]~input_o\ & (!\A[6]~input_o\ & \B[6]~input_o\))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001010110010101100101011101100100010101100101011001010111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_A[7]~input_o\,
+	datab => \ALT_INV_B[7]~input_o\,
+	datac => \ALT_INV_A[6]~input_o\,
+	datad => \ALT_INV_B[6]~input_o\,
+	datae => \P5|ALT_INV_LessThan0~2_combout\,
+	combout => \P5|LessThan0~3_combout\);
+
+\P5|LessThan0~4\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P5|LessThan0~4_combout\ = ( \P5|LessThan0~3_combout\ & ( (!\A[9]~input_o\ & (((!\A[8]~input_o\) # (\B[8]~input_o\)) # (\B[9]~input_o\))) # (\A[9]~input_o\ & (\B[9]~input_o\ & ((!\A[8]~input_o\) # (\B[8]~input_o\)))) ) ) # ( !\P5|LessThan0~3_combout\ & ( 
+-- (!\A[9]~input_o\ & (((!\A[8]~input_o\ & \B[8]~input_o\)) # (\B[9]~input_o\))) # (\A[9]~input_o\ & (\B[9]~input_o\ & (!\A[8]~input_o\ & \B[8]~input_o\))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001010110010101100101011101100100010101100101011001010111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_A[9]~input_o\,
+	datab => \ALT_INV_B[9]~input_o\,
+	datac => \ALT_INV_A[8]~input_o\,
+	datad => \ALT_INV_B[8]~input_o\,
+	datae => \P5|ALT_INV_LessThan0~3_combout\,
+	combout => \P5|LessThan0~4_combout\);
+
+\P5|LessThan0~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P5|LessThan0~5_combout\ = ( \P5|LessThan0~4_combout\ & ( (!\A[11]~input_o\ & (((!\A[10]~input_o\) # (\B[10]~input_o\)) # (\B[11]~input_o\))) # (\A[11]~input_o\ & (\B[11]~input_o\ & ((!\A[10]~input_o\) # (\B[10]~input_o\)))) ) ) # ( 
+-- !\P5|LessThan0~4_combout\ & ( (!\A[11]~input_o\ & (((!\A[10]~input_o\ & \B[10]~input_o\)) # (\B[11]~input_o\))) # (\A[11]~input_o\ & (\B[11]~input_o\ & (!\A[10]~input_o\ & \B[10]~input_o\))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001010110010101100101011101100100010101100101011001010111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_A[11]~input_o\,
+	datab => \ALT_INV_B[11]~input_o\,
+	datac => \ALT_INV_A[10]~input_o\,
+	datad => \ALT_INV_B[10]~input_o\,
+	datae => \P5|ALT_INV_LessThan0~4_combout\,
+	combout => \P5|LessThan0~5_combout\);
+
+\P5|LessThan0~6\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P5|LessThan0~6_combout\ = ( \P5|LessThan0~5_combout\ & ( (!\A[13]~input_o\ & (((!\A[12]~input_o\) # (\B[12]~input_o\)) # (\B[13]~input_o\))) # (\A[13]~input_o\ & (\B[13]~input_o\ & ((!\A[12]~input_o\) # (\B[12]~input_o\)))) ) ) # ( 
+-- !\P5|LessThan0~5_combout\ & ( (!\A[13]~input_o\ & (((!\A[12]~input_o\ & \B[12]~input_o\)) # (\B[13]~input_o\))) # (\A[13]~input_o\ & (\B[13]~input_o\ & (!\A[12]~input_o\ & \B[12]~input_o\))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001010110010101100101011101100100010101100101011001010111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_A[13]~input_o\,
+	datab => \ALT_INV_B[13]~input_o\,
+	datac => \ALT_INV_A[12]~input_o\,
+	datad => \ALT_INV_B[12]~input_o\,
+	datae => \P5|ALT_INV_LessThan0~5_combout\,
+	combout => \P5|LessThan0~6_combout\);
+
+\P9|Mux15~2\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~2_combout\ = ( \B[14]~input_o\ & ( \P5|LessThan0~6_combout\ & ( (!\opcode[0]~input_o\ & ((!\A[15]~input_o\) # (\B[15]~input_o\))) ) ) ) # ( !\B[14]~input_o\ & ( \P5|LessThan0~6_combout\ & ( (!\opcode[0]~input_o\ & ((!\A[15]~input_o\ & 
+-- ((!\A[14]~input_o\) # (\B[15]~input_o\))) # (\A[15]~input_o\ & (\B[15]~input_o\ & !\A[14]~input_o\)))) ) ) ) # ( \B[14]~input_o\ & ( !\P5|LessThan0~6_combout\ & ( (!\opcode[0]~input_o\ & ((!\A[15]~input_o\ & ((!\A[14]~input_o\) # (\B[15]~input_o\))) # 
+-- (\A[15]~input_o\ & (\B[15]~input_o\ & !\A[14]~input_o\)))) ) ) ) # ( !\B[14]~input_o\ & ( !\P5|LessThan0~6_combout\ & ( (!\opcode[0]~input_o\ & (!\A[15]~input_o\ & \B[15]~input_o\)) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000100000001000100010100000100010001010000010001000101010001010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[15]~input_o\,
+	datac => \ALT_INV_B[15]~input_o\,
+	datad => \ALT_INV_A[14]~input_o\,
+	datae => \ALT_INV_B[14]~input_o\,
+	dataf => \P5|ALT_INV_LessThan0~6_combout\,
+	combout => \P9|Mux15~2_combout\);
+
+\P8|Add0~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add0~1_sumout\ = SUM(( !\A[0]~input_o\ ) + ( VCC ) + ( !VCC ))
+-- \P8|Add0~2\ = CARRY(( !\A[0]~input_o\ ) + ( VCC ) + ( !VCC ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1024,50 +1858,110 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	datad => \ALT_INV_inputA[0]~input_o\,
+	datad => \ALT_INV_A[0]~input_o\,
 	cin => GND,
-	sumout => \Add0~1_sumout\,
-	cout => \Add0~2\);
+	sumout => \P8|Add0~1_sumout\,
+	cout => \P8|Add0~2\);
 
-\P~0\ : cyclonev_lcell_comb
+\P9|Mux15~3\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~0_combout\ = (\inputB[0]~input_o\ & \Add0~1_sumout\)
+-- \P9|Mux15~3_combout\ = (!\opcode[0]~input_o\ & (((\A[2]~input_o\)))) # (\opcode[0]~input_o\ & (\B[0]~input_o\ & ((\P8|Add0~1_sumout\))))
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0001000100010001000100010001000100010001000100010001000100010001",
+	lut_mask => "0000101000011011000010100001101100001010000110110000101000011011",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_Add0~1_sumout\,
-	combout => \P~0_combout\);
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_B[0]~input_o\,
+	datac => \ALT_INV_A[2]~input_o\,
+	datad => \P8|ALT_INV_Add0~1_sumout\,
+	combout => \P9|Mux15~3_combout\);
 
-\inputB[1]~input\ : cyclonev_io_ibuf
+\opcode[1]~input\ : cyclonev_io_ibuf
 -- pragma translate_off
 GENERIC MAP (
 	bus_hold => "false",
 	simulate_z_as => "z")
 -- pragma translate_on
 PORT MAP (
-	i => ww_inputB(1),
-	o => \inputB[1]~input_o\);
+	i => ww_opcode(1),
+	o => \opcode[1]~input_o\);
 
-\inputA[1]~input\ : cyclonev_io_ibuf
+\opcode[2]~input\ : cyclonev_io_ibuf
 -- pragma translate_off
 GENERIC MAP (
 	bus_hold => "false",
 	simulate_z_as => "z")
 -- pragma translate_on
 PORT MAP (
-	i => ww_inputA(1),
-	o => \inputA[1]~input_o\);
+	i => ww_opcode(2),
+	o => \opcode[2]~input_o\);
 
-\Add0~5\ : cyclonev_lcell_comb
+\P9|Mux15~4\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add0~5_sumout\ = SUM(( !\inputA[1]~input_o\ ) + ( GND ) + ( \Add0~2\ ))
--- \Add0~6\ = CARRY(( !\inputA[1]~input_o\ ) + ( GND ) + ( \Add0~2\ ))
+-- \P9|Mux15~4_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~3_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~2_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~1_combout\ ) 
+-- ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~0_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001100001111000011110000000011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~0_combout\,
+	datab => \P9|ALT_INV_Mux15~1_combout\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	datad => \P9|ALT_INV_Mux15~3_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux15~4_combout\);
+
+\P9|Mux15~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~5_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[1]~input_o\) # (!\B[1]~input_o\))) # (\opcode[0]~input_o\ & (!\A[1]~input_o\ & !\B[1]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[1]~input_o\,
+	datad => \ALT_INV_B[1]~input_o\,
+	combout => \P9|Mux15~5_combout\);
+
+\P9|Mux15~6\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~6_combout\ = ( \A[1]~input_o\ & ( \B[1]~input_o\ & ( (!\opcode[0]~input_o\ & (\negate~input_o\)) # (\opcode[0]~input_o\ & (\B[0]~input_o\ & (!\negate~input_o\ $ (!\A[0]~input_o\)))) ) ) ) # ( !\A[1]~input_o\ & ( \B[1]~input_o\ & ( 
+-- (!\opcode[0]~input_o\ & (!\negate~input_o\)) # (\opcode[0]~input_o\ & ((!\B[0]~input_o\) # (!\negate~input_o\ $ (\A[0]~input_o\)))) ) ) ) # ( \A[1]~input_o\ & ( !\B[1]~input_o\ & ( (!\opcode[0]~input_o\ & (!\negate~input_o\)) # (\opcode[0]~input_o\ & 
+-- ((!\B[0]~input_o\) # (!\negate~input_o\ $ (\A[0]~input_o\)))) ) ) ) # ( !\A[1]~input_o\ & ( !\B[1]~input_o\ & ( (!\opcode[0]~input_o\ & (\negate~input_o\)) # (\opcode[0]~input_o\ & (\B[0]~input_o\ & (!\negate~input_o\ $ (!\A[0]~input_o\)))) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0100010101000110101110101011100110111010101110010100010101000110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_B[0]~input_o\,
+	datad => \ALT_INV_A[0]~input_o\,
+	datae => \ALT_INV_A[1]~input_o\,
+	dataf => \ALT_INV_B[1]~input_o\,
+	combout => \P9|Mux15~6_combout\);
+
+\P8|Add0~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add0~5_sumout\ = SUM(( !\A[1]~input_o\ ) + ( GND ) + ( \P8|Add0~2\ ))
+-- \P8|Add0~6\ = CARRY(( !\A[1]~input_o\ ) + ( GND ) + ( \P8|Add0~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1076,15 +1970,15 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	datad => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add0~2\,
-	sumout => \Add0~5_sumout\,
-	cout => \Add0~6\);
+	datad => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add0~2\,
+	sumout => \P8|Add0~5_sumout\,
+	cout => \P8|Add0~6\);
 
-\Add1~1\ : cyclonev_lcell_comb
+\P8|Add2~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add1~1_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~5_sumout\) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
--- \Add1~2\ = CARRY(( (\inputB[0]~input_o\ & \Add0~5_sumout\) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add2~1_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~5_sumout\) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add2~2\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~5_sumout\) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1093,17 +1987,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~5_sumout\,
-	dataf => \ALT_INV_inputA[0]~input_o\,
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~5_sumout\,
+	dataf => \P8|ALT_INV_Add0~1_sumout\,
 	cin => GND,
-	sumout => \Add1~1_sumout\,
-	cout => \Add1~2\);
+	sumout => \P8|Add2~1_sumout\,
+	cout => \P8|Add2~2\);
 
-\Add2~1\ : cyclonev_lcell_comb
+\P8|Add1~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add2~1_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~5_sumout\) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
--- \Add2~2\ = CARRY(( (\inputB[0]~input_o\ & \Add0~5_sumout\) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add1~1_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~5_sumout\) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add1~2\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~5_sumout\) ) + ( \A[0]~input_o\ ) + ( !VCC ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1112,205 +2006,127 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~5_sumout\,
-	dataf => \ALT_INV_Add0~1_sumout\,
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~5_sumout\,
+	dataf => \ALT_INV_A[0]~input_o\,
 	cin => GND,
-	sumout => \Add2~1_sumout\,
-	cout => \Add2~2\);
+	sumout => \P8|Add1~1_sumout\,
+	cout => \P8|Add1~2\);
 
-\P~1\ : cyclonev_lcell_comb
+\P9|Mux15~80\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~1_combout\ = ( \Add2~1_sumout\ & ( (!\inputB[0]~input_o\ & (\inputB[1]~input_o\)) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & ((\Add1~1_sumout\))) # (\inputB[1]~input_o\ & (\Add0~5_sumout\)))) ) ) # ( !\Add2~1_sumout\ & ( (\inputB[0]~input_o\ & 
--- ((!\inputB[1]~input_o\ & ((\Add1~1_sumout\))) # (\inputB[1]~input_o\ & (\Add0~5_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000101000101001000110110011100000001010001010010001101100111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~5_sumout\,
-	datad => \ALT_INV_Add1~1_sumout\,
-	datae => \ALT_INV_Add2~1_sumout\,
-	combout => \P~1_combout\);
-
-\inputA[2]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputA(2),
-	o => \inputA[2]~input_o\);
-
-\Add0~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add0~9_sumout\ = SUM(( !\inputA[2]~input_o\ ) + ( GND ) + ( \Add0~6\ ))
--- \Add0~10\ = CARRY(( !\inputA[2]~input_o\ ) + ( GND ) + ( \Add0~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111111111111100000000000000001111111100000000",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	datad => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add0~6\,
-	sumout => \Add0~9_sumout\,
-	cout => \Add0~10\);
-
-\Add2~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add2~5_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~9_sumout\) ) + ( \Add0~5_sumout\ ) + ( \Add2~2\ ))
--- \Add2~6\ = CARRY(( (\inputB[0]~input_o\ & \Add0~9_sumout\) ) + ( \Add0~5_sumout\ ) + ( \Add2~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~9_sumout\,
-	dataf => \ALT_INV_Add0~5_sumout\,
-	cin => \Add2~2\,
-	sumout => \Add2~5_sumout\,
-	cout => \Add2~6\);
-
-\P~2\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~2_combout\ = (!\inputB[0]~input_o\ & (\inputB[1]~input_o\ & ((\Add2~5_sumout\)))) # (\inputB[0]~input_o\ & (((\Add0~9_sumout\))))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010100100111000001010010011100000101001001110000010100100111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~9_sumout\,
-	datad => \ALT_INV_Add2~5_sumout\,
-	combout => \P~2_combout\);
-
-\Add1~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add1~5_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~9_sumout\) ) + ( \inputA[1]~input_o\ ) + ( \Add1~2\ ))
--- \Add1~6\ = CARRY(( (\inputB[0]~input_o\ & \Add0~9_sumout\) ) + ( \inputA[1]~input_o\ ) + ( \Add1~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~9_sumout\,
-	dataf => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add1~2\,
-	sumout => \Add1~5_sumout\,
-	cout => \Add1~6\);
-
-\Add4~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add4~1_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~2_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~5_sumout\)) # (\inputB[1]~input_o\ & ((\P~2_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
--- \Add4~2\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~2_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~5_sumout\)) # (\inputB[1]~input_o\ & ((\P~2_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~5_sumout\,
-	datad => \ALT_INV_P~2_combout\,
-	dataf => \ALT_INV_Add0~1_sumout\,
-	cin => GND,
-	sumout => \Add4~1_sumout\,
-	cout => \Add4~2\);
-
-\inputB[2]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputB(2),
-	o => \inputB[2]~input_o\);
-
-\Add3~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add3~1_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~2_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~5_sumout\)) # (\inputB[1]~input_o\ & ((\P~2_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
--- \Add3~2\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~2_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~5_sumout\)) # (\inputB[1]~input_o\ & ((\P~2_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~5_sumout\,
-	datad => \ALT_INV_P~2_combout\,
-	dataf => \ALT_INV_inputA[0]~input_o\,
-	cin => GND,
-	sumout => \Add3~1_sumout\,
-	cout => \Add3~2\);
-
-\P~92\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~92_combout\ = ( !\inputB[2]~input_o\ & ( (!\inputB[1]~input_o\ & ((!\inputB[0]~input_o\ & (\P~2_combout\)) # (\inputB[0]~input_o\ & (((\Add1~5_sumout\)))))) # (\inputB[1]~input_o\ & ((((\Add3~1_sumout\))))) ) ) # ( \inputB[2]~input_o\ & ( 
--- (((!\inputB[1]~input_o\ & ((\Add4~1_sumout\))) # (\inputB[1]~input_o\ & (\P~2_combout\)))) ) )
+-- \P9|Mux15~80_combout\ = ( !\B[1]~input_o\ & ( ((!\opcode[0]~input_o\ & (((\A[3]~input_o\)))) # (\opcode[0]~input_o\ & (\B[0]~input_o\ & (\P8|Add1~1_sumout\)))) ) ) # ( \B[1]~input_o\ & ( (!\opcode[0]~input_o\ & ((((\A[3]~input_o\))))) # 
+-- (\opcode[0]~input_o\ & ((!\B[0]~input_o\ & (\P8|Add2~1_sumout\)) # (\B[0]~input_o\ & (((\P8|Add0~5_sumout\)))))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "on",
-	lut_mask => "0010001001110111000011110000111100001111000011110011001100110011",
+	lut_mask => "0000000011111111000000001111111100000011000000110100011101000111",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_P~2_combout\,
-	datac => \ALT_INV_Add4~1_sumout\,
-	datad => \ALT_INV_Add1~5_sumout\,
-	datae => \ALT_INV_inputB[2]~input_o\,
-	dataf => \ALT_INV_inputB[1]~input_o\,
-	datag => \ALT_INV_Add3~1_sumout\,
-	combout => \P~92_combout\);
+	dataa => \P8|ALT_INV_Add2~1_sumout\,
+	datab => \ALT_INV_B[0]~input_o\,
+	datac => \P8|ALT_INV_Add0~5_sumout\,
+	datad => \ALT_INV_A[3]~input_o\,
+	datae => \ALT_INV_B[1]~input_o\,
+	dataf => \ALT_INV_opcode[0]~input_o\,
+	datag => \P8|ALT_INV_Add1~1_sumout\,
+	combout => \P9|Mux15~80_combout\);
 
-\process_0~0\ : cyclonev_lcell_comb
+\P9|Mux14~0\ : cyclonev_lcell_comb
 -- Equation(s):
--- \process_0~0_combout\ = (\inputB[0]~input_o\ & !\inputB[1]~input_o\)
+-- \P9|Mux14~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~80_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~2_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~6_combout\ 
+-- ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~5_combout\ ) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0100010001000100010001000100010001000100010001000100010001000100",
+	lut_mask => "0101010101010101001100110011001100001111000011110000000011111111",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	combout => \process_0~0_combout\);
+	dataa => \P9|ALT_INV_Mux15~5_combout\,
+	datab => \P9|ALT_INV_Mux15~6_combout\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	datad => \P9|ALT_INV_Mux15~80_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux14~0_combout\);
 
-\process_0~2\ : cyclonev_lcell_comb
+\P9|Mux15~7\ : cyclonev_lcell_comb
 -- Equation(s):
--- \process_0~2_combout\ = (!\inputB[1]~input_o\ & \inputB[2]~input_o\)
+-- \P9|Mux15~7_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[2]~input_o\) # (!\B[2]~input_o\))) # (\opcode[0]~input_o\ & (!\A[2]~input_o\ & !\B[2]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[2]~input_o\,
+	datad => \ALT_INV_B[2]~input_o\,
+	combout => \P9|Mux15~7_combout\);
+
+\P4|C~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~0_combout\ = ( \B[1]~input_o\ & ( (!\negate~input_o\ & (((\B[0]~input_o\ & \A[0]~input_o\)) # (\A[1]~input_o\))) # (\negate~input_o\ & (\A[1]~input_o\ & ((!\B[0]~input_o\) # (\A[0]~input_o\)))) ) ) # ( !\B[1]~input_o\ & ( (!\negate~input_o\ & 
+-- (\B[0]~input_o\ & (\A[0]~input_o\ & \A[1]~input_o\))) # (\negate~input_o\ & ((!\B[0]~input_o\) # ((\A[1]~input_o\) # (\A[0]~input_o\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0100010101010111000000101110111101000101010101110000001011101111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_B[0]~input_o\,
+	datac => \ALT_INV_A[0]~input_o\,
+	datad => \ALT_INV_A[1]~input_o\,
+	datae => \ALT_INV_B[1]~input_o\,
+	combout => \P4|C~0_combout\);
+
+\P9|Mux15~8\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~8_combout\ = ( \P4|C~0_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[2]~input_o\ $ (!\B[2]~input_o\))) ) ) # ( !\P4|C~0_combout\ & ( !\negate~input_o\ $ (!\A[2]~input_o\ $ (\B[2]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[2]~input_o\,
+	datad => \ALT_INV_B[2]~input_o\,
+	datae => \P4|ALT_INV_C~0_combout\,
+	combout => \P9|Mux15~8_combout\);
+
+\P9|Mux15~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~9_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[0]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[0]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~9_combout\);
+
+\P8|process_0~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|process_0~0_combout\ = (!\B[2]~input_o\ & \B[1]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1319,24 +2135,14 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	combout => \process_0~2_combout\);
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	combout => \P8|process_0~0_combout\);
 
-\inputA[3]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputA(3),
-	o => \inputA[3]~input_o\);
-
-\Add0~13\ : cyclonev_lcell_comb
+\P8|Add0~9\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add0~13_sumout\ = SUM(( !\inputA[3]~input_o\ ) + ( GND ) + ( \Add0~10\ ))
--- \Add0~14\ = CARRY(( !\inputA[3]~input_o\ ) + ( GND ) + ( \Add0~10\ ))
+-- \P8|Add0~9_sumout\ = SUM(( !\A[2]~input_o\ ) + ( GND ) + ( \P8|Add0~6\ ))
+-- \P8|Add0~10\ = CARRY(( !\A[2]~input_o\ ) + ( GND ) + ( \P8|Add0~6\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1345,15 +2151,15 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	datad => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add0~10\,
-	sumout => \Add0~13_sumout\,
-	cout => \Add0~14\);
+	datad => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add0~6\,
+	sumout => \P8|Add0~9_sumout\,
+	cout => \P8|Add0~10\);
 
-\Add1~9\ : cyclonev_lcell_comb
+\P8|Add1~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add1~9_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~13_sumout\) ) + ( \inputA[2]~input_o\ ) + ( \Add1~6\ ))
--- \Add1~10\ = CARRY(( (\inputB[0]~input_o\ & \Add0~13_sumout\) ) + ( \inputA[2]~input_o\ ) + ( \Add1~6\ ))
+-- \P8|Add1~5_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~9_sumout\) ) + ( \A[1]~input_o\ ) + ( \P8|Add1~2\ ))
+-- \P8|Add1~6\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~9_sumout\) ) + ( \A[1]~input_o\ ) + ( \P8|Add1~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1362,17 +2168,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~13_sumout\,
-	dataf => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add1~6\,
-	sumout => \Add1~9_sumout\,
-	cout => \Add1~10\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~9_sumout\,
+	dataf => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add1~2\,
+	sumout => \P8|Add1~5_sumout\,
+	cout => \P8|Add1~6\);
 
-\Add2~9\ : cyclonev_lcell_comb
+\P8|Add2~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add2~9_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~13_sumout\) ) + ( \Add0~9_sumout\ ) + ( \Add2~6\ ))
--- \Add2~10\ = CARRY(( (\inputB[0]~input_o\ & \Add0~13_sumout\) ) + ( \Add0~9_sumout\ ) + ( \Add2~6\ ))
+-- \P8|Add2~5_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~9_sumout\) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add2~2\ ))
+-- \P8|Add2~6\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~9_sumout\) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add2~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1381,16 +2187,16 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~13_sumout\,
-	dataf => \ALT_INV_Add0~9_sumout\,
-	cin => \Add2~6\,
-	sumout => \Add2~9_sumout\,
-	cout => \Add2~10\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~9_sumout\,
+	dataf => \P8|ALT_INV_Add0~5_sumout\,
+	cin => \P8|Add2~2\,
+	sumout => \P8|Add2~5_sumout\,
+	cout => \P8|Add2~6\);
 
-\P~3\ : cyclonev_lcell_comb
+\P8|P~0\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~3_combout\ = (!\inputB[0]~input_o\ & (\inputB[1]~input_o\ & ((\Add2~9_sumout\)))) # (\inputB[0]~input_o\ & (((\Add0~13_sumout\))))
+-- \P8|P~0_combout\ = (!\B[0]~input_o\ & (\B[1]~input_o\ & ((\P8|Add2~5_sumout\)))) # (\B[0]~input_o\ & (((\P8|Add0~9_sumout\))))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1399,16 +2205,16 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~13_sumout\,
-	datad => \ALT_INV_Add2~9_sumout\,
-	combout => \P~3_combout\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add0~9_sumout\,
+	datad => \P8|ALT_INV_Add2~5_sumout\,
+	combout => \P8|P~0_combout\);
 
-\Add4~5\ : cyclonev_lcell_comb
+\P8|Add3~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add4~5_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~3_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~9_sumout\)) # (\inputB[1]~input_o\ & ((\P~3_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add4~2\ ))
--- \Add4~6\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~3_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~9_sumout\)) # (\inputB[1]~input_o\ & ((\P~3_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add4~2\ ))
+-- \P8|Add3~1_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~0_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~5_sumout\)) # (\B[1]~input_o\ & ((\P8|P~0_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add3~2\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~0_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~5_sumout\)) # (\B[1]~input_o\ & ((\P8|P~0_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1417,131 +2223,18 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~9_sumout\,
-	datad => \ALT_INV_P~3_combout\,
-	dataf => \ALT_INV_Add0~5_sumout\,
-	cin => \Add4~2\,
-	sumout => \Add4~5_sumout\,
-	cout => \Add4~6\);
-
-\P~4\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~4_combout\ = ( \Add4~5_sumout\ & ( ((!\process_0~0_combout\ & ((\P~3_combout\))) # (\process_0~0_combout\ & (\Add1~9_sumout\))) # (\process_0~2_combout\) ) ) # ( !\Add4~5_sumout\ & ( (!\process_0~2_combout\ & ((!\process_0~0_combout\ & 
--- ((\P~3_combout\))) # (\process_0~0_combout\ & (\Add1~9_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~0_combout\,
-	datab => \ALT_INV_process_0~2_combout\,
-	datac => \ALT_INV_Add1~9_sumout\,
-	datad => \ALT_INV_P~3_combout\,
-	datae => \ALT_INV_Add4~5_sumout\,
-	combout => \P~4_combout\);
-
-\Add3~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add3~5_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~3_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~9_sumout\)) # (\inputB[1]~input_o\ & ((\P~3_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add3~2\ ))
--- \Add3~6\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~3_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~9_sumout\)) # (\inputB[1]~input_o\ & ((\P~3_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add3~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~9_sumout\,
-	datad => \ALT_INV_P~3_combout\,
-	dataf => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add3~2\,
-	sumout => \Add3~5_sumout\,
-	cout => \Add3~6\);
-
-\Add6~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add6~1_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~4_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~5_sumout\)) # (\inputB[2]~input_o\ & ((\P~4_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
--- \Add6~2\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~4_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~5_sumout\)) # (\inputB[2]~input_o\ & ((\P~4_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~5_sumout\,
-	datad => \ALT_INV_P~4_combout\,
-	dataf => \ALT_INV_Add0~1_sumout\,
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~5_sumout\,
+	datad => \P8|ALT_INV_P~0_combout\,
+	dataf => \ALT_INV_A[0]~input_o\,
 	cin => GND,
-	sumout => \Add6~1_sumout\,
-	cout => \Add6~2\);
+	sumout => \P8|Add3~1_sumout\,
+	cout => \P8|Add3~2\);
 
-\inputB[3]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputB(3),
-	o => \inputB[3]~input_o\);
-
-\Add5~1\ : cyclonev_lcell_comb
+\P8|process_0~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add5~1_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~4_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~5_sumout\)) # (\inputB[2]~input_o\ & ((\P~4_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
--- \Add5~2\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~4_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~5_sumout\)) # (\inputB[2]~input_o\ & ((\P~4_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~5_sumout\,
-	datad => \ALT_INV_P~4_combout\,
-	dataf => \ALT_INV_inputA[0]~input_o\,
-	cin => GND,
-	sumout => \Add5~1_sumout\,
-	cout => \Add5~2\);
-
-\P~88\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~88_combout\ = ( !\inputB[3]~input_o\ & ( (!\inputB[2]~input_o\ & ((!\inputB[1]~input_o\ & (\P~4_combout\)) # (\inputB[1]~input_o\ & (((\Add3~5_sumout\)))))) # (\inputB[2]~input_o\ & ((((\Add5~1_sumout\))))) ) ) # ( \inputB[3]~input_o\ & ( 
--- (((!\inputB[2]~input_o\ & ((\Add6~1_sumout\))) # (\inputB[2]~input_o\ & (\P~4_combout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "on",
-	lut_mask => "0010001001110111000011110000111100001111000011110011001100110011",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_P~4_combout\,
-	datac => \ALT_INV_Add6~1_sumout\,
-	datad => \ALT_INV_Add3~5_sumout\,
-	datae => \ALT_INV_inputB[3]~input_o\,
-	dataf => \ALT_INV_inputB[2]~input_o\,
-	datag => \ALT_INV_Add5~1_sumout\,
-	combout => \P~88_combout\);
-
-\process_0~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \process_0~1_combout\ = (\inputB[1]~input_o\ & !\inputB[2]~input_o\)
+-- \P8|process_0~1_combout\ = (\B[0]~input_o\ & !\B[1]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1550,305 +2243,13 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	combout => \process_0~1_combout\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	combout => \P8|process_0~1_combout\);
 
-\process_0~4\ : cyclonev_lcell_comb
+\P8|process_0~2\ : cyclonev_lcell_comb
 -- Equation(s):
--- \process_0~4_combout\ = (!\inputB[2]~input_o\ & \inputB[3]~input_o\)
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0010001000100010001000100010001000100010001000100010001000100010",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	combout => \process_0~4_combout\);
-
-\inputA[4]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputA(4),
-	o => \inputA[4]~input_o\);
-
-\Add0~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add0~17_sumout\ = SUM(( !\inputA[4]~input_o\ ) + ( GND ) + ( \Add0~14\ ))
--- \Add0~18\ = CARRY(( !\inputA[4]~input_o\ ) + ( GND ) + ( \Add0~14\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111111111111100000000000000001111111100000000",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	datad => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add0~14\,
-	sumout => \Add0~17_sumout\,
-	cout => \Add0~18\);
-
-\Add1~13\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add1~13_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~17_sumout\) ) + ( \inputA[3]~input_o\ ) + ( \Add1~10\ ))
--- \Add1~14\ = CARRY(( (\inputB[0]~input_o\ & \Add0~17_sumout\) ) + ( \inputA[3]~input_o\ ) + ( \Add1~10\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~17_sumout\,
-	dataf => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add1~10\,
-	sumout => \Add1~13_sumout\,
-	cout => \Add1~14\);
-
-\Add2~13\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add2~13_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~17_sumout\) ) + ( \Add0~13_sumout\ ) + ( \Add2~10\ ))
--- \Add2~14\ = CARRY(( (\inputB[0]~input_o\ & \Add0~17_sumout\) ) + ( \Add0~13_sumout\ ) + ( \Add2~10\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~17_sumout\,
-	dataf => \ALT_INV_Add0~13_sumout\,
-	cin => \Add2~10\,
-	sumout => \Add2~13_sumout\,
-	cout => \Add2~14\);
-
-\P~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~5_combout\ = (!\inputB[0]~input_o\ & (\inputB[1]~input_o\ & ((\Add2~13_sumout\)))) # (\inputB[0]~input_o\ & (((\Add0~17_sumout\))))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010100100111000001010010011100000101001001110000010100100111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~17_sumout\,
-	datad => \ALT_INV_Add2~13_sumout\,
-	combout => \P~5_combout\);
-
-\Add3~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add3~9_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~5_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~13_sumout\)) # (\inputB[1]~input_o\ & ((\P~5_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add3~6\ ))
--- \Add3~10\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~5_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~13_sumout\)) # (\inputB[1]~input_o\ & ((\P~5_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add3~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~13_sumout\,
-	datad => \ALT_INV_P~5_combout\,
-	dataf => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add3~6\,
-	sumout => \Add3~9_sumout\,
-	cout => \Add3~10\);
-
-\Add4~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add4~9_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~5_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~13_sumout\)) # (\inputB[1]~input_o\ & ((\P~5_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add4~6\ ))
--- \Add4~10\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~5_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~13_sumout\)) # (\inputB[1]~input_o\ & ((\P~5_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add4~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~13_sumout\,
-	datad => \ALT_INV_P~5_combout\,
-	dataf => \ALT_INV_Add0~9_sumout\,
-	cin => \Add4~6\,
-	sumout => \Add4~9_sumout\,
-	cout => \Add4~10\);
-
-\P~6\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~6_combout\ = ( \Add4~9_sumout\ & ( ((!\process_0~0_combout\ & ((\P~5_combout\))) # (\process_0~0_combout\ & (\Add1~13_sumout\))) # (\process_0~2_combout\) ) ) # ( !\Add4~9_sumout\ & ( (!\process_0~2_combout\ & ((!\process_0~0_combout\ & 
--- ((\P~5_combout\))) # (\process_0~0_combout\ & (\Add1~13_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~0_combout\,
-	datab => \ALT_INV_process_0~2_combout\,
-	datac => \ALT_INV_Add1~13_sumout\,
-	datad => \ALT_INV_P~5_combout\,
-	datae => \ALT_INV_Add4~9_sumout\,
-	combout => \P~6_combout\);
-
-\Add6~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add6~5_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~6_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~9_sumout\)) # (\inputB[2]~input_o\ & ((\P~6_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add6~2\ ))
--- \Add6~6\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~6_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~9_sumout\)) # (\inputB[2]~input_o\ & ((\P~6_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add6~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~9_sumout\,
-	datad => \ALT_INV_P~6_combout\,
-	dataf => \ALT_INV_Add0~5_sumout\,
-	cin => \Add6~2\,
-	sumout => \Add6~5_sumout\,
-	cout => \Add6~6\);
-
-\P~7\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~7_combout\ = ( \Add6~5_sumout\ & ( ((!\process_0~1_combout\ & ((\P~6_combout\))) # (\process_0~1_combout\ & (\Add3~9_sumout\))) # (\process_0~4_combout\) ) ) # ( !\Add6~5_sumout\ & ( (!\process_0~4_combout\ & ((!\process_0~1_combout\ & 
--- ((\P~6_combout\))) # (\process_0~1_combout\ & (\Add3~9_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~1_combout\,
-	datab => \ALT_INV_process_0~4_combout\,
-	datac => \ALT_INV_Add3~9_sumout\,
-	datad => \ALT_INV_P~6_combout\,
-	datae => \ALT_INV_Add6~5_sumout\,
-	combout => \P~7_combout\);
-
-\Add5~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add5~5_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~6_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~9_sumout\)) # (\inputB[2]~input_o\ & ((\P~6_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add5~2\ ))
--- \Add5~6\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~6_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~9_sumout\)) # (\inputB[2]~input_o\ & ((\P~6_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add5~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~9_sumout\,
-	datad => \ALT_INV_P~6_combout\,
-	dataf => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add5~2\,
-	sumout => \Add5~5_sumout\,
-	cout => \Add5~6\);
-
-\Add8~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add8~1_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~7_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~5_sumout\)) # (\inputB[3]~input_o\ & ((\P~7_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
--- \Add8~2\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~7_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~5_sumout\)) # (\inputB[3]~input_o\ & ((\P~7_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~5_sumout\,
-	datad => \ALT_INV_P~7_combout\,
-	dataf => \ALT_INV_Add0~1_sumout\,
-	cin => GND,
-	sumout => \Add8~1_sumout\,
-	cout => \Add8~2\);
-
-\inputB[4]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputB(4),
-	o => \inputB[4]~input_o\);
-
-\Add7~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add7~1_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~7_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~5_sumout\)) # (\inputB[3]~input_o\ & ((\P~7_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
--- \Add7~2\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~7_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~5_sumout\)) # (\inputB[3]~input_o\ & ((\P~7_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~5_sumout\,
-	datad => \ALT_INV_P~7_combout\,
-	dataf => \ALT_INV_inputA[0]~input_o\,
-	cin => GND,
-	sumout => \Add7~1_sumout\,
-	cout => \Add7~2\);
-
-\P~84\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~84_combout\ = ( !\inputB[4]~input_o\ & ( (!\inputB[3]~input_o\ & ((!\inputB[2]~input_o\ & (\P~7_combout\)) # (\inputB[2]~input_o\ & (((\Add5~5_sumout\)))))) # (\inputB[3]~input_o\ & ((((\Add7~1_sumout\))))) ) ) # ( \inputB[4]~input_o\ & ( 
--- (((!\inputB[3]~input_o\ & ((\Add8~1_sumout\))) # (\inputB[3]~input_o\ & (\P~7_combout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "on",
-	lut_mask => "0010001001110111000011110000111100001111000011110011001100110011",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_P~7_combout\,
-	datac => \ALT_INV_Add8~1_sumout\,
-	datad => \ALT_INV_Add5~5_sumout\,
-	datae => \ALT_INV_inputB[4]~input_o\,
-	dataf => \ALT_INV_inputB[3]~input_o\,
-	datag => \ALT_INV_Add7~1_sumout\,
-	combout => \P~84_combout\);
-
-\process_0~3\ : cyclonev_lcell_comb
--- Equation(s):
--- \process_0~3_combout\ = (\inputB[2]~input_o\ & !\inputB[3]~input_o\)
+-- \P8|process_0~2_combout\ = (\B[2]~input_o\ & !\B[1]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1857,13 +2258,160 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	combout => \process_0~3_combout\);
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	combout => \P8|process_0~2_combout\);
 
-\process_0~6\ : cyclonev_lcell_comb
+\P8|Add4~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \process_0~6_combout\ = (!\inputB[3]~input_o\ & \inputB[4]~input_o\)
+-- \P8|Add4~1_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~0_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~5_sumout\)) # (\B[1]~input_o\ & ((\P8|P~0_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add4~2\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~0_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~5_sumout\)) # (\B[1]~input_o\ & ((\P8|P~0_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~5_sumout\,
+	datad => \P8|ALT_INV_P~0_combout\,
+	dataf => \P8|ALT_INV_Add0~1_sumout\,
+	cin => GND,
+	sumout => \P8|Add4~1_sumout\,
+	cout => \P8|Add4~2\);
+
+\P9|Mux15~10\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~10_combout\ = ( \P8|Add4~1_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~0_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~5_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~1_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~0_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~5_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001101100000000000110111111111100011011000000000001101111111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_Add1~5_sumout\,
+	datac => \P8|ALT_INV_P~0_combout\,
+	datad => \P8|ALT_INV_process_0~2_combout\,
+	datae => \P8|ALT_INV_Add4~1_sumout\,
+	combout => \P9|Mux15~10_combout\);
+
+\P9|Mux15~11\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~11_combout\ = ( \P9|Mux15~10_combout\ & ( (!\opcode[0]~input_o\ & (\A[4]~input_o\)) # (\opcode[0]~input_o\ & (((!\P8|process_0~0_combout\) # (\P8|Add3~1_sumout\)))) ) ) # ( !\P9|Mux15~10_combout\ & ( (!\opcode[0]~input_o\ & (\A[4]~input_o\)) # 
+-- (\opcode[0]~input_o\ & (((\P8|process_0~0_combout\ & \P8|Add3~1_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100111011100100111011100100010001001110111001001110111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[4]~input_o\,
+	datac => \P8|ALT_INV_process_0~0_combout\,
+	datad => \P8|ALT_INV_Add3~1_sumout\,
+	datae => \P9|ALT_INV_Mux15~10_combout\,
+	combout => \P9|Mux15~11_combout\);
+
+\P9|Mux13~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux13~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~11_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~9_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~8_combout\ 
+-- ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~7_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100000000000011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~7_combout\,
+	datab => \P9|ALT_INV_Mux15~8_combout\,
+	datac => \P9|ALT_INV_Mux15~9_combout\,
+	datad => \P9|ALT_INV_Mux15~11_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux13~0_combout\);
+
+\P9|Mux15~12\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~12_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[3]~input_o\) # (!\B[3]~input_o\))) # (\opcode[0]~input_o\ & (!\A[3]~input_o\ & !\B[3]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[3]~input_o\,
+	datad => \ALT_INV_B[3]~input_o\,
+	combout => \P9|Mux15~12_combout\);
+
+\P4|C~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~1_combout\ = (!\A[2]~input_o\ & (\P4|C~0_combout\ & (!\negate~input_o\ $ (!\B[2]~input_o\)))) # (\A[2]~input_o\ & ((!\negate~input_o\ $ (!\B[2]~input_o\)) # (\P4|C~0_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[2]~input_o\,
+	datac => \ALT_INV_B[2]~input_o\,
+	datad => \P4|ALT_INV_C~0_combout\,
+	combout => \P4|C~1_combout\);
+
+\P9|Mux15~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~13_combout\ = ( \P4|C~1_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[3]~input_o\ $ (!\B[3]~input_o\))) ) ) # ( !\P4|C~1_combout\ & ( !\negate~input_o\ $ (!\A[3]~input_o\ $ (\B[3]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[3]~input_o\,
+	datad => \ALT_INV_B[3]~input_o\,
+	datae => \P4|ALT_INV_C~1_combout\,
+	combout => \P9|Mux15~13_combout\);
+
+\P9|Mux15~14\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~14_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[1]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[1]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~14_combout\);
+
+\P8|process_0~3\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|process_0~3_combout\ = (!\B[3]~input_o\ & \B[2]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1872,24 +2420,14 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	combout => \process_0~6_combout\);
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	combout => \P8|process_0~3_combout\);
 
-\inputA[5]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputA(5),
-	o => \inputA[5]~input_o\);
-
-\Add0~21\ : cyclonev_lcell_comb
+\P8|Add0~13\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add0~21_sumout\ = SUM(( !\inputA[5]~input_o\ ) + ( GND ) + ( \Add0~18\ ))
--- \Add0~22\ = CARRY(( !\inputA[5]~input_o\ ) + ( GND ) + ( \Add0~18\ ))
+-- \P8|Add0~13_sumout\ = SUM(( !\A[3]~input_o\ ) + ( GND ) + ( \P8|Add0~10\ ))
+-- \P8|Add0~14\ = CARRY(( !\A[3]~input_o\ ) + ( GND ) + ( \P8|Add0~10\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1898,15 +2436,15 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	datad => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add0~18\,
-	sumout => \Add0~21_sumout\,
-	cout => \Add0~22\);
+	datad => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add0~10\,
+	sumout => \P8|Add0~13_sumout\,
+	cout => \P8|Add0~14\);
 
-\Add1~17\ : cyclonev_lcell_comb
+\P8|Add1~9\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add1~17_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~21_sumout\) ) + ( \inputA[4]~input_o\ ) + ( \Add1~14\ ))
--- \Add1~18\ = CARRY(( (\inputB[0]~input_o\ & \Add0~21_sumout\) ) + ( \inputA[4]~input_o\ ) + ( \Add1~14\ ))
+-- \P8|Add1~9_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~13_sumout\) ) + ( \A[2]~input_o\ ) + ( \P8|Add1~6\ ))
+-- \P8|Add1~10\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~13_sumout\) ) + ( \A[2]~input_o\ ) + ( \P8|Add1~6\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1915,17 +2453,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~21_sumout\,
-	dataf => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add1~14\,
-	sumout => \Add1~17_sumout\,
-	cout => \Add1~18\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~13_sumout\,
+	dataf => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add1~6\,
+	sumout => \P8|Add1~9_sumout\,
+	cout => \P8|Add1~10\);
 
-\Add2~17\ : cyclonev_lcell_comb
+\P8|Add2~9\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add2~17_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~21_sumout\) ) + ( \Add0~17_sumout\ ) + ( \Add2~14\ ))
--- \Add2~18\ = CARRY(( (\inputB[0]~input_o\ & \Add0~21_sumout\) ) + ( \Add0~17_sumout\ ) + ( \Add2~14\ ))
+-- \P8|Add2~9_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~13_sumout\) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add2~6\ ))
+-- \P8|Add2~10\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~13_sumout\) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add2~6\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1934,16 +2472,16 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~21_sumout\,
-	dataf => \ALT_INV_Add0~17_sumout\,
-	cin => \Add2~14\,
-	sumout => \Add2~17_sumout\,
-	cout => \Add2~18\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~13_sumout\,
+	dataf => \P8|ALT_INV_Add0~9_sumout\,
+	cin => \P8|Add2~6\,
+	sumout => \P8|Add2~9_sumout\,
+	cout => \P8|Add2~10\);
 
-\P~8\ : cyclonev_lcell_comb
+\P8|P~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~8_combout\ = (!\inputB[0]~input_o\ & (\inputB[1]~input_o\ & ((\Add2~17_sumout\)))) # (\inputB[0]~input_o\ & (((\Add0~21_sumout\))))
+-- \P8|P~1_combout\ = (!\B[0]~input_o\ & (\B[1]~input_o\ & ((\P8|Add2~9_sumout\)))) # (\B[0]~input_o\ & (((\P8|Add0~13_sumout\))))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1952,16 +2490,16 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~21_sumout\,
-	datad => \ALT_INV_Add2~17_sumout\,
-	combout => \P~8_combout\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add0~13_sumout\,
+	datad => \P8|ALT_INV_Add2~9_sumout\,
+	combout => \P8|P~1_combout\);
 
-\Add3~13\ : cyclonev_lcell_comb
+\P8|Add3~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add3~13_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~8_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~17_sumout\)) # (\inputB[1]~input_o\ & ((\P~8_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add3~10\ ))
--- \Add3~14\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~8_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~17_sumout\)) # (\inputB[1]~input_o\ & ((\P~8_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add3~10\ ))
+-- \P8|Add3~5_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~1_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~9_sumout\)) # (\B[1]~input_o\ & ((\P8|P~1_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add3~2\ ))
+-- \P8|Add3~6\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~1_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~9_sumout\)) # (\B[1]~input_o\ & ((\P8|P~1_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add3~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1970,19 +2508,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~17_sumout\,
-	datad => \ALT_INV_P~8_combout\,
-	dataf => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add3~10\,
-	sumout => \Add3~13_sumout\,
-	cout => \Add3~14\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~9_sumout\,
+	datad => \P8|ALT_INV_P~1_combout\,
+	dataf => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add3~2\,
+	sumout => \P8|Add3~5_sumout\,
+	cout => \P8|Add3~6\);
 
-\Add4~13\ : cyclonev_lcell_comb
+\P8|Add4~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add4~13_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~8_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~17_sumout\)) # (\inputB[1]~input_o\ & ((\P~8_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add4~10\ ))
--- \Add4~14\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~8_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~17_sumout\)) # (\inputB[1]~input_o\ & ((\P~8_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add4~10\ ))
+-- \P8|Add4~5_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~1_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~9_sumout\)) # (\B[1]~input_o\ & ((\P8|P~1_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add4~2\ ))
+-- \P8|Add4~6\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~1_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~9_sumout\)) # (\B[1]~input_o\ & ((\P8|P~1_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add4~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -1991,19 +2529,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~17_sumout\,
-	datad => \ALT_INV_P~8_combout\,
-	dataf => \ALT_INV_Add0~13_sumout\,
-	cin => \Add4~10\,
-	sumout => \Add4~13_sumout\,
-	cout => \Add4~14\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~9_sumout\,
+	datad => \P8|ALT_INV_P~1_combout\,
+	dataf => \P8|ALT_INV_Add0~5_sumout\,
+	cin => \P8|Add4~2\,
+	sumout => \P8|Add4~5_sumout\,
+	cout => \P8|Add4~6\);
 
-\P~9\ : cyclonev_lcell_comb
+\P8|P~2\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~9_combout\ = ( \Add4~13_sumout\ & ( ((!\process_0~0_combout\ & ((\P~8_combout\))) # (\process_0~0_combout\ & (\Add1~17_sumout\))) # (\process_0~2_combout\) ) ) # ( !\Add4~13_sumout\ & ( (!\process_0~2_combout\ & ((!\process_0~0_combout\ & 
--- ((\P~8_combout\))) # (\process_0~0_combout\ & (\Add1~17_sumout\)))) ) )
+-- \P8|P~2_combout\ = ( \P8|Add4~5_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~1_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~9_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~5_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~1_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~9_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2012,17 +2550,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~0_combout\,
-	datab => \ALT_INV_process_0~2_combout\,
-	datac => \ALT_INV_Add1~17_sumout\,
-	datad => \ALT_INV_P~8_combout\,
-	datae => \ALT_INV_Add4~13_sumout\,
-	combout => \P~9_combout\);
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_process_0~2_combout\,
+	datac => \P8|ALT_INV_Add1~9_sumout\,
+	datad => \P8|ALT_INV_P~1_combout\,
+	datae => \P8|ALT_INV_Add4~5_sumout\,
+	combout => \P8|P~2_combout\);
 
-\Add5~9\ : cyclonev_lcell_comb
+\P8|Add5~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add5~9_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~9_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~13_sumout\)) # (\inputB[2]~input_o\ & ((\P~9_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add5~6\ ))
--- \Add5~10\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~9_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~13_sumout\)) # (\inputB[2]~input_o\ & ((\P~9_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add5~6\ ))
+-- \P8|Add5~1_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~2_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~5_sumout\)) # (\B[2]~input_o\ & ((\P8|P~2_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add5~2\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~2_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~5_sumout\)) # (\B[2]~input_o\ & ((\P8|P~2_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2031,478 +2569,18 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~13_sumout\,
-	datad => \ALT_INV_P~9_combout\,
-	dataf => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add5~6\,
-	sumout => \Add5~9_sumout\,
-	cout => \Add5~10\);
-
-\Add6~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add6~9_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~9_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~13_sumout\)) # (\inputB[2]~input_o\ & ((\P~9_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add6~6\ ))
--- \Add6~10\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~9_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~13_sumout\)) # (\inputB[2]~input_o\ & ((\P~9_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add6~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~13_sumout\,
-	datad => \ALT_INV_P~9_combout\,
-	dataf => \ALT_INV_Add0~9_sumout\,
-	cin => \Add6~6\,
-	sumout => \Add6~9_sumout\,
-	cout => \Add6~10\);
-
-\P~10\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~10_combout\ = ( \Add6~9_sumout\ & ( ((!\process_0~1_combout\ & ((\P~9_combout\))) # (\process_0~1_combout\ & (\Add3~13_sumout\))) # (\process_0~4_combout\) ) ) # ( !\Add6~9_sumout\ & ( (!\process_0~4_combout\ & ((!\process_0~1_combout\ & 
--- ((\P~9_combout\))) # (\process_0~1_combout\ & (\Add3~13_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~1_combout\,
-	datab => \ALT_INV_process_0~4_combout\,
-	datac => \ALT_INV_Add3~13_sumout\,
-	datad => \ALT_INV_P~9_combout\,
-	datae => \ALT_INV_Add6~9_sumout\,
-	combout => \P~10_combout\);
-
-\Add8~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add8~5_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~10_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~9_sumout\)) # (\inputB[3]~input_o\ & ((\P~10_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add8~2\ ))
--- \Add8~6\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~10_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~9_sumout\)) # (\inputB[3]~input_o\ & ((\P~10_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add8~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~9_sumout\,
-	datad => \ALT_INV_P~10_combout\,
-	dataf => \ALT_INV_Add0~5_sumout\,
-	cin => \Add8~2\,
-	sumout => \Add8~5_sumout\,
-	cout => \Add8~6\);
-
-\P~11\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~11_combout\ = ( \Add8~5_sumout\ & ( ((!\process_0~3_combout\ & ((\P~10_combout\))) # (\process_0~3_combout\ & (\Add5~9_sumout\))) # (\process_0~6_combout\) ) ) # ( !\Add8~5_sumout\ & ( (!\process_0~6_combout\ & ((!\process_0~3_combout\ & 
--- ((\P~10_combout\))) # (\process_0~3_combout\ & (\Add5~9_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~3_combout\,
-	datab => \ALT_INV_process_0~6_combout\,
-	datac => \ALT_INV_Add5~9_sumout\,
-	datad => \ALT_INV_P~10_combout\,
-	datae => \ALT_INV_Add8~5_sumout\,
-	combout => \P~11_combout\);
-
-\Add7~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add7~5_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~10_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~9_sumout\)) # (\inputB[3]~input_o\ & ((\P~10_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add7~2\ ))
--- \Add7~6\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~10_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~9_sumout\)) # (\inputB[3]~input_o\ & ((\P~10_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add7~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~9_sumout\,
-	datad => \ALT_INV_P~10_combout\,
-	dataf => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add7~2\,
-	sumout => \Add7~5_sumout\,
-	cout => \Add7~6\);
-
-\Add10~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add10~1_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~11_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~5_sumout\)) # (\inputB[4]~input_o\ & ((\P~11_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
--- \Add10~2\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~11_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~5_sumout\)) # (\inputB[4]~input_o\ & ((\P~11_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~5_sumout\,
-	datad => \ALT_INV_P~11_combout\,
-	dataf => \ALT_INV_Add0~1_sumout\,
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~5_sumout\,
+	datad => \P8|ALT_INV_P~2_combout\,
+	dataf => \ALT_INV_A[0]~input_o\,
 	cin => GND,
-	sumout => \Add10~1_sumout\,
-	cout => \Add10~2\);
+	sumout => \P8|Add5~1_sumout\,
+	cout => \P8|Add5~2\);
 
-\inputB[5]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputB(5),
-	o => \inputB[5]~input_o\);
-
-\Add9~1\ : cyclonev_lcell_comb
+\P8|process_0~4\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add9~1_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~11_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~5_sumout\)) # (\inputB[4]~input_o\ & ((\P~11_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
--- \Add9~2\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~11_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~5_sumout\)) # (\inputB[4]~input_o\ & ((\P~11_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~5_sumout\,
-	datad => \ALT_INV_P~11_combout\,
-	dataf => \ALT_INV_inputA[0]~input_o\,
-	cin => GND,
-	sumout => \Add9~1_sumout\,
-	cout => \Add9~2\);
-
-\P~80\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~80_combout\ = ( !\inputB[5]~input_o\ & ( (!\inputB[4]~input_o\ & ((!\inputB[3]~input_o\ & (\P~11_combout\)) # (\inputB[3]~input_o\ & (((\Add7~5_sumout\)))))) # (\inputB[4]~input_o\ & ((((\Add9~1_sumout\))))) ) ) # ( \inputB[5]~input_o\ & ( 
--- (((!\inputB[4]~input_o\ & ((\Add10~1_sumout\))) # (\inputB[4]~input_o\ & (\P~11_combout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "on",
-	lut_mask => "0010001001110111000011110000111100001111000011110011001100110011",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_P~11_combout\,
-	datac => \ALT_INV_Add10~1_sumout\,
-	datad => \ALT_INV_Add7~5_sumout\,
-	datae => \ALT_INV_inputB[5]~input_o\,
-	dataf => \ALT_INV_inputB[4]~input_o\,
-	datag => \ALT_INV_Add9~1_sumout\,
-	combout => \P~80_combout\);
-
-\inputA[6]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputA(6),
-	o => \inputA[6]~input_o\);
-
-\Add0~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add0~25_sumout\ = SUM(( !\inputA[6]~input_o\ ) + ( GND ) + ( \Add0~22\ ))
--- \Add0~26\ = CARRY(( !\inputA[6]~input_o\ ) + ( GND ) + ( \Add0~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111111111111100000000000000001111111100000000",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	datad => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add0~22\,
-	sumout => \Add0~25_sumout\,
-	cout => \Add0~26\);
-
-\Add1~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add1~21_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~25_sumout\) ) + ( \inputA[5]~input_o\ ) + ( \Add1~18\ ))
--- \Add1~22\ = CARRY(( (\inputB[0]~input_o\ & \Add0~25_sumout\) ) + ( \inputA[5]~input_o\ ) + ( \Add1~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~25_sumout\,
-	dataf => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add1~18\,
-	sumout => \Add1~21_sumout\,
-	cout => \Add1~22\);
-
-\Add2~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add2~21_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~25_sumout\) ) + ( \Add0~21_sumout\ ) + ( \Add2~18\ ))
--- \Add2~22\ = CARRY(( (\inputB[0]~input_o\ & \Add0~25_sumout\) ) + ( \Add0~21_sumout\ ) + ( \Add2~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~25_sumout\,
-	dataf => \ALT_INV_Add0~21_sumout\,
-	cin => \Add2~18\,
-	sumout => \Add2~21_sumout\,
-	cout => \Add2~22\);
-
-\P~12\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~12_combout\ = (!\inputB[0]~input_o\ & (\inputB[1]~input_o\ & ((\Add2~21_sumout\)))) # (\inputB[0]~input_o\ & (((\Add0~25_sumout\))))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010100100111000001010010011100000101001001110000010100100111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~25_sumout\,
-	datad => \ALT_INV_Add2~21_sumout\,
-	combout => \P~12_combout\);
-
-\Add3~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add3~17_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~12_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~21_sumout\)) # (\inputB[1]~input_o\ & ((\P~12_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add3~14\ ))
--- \Add3~18\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~12_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~21_sumout\)) # (\inputB[1]~input_o\ & ((\P~12_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add3~14\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~21_sumout\,
-	datad => \ALT_INV_P~12_combout\,
-	dataf => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add3~14\,
-	sumout => \Add3~17_sumout\,
-	cout => \Add3~18\);
-
-\Add4~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add4~17_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~12_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~21_sumout\)) # (\inputB[1]~input_o\ & ((\P~12_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add4~14\ ))
--- \Add4~18\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~12_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~21_sumout\)) # (\inputB[1]~input_o\ & ((\P~12_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add4~14\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~21_sumout\,
-	datad => \ALT_INV_P~12_combout\,
-	dataf => \ALT_INV_Add0~17_sumout\,
-	cin => \Add4~14\,
-	sumout => \Add4~17_sumout\,
-	cout => \Add4~18\);
-
-\P~13\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~13_combout\ = ( \Add4~17_sumout\ & ( ((!\process_0~0_combout\ & ((\P~12_combout\))) # (\process_0~0_combout\ & (\Add1~21_sumout\))) # (\process_0~2_combout\) ) ) # ( !\Add4~17_sumout\ & ( (!\process_0~2_combout\ & ((!\process_0~0_combout\ & 
--- ((\P~12_combout\))) # (\process_0~0_combout\ & (\Add1~21_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~0_combout\,
-	datab => \ALT_INV_process_0~2_combout\,
-	datac => \ALT_INV_Add1~21_sumout\,
-	datad => \ALT_INV_P~12_combout\,
-	datae => \ALT_INV_Add4~17_sumout\,
-	combout => \P~13_combout\);
-
-\Add5~13\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add5~13_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~13_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~17_sumout\)) # (\inputB[2]~input_o\ & ((\P~13_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add5~10\ ))
--- \Add5~14\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~13_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~17_sumout\)) # (\inputB[2]~input_o\ & ((\P~13_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add5~10\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~17_sumout\,
-	datad => \ALT_INV_P~13_combout\,
-	dataf => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add5~10\,
-	sumout => \Add5~13_sumout\,
-	cout => \Add5~14\);
-
-\Add6~13\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add6~13_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~13_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~17_sumout\)) # (\inputB[2]~input_o\ & ((\P~13_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add6~10\ ))
--- \Add6~14\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~13_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~17_sumout\)) # (\inputB[2]~input_o\ & ((\P~13_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add6~10\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~17_sumout\,
-	datad => \ALT_INV_P~13_combout\,
-	dataf => \ALT_INV_Add0~13_sumout\,
-	cin => \Add6~10\,
-	sumout => \Add6~13_sumout\,
-	cout => \Add6~14\);
-
-\P~14\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~14_combout\ = ( \Add6~13_sumout\ & ( ((!\process_0~1_combout\ & ((\P~13_combout\))) # (\process_0~1_combout\ & (\Add3~17_sumout\))) # (\process_0~4_combout\) ) ) # ( !\Add6~13_sumout\ & ( (!\process_0~4_combout\ & ((!\process_0~1_combout\ & 
--- ((\P~13_combout\))) # (\process_0~1_combout\ & (\Add3~17_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~1_combout\,
-	datab => \ALT_INV_process_0~4_combout\,
-	datac => \ALT_INV_Add3~17_sumout\,
-	datad => \ALT_INV_P~13_combout\,
-	datae => \ALT_INV_Add6~13_sumout\,
-	combout => \P~14_combout\);
-
-\Add7~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add7~9_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~14_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~13_sumout\)) # (\inputB[3]~input_o\ & ((\P~14_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add7~6\ ))
--- \Add7~10\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~14_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~13_sumout\)) # (\inputB[3]~input_o\ & ((\P~14_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add7~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~13_sumout\,
-	datad => \ALT_INV_P~14_combout\,
-	dataf => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add7~6\,
-	sumout => \Add7~9_sumout\,
-	cout => \Add7~10\);
-
-\Add8~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add8~9_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~14_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~13_sumout\)) # (\inputB[3]~input_o\ & ((\P~14_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add8~6\ ))
--- \Add8~10\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~14_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~13_sumout\)) # (\inputB[3]~input_o\ & ((\P~14_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add8~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~13_sumout\,
-	datad => \ALT_INV_P~14_combout\,
-	dataf => \ALT_INV_Add0~9_sumout\,
-	cin => \Add8~6\,
-	sumout => \Add8~9_sumout\,
-	cout => \Add8~10\);
-
-\P~15\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~15_combout\ = ( \Add8~9_sumout\ & ( ((!\process_0~3_combout\ & ((\P~14_combout\))) # (\process_0~3_combout\ & (\Add5~13_sumout\))) # (\process_0~6_combout\) ) ) # ( !\Add8~9_sumout\ & ( (!\process_0~6_combout\ & ((!\process_0~3_combout\ & 
--- ((\P~14_combout\))) # (\process_0~3_combout\ & (\Add5~13_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~3_combout\,
-	datab => \ALT_INV_process_0~6_combout\,
-	datac => \ALT_INV_Add5~13_sumout\,
-	datad => \ALT_INV_P~14_combout\,
-	datae => \ALT_INV_Add8~9_sumout\,
-	combout => \P~15_combout\);
-
-\Add9~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add9~5_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~15_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~9_sumout\)) # (\inputB[4]~input_o\ & ((\P~15_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add9~2\ ))
--- \Add9~6\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~15_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~9_sumout\)) # (\inputB[4]~input_o\ & ((\P~15_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add9~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~9_sumout\,
-	datad => \ALT_INV_P~15_combout\,
-	dataf => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add9~2\,
-	sumout => \Add9~5_sumout\,
-	cout => \Add9~6\);
-
-\process_0~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \process_0~5_combout\ = (\inputB[3]~input_o\ & !\inputB[4]~input_o\)
+-- \P8|process_0~4_combout\ = (\B[3]~input_o\ & !\B[2]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2511,13 +2589,160 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	combout => \process_0~5_combout\);
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	combout => \P8|process_0~4_combout\);
 
-\process_0~8\ : cyclonev_lcell_comb
+\P8|Add6~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \process_0~8_combout\ = (!\inputB[4]~input_o\ & \inputB[5]~input_o\)
+-- \P8|Add6~1_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~2_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~5_sumout\)) # (\B[2]~input_o\ & ((\P8|P~2_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add6~2\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~2_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~5_sumout\)) # (\B[2]~input_o\ & ((\P8|P~2_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~5_sumout\,
+	datad => \P8|ALT_INV_P~2_combout\,
+	dataf => \P8|ALT_INV_Add0~1_sumout\,
+	cin => GND,
+	sumout => \P8|Add6~1_sumout\,
+	cout => \P8|Add6~2\);
+
+\P9|Mux15~15\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~15_combout\ = ( \P8|Add6~1_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~2_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~5_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~1_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~2_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~5_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001101100000000000110111111111100011011000000000001101111111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_Add3~5_sumout\,
+	datac => \P8|ALT_INV_P~2_combout\,
+	datad => \P8|ALT_INV_process_0~4_combout\,
+	datae => \P8|ALT_INV_Add6~1_sumout\,
+	combout => \P9|Mux15~15_combout\);
+
+\P9|Mux15~16\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~16_combout\ = ( \P9|Mux15~15_combout\ & ( (!\opcode[0]~input_o\ & (\A[5]~input_o\)) # (\opcode[0]~input_o\ & (((!\P8|process_0~3_combout\) # (\P8|Add5~1_sumout\)))) ) ) # ( !\P9|Mux15~15_combout\ & ( (!\opcode[0]~input_o\ & (\A[5]~input_o\)) # 
+-- (\opcode[0]~input_o\ & (((\P8|process_0~3_combout\ & \P8|Add5~1_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100111011100100111011100100010001001110111001001110111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[5]~input_o\,
+	datac => \P8|ALT_INV_process_0~3_combout\,
+	datad => \P8|ALT_INV_Add5~1_sumout\,
+	datae => \P9|ALT_INV_Mux15~15_combout\,
+	combout => \P9|Mux15~16_combout\);
+
+\P9|Mux12~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux12~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~16_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~14_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~13_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~12_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100000000000011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~12_combout\,
+	datab => \P9|ALT_INV_Mux15~13_combout\,
+	datac => \P9|ALT_INV_Mux15~14_combout\,
+	datad => \P9|ALT_INV_Mux15~16_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux12~0_combout\);
+
+\P9|Mux15~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~17_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[4]~input_o\) # (!\B[4]~input_o\))) # (\opcode[0]~input_o\ & (!\A[4]~input_o\ & !\B[4]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[4]~input_o\,
+	datad => \ALT_INV_B[4]~input_o\,
+	combout => \P9|Mux15~17_combout\);
+
+\P4|C~2\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~2_combout\ = (!\A[3]~input_o\ & (\P4|C~1_combout\ & (!\negate~input_o\ $ (!\B[3]~input_o\)))) # (\A[3]~input_o\ & ((!\negate~input_o\ $ (!\B[3]~input_o\)) # (\P4|C~1_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[3]~input_o\,
+	datac => \ALT_INV_B[3]~input_o\,
+	datad => \P4|ALT_INV_C~1_combout\,
+	combout => \P4|C~2_combout\);
+
+\P9|Mux15~18\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~18_combout\ = ( \P4|C~2_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[4]~input_o\ $ (!\B[4]~input_o\))) ) ) # ( !\P4|C~2_combout\ & ( !\negate~input_o\ $ (!\A[4]~input_o\ $ (\B[4]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[4]~input_o\,
+	datad => \ALT_INV_B[4]~input_o\,
+	datae => \P4|ALT_INV_C~2_combout\,
+	combout => \P9|Mux15~18_combout\);
+
+\P9|Mux15~19\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~19_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[2]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[2]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~19_combout\);
+
+\P8|process_0~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|process_0~5_combout\ = (!\B[4]~input_o\ & \B[3]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2526,157 +2751,14 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	combout => \process_0~8_combout\);
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	combout => \P8|process_0~5_combout\);
 
-\Add10~5\ : cyclonev_lcell_comb
+\P8|Add0~17\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add10~5_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~15_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~9_sumout\)) # (\inputB[4]~input_o\ & ((\P~15_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add10~2\ ))
--- \Add10~6\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~15_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~9_sumout\)) # (\inputB[4]~input_o\ & ((\P~15_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add10~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~9_sumout\,
-	datad => \ALT_INV_P~15_combout\,
-	dataf => \ALT_INV_Add0~5_sumout\,
-	cin => \Add10~2\,
-	sumout => \Add10~5_sumout\,
-	cout => \Add10~6\);
-
-\P~49\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~49_combout\ = ( \Add10~5_sumout\ & ( ((!\process_0~5_combout\ & ((\P~15_combout\))) # (\process_0~5_combout\ & (\Add7~9_sumout\))) # (\process_0~8_combout\) ) ) # ( !\Add10~5_sumout\ & ( (!\process_0~8_combout\ & ((!\process_0~5_combout\ & 
--- ((\P~15_combout\))) # (\process_0~5_combout\ & (\Add7~9_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~5_combout\,
-	datab => \ALT_INV_process_0~8_combout\,
-	datac => \ALT_INV_Add7~9_sumout\,
-	datad => \ALT_INV_P~15_combout\,
-	datae => \ALT_INV_Add10~5_sumout\,
-	combout => \P~49_combout\);
-
-\Add12~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add12~1_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~49_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~5_sumout\)) # (\inputB[5]~input_o\ & ((\P~49_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
--- \Add12~2\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~49_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~5_sumout\)) # (\inputB[5]~input_o\ & ((\P~49_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~5_sumout\,
-	datad => \ALT_INV_P~49_combout\,
-	dataf => \ALT_INV_Add0~1_sumout\,
-	cin => GND,
-	sumout => \Add12~1_sumout\,
-	cout => \Add12~2\);
-
-\P~16\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~16_combout\ = ( \P~15_combout\ & ( \Add10~5_sumout\ & ( ((!\inputB[4]~input_o\ & ((!\inputB[3]~input_o\) # (\Add7~9_sumout\)))) # (\inputB[5]~input_o\) ) ) ) # ( !\P~15_combout\ & ( \Add10~5_sumout\ & ( (!\inputB[4]~input_o\ & (((\inputB[3]~input_o\ & 
--- \Add7~9_sumout\)) # (\inputB[5]~input_o\))) ) ) ) # ( \P~15_combout\ & ( !\Add10~5_sumout\ & ( (!\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & ((!\inputB[3]~input_o\) # (\Add7~9_sumout\)))) # (\inputB[4]~input_o\ & (((\inputB[5]~input_o\)))) ) ) ) # ( 
--- !\P~15_combout\ & ( !\Add10~5_sumout\ & ( (\inputB[3]~input_o\ & (!\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & \Add7~9_sumout\))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000001000000100000111100001100001100010011001000111111001111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_inputB[5]~input_o\,
-	datad => \ALT_INV_Add7~9_sumout\,
-	datae => \ALT_INV_P~15_combout\,
-	dataf => \ALT_INV_Add10~5_sumout\,
-	combout => \P~16_combout\);
-
-\inputB[6]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputB(6),
-	o => \inputB[6]~input_o\);
-
-\Add11~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add11~1_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~49_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~5_sumout\)) # (\inputB[5]~input_o\ & ((\P~49_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
--- \Add11~2\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~49_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~5_sumout\)) # (\inputB[5]~input_o\ & ((\P~49_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~5_sumout\,
-	datad => \ALT_INV_P~49_combout\,
-	dataf => \ALT_INV_inputA[0]~input_o\,
-	cin => GND,
-	sumout => \Add11~1_sumout\,
-	cout => \Add11~2\);
-
-\P~76\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~76_combout\ = ( !\inputB[6]~input_o\ & ( (!\inputB[5]~input_o\ & ((((\inputB[4]~input_o\ & \Add9~5_sumout\)) # (\P~16_combout\)))) # (\inputB[5]~input_o\ & ((((\Add11~1_sumout\))))) ) ) # ( \inputB[6]~input_o\ & ( (((!\inputB[5]~input_o\ & 
--- (\Add12~1_sumout\)) # (\inputB[5]~input_o\ & ((\P~16_combout\))))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "on",
-	lut_mask => "0001000111111111000011110000111100001111000011110000000011111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_Add9~5_sumout\,
-	datac => \ALT_INV_Add12~1_sumout\,
-	datad => \ALT_INV_P~16_combout\,
-	datae => \ALT_INV_inputB[6]~input_o\,
-	dataf => \ALT_INV_inputB[5]~input_o\,
-	datag => \ALT_INV_Add11~1_sumout\,
-	combout => \P~76_combout\);
-
-\inputA[7]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputA(7),
-	o => \inputA[7]~input_o\);
-
-\Add0~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add0~29_sumout\ = SUM(( !\inputA[7]~input_o\ ) + ( GND ) + ( \Add0~26\ ))
+-- \P8|Add0~17_sumout\ = SUM(( !\A[4]~input_o\ ) + ( GND ) + ( \P8|Add0~14\ ))
+-- \P8|Add0~18\ = CARRY(( !\A[4]~input_o\ ) + ( GND ) + ( \P8|Add0~14\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2685,14 +2767,15 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	datad => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add0~26\,
-	sumout => \Add0~29_sumout\);
+	datad => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add0~14\,
+	sumout => \P8|Add0~17_sumout\,
+	cout => \P8|Add0~18\);
 
-\Add1~25\ : cyclonev_lcell_comb
+\P8|Add1~13\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add1~25_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~29_sumout\) ) + ( \inputA[6]~input_o\ ) + ( \Add1~22\ ))
--- \Add1~26\ = CARRY(( (\inputB[0]~input_o\ & \Add0~29_sumout\) ) + ( \inputA[6]~input_o\ ) + ( \Add1~22\ ))
+-- \P8|Add1~13_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~17_sumout\) ) + ( \A[3]~input_o\ ) + ( \P8|Add1~10\ ))
+-- \P8|Add1~14\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~17_sumout\) ) + ( \A[3]~input_o\ ) + ( \P8|Add1~10\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2701,17 +2784,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~29_sumout\,
-	dataf => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add1~22\,
-	sumout => \Add1~25_sumout\,
-	cout => \Add1~26\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~17_sumout\,
+	dataf => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add1~10\,
+	sumout => \P8|Add1~13_sumout\,
+	cout => \P8|Add1~14\);
 
-\Add2~25\ : cyclonev_lcell_comb
+\P8|Add2~13\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add2~25_sumout\ = SUM(( (\Add0~29_sumout\ & \inputB[0]~input_o\) ) + ( \Add0~25_sumout\ ) + ( \Add2~22\ ))
--- \Add2~26\ = CARRY(( (\Add0~29_sumout\ & \inputB[0]~input_o\) ) + ( \Add0~25_sumout\ ) + ( \Add2~22\ ))
+-- \P8|Add2~13_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~17_sumout\) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add2~10\ ))
+-- \P8|Add2~14\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~17_sumout\) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add2~10\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2720,16 +2803,16 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_Add0~29_sumout\,
-	datad => \ALT_INV_inputB[0]~input_o\,
-	dataf => \ALT_INV_Add0~25_sumout\,
-	cin => \Add2~22\,
-	sumout => \Add2~25_sumout\,
-	cout => \Add2~26\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~17_sumout\,
+	dataf => \P8|ALT_INV_Add0~13_sumout\,
+	cin => \P8|Add2~10\,
+	sumout => \P8|Add2~13_sumout\,
+	cout => \P8|Add2~14\);
 
-\P~17\ : cyclonev_lcell_comb
+\P8|P~3\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~17_combout\ = (!\inputB[0]~input_o\ & (\inputB[1]~input_o\ & ((\Add2~25_sumout\)))) # (\inputB[0]~input_o\ & (((\Add0~29_sumout\))))
+-- \P8|P~3_combout\ = (!\B[0]~input_o\ & (\B[1]~input_o\ & ((\P8|Add2~13_sumout\)))) # (\B[0]~input_o\ & (((\P8|Add0~17_sumout\))))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2738,16 +2821,16 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~29_sumout\,
-	datad => \ALT_INV_Add2~25_sumout\,
-	combout => \P~17_combout\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add0~17_sumout\,
+	datad => \P8|ALT_INV_Add2~13_sumout\,
+	combout => \P8|P~3_combout\);
 
-\Add3~21\ : cyclonev_lcell_comb
+\P8|Add3~9\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add3~21_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~17_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~25_sumout\)) # (\inputB[1]~input_o\ & ((\P~17_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add3~18\ ))
--- \Add3~22\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~17_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~25_sumout\)) # (\inputB[1]~input_o\ & ((\P~17_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add3~18\ ))
+-- \P8|Add3~9_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~3_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~13_sumout\)) # (\B[1]~input_o\ & ((\P8|P~3_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add3~6\ ))
+-- \P8|Add3~10\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~3_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~13_sumout\)) # (\B[1]~input_o\ & ((\P8|P~3_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add3~6\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2756,19 +2839,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~25_sumout\,
-	datad => \ALT_INV_P~17_combout\,
-	dataf => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add3~18\,
-	sumout => \Add3~21_sumout\,
-	cout => \Add3~22\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~13_sumout\,
+	datad => \P8|ALT_INV_P~3_combout\,
+	dataf => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add3~6\,
+	sumout => \P8|Add3~9_sumout\,
+	cout => \P8|Add3~10\);
 
-\Add4~21\ : cyclonev_lcell_comb
+\P8|Add4~9\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add4~21_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~17_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~25_sumout\)) # (\inputB[1]~input_o\ & ((\P~17_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add4~18\ ))
--- \Add4~22\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~17_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~25_sumout\)) # (\inputB[1]~input_o\ & ((\P~17_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add4~18\ ))
+-- \P8|Add4~9_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~3_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~13_sumout\)) # (\B[1]~input_o\ & ((\P8|P~3_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add4~6\ ))
+-- \P8|Add4~10\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~3_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~13_sumout\)) # (\B[1]~input_o\ & ((\P8|P~3_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add4~6\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2777,19 +2860,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~25_sumout\,
-	datad => \ALT_INV_P~17_combout\,
-	dataf => \ALT_INV_Add0~21_sumout\,
-	cin => \Add4~18\,
-	sumout => \Add4~21_sumout\,
-	cout => \Add4~22\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~13_sumout\,
+	datad => \P8|ALT_INV_P~3_combout\,
+	dataf => \P8|ALT_INV_Add0~9_sumout\,
+	cin => \P8|Add4~6\,
+	sumout => \P8|Add4~9_sumout\,
+	cout => \P8|Add4~10\);
 
-\P~18\ : cyclonev_lcell_comb
+\P8|P~4\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~18_combout\ = ( \Add4~21_sumout\ & ( ((!\process_0~0_combout\ & ((\P~17_combout\))) # (\process_0~0_combout\ & (\Add1~25_sumout\))) # (\process_0~2_combout\) ) ) # ( !\Add4~21_sumout\ & ( (!\process_0~2_combout\ & ((!\process_0~0_combout\ & 
--- ((\P~17_combout\))) # (\process_0~0_combout\ & (\Add1~25_sumout\)))) ) )
+-- \P8|P~4_combout\ = ( \P8|Add4~9_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~3_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~13_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~9_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~3_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~13_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2798,17 +2881,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~0_combout\,
-	datab => \ALT_INV_process_0~2_combout\,
-	datac => \ALT_INV_Add1~25_sumout\,
-	datad => \ALT_INV_P~17_combout\,
-	datae => \ALT_INV_Add4~21_sumout\,
-	combout => \P~18_combout\);
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_process_0~2_combout\,
+	datac => \P8|ALT_INV_Add1~13_sumout\,
+	datad => \P8|ALT_INV_P~3_combout\,
+	datae => \P8|ALT_INV_Add4~9_sumout\,
+	combout => \P8|P~4_combout\);
 
-\Add5~17\ : cyclonev_lcell_comb
+\P8|Add5~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add5~17_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~18_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~21_sumout\)) # (\inputB[2]~input_o\ & ((\P~18_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add5~14\ ))
--- \Add5~18\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~18_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~21_sumout\)) # (\inputB[2]~input_o\ & ((\P~18_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add5~14\ ))
+-- \P8|Add5~5_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~4_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~9_sumout\)) # (\B[2]~input_o\ & ((\P8|P~4_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add5~2\ ))
+-- \P8|Add5~6\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~4_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~9_sumout\)) # (\B[2]~input_o\ & ((\P8|P~4_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add5~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2817,19 +2900,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~21_sumout\,
-	datad => \ALT_INV_P~18_combout\,
-	dataf => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add5~14\,
-	sumout => \Add5~17_sumout\,
-	cout => \Add5~18\);
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~9_sumout\,
+	datad => \P8|ALT_INV_P~4_combout\,
+	dataf => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add5~2\,
+	sumout => \P8|Add5~5_sumout\,
+	cout => \P8|Add5~6\);
 
-\Add6~17\ : cyclonev_lcell_comb
+\P8|Add6~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add6~17_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~18_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~21_sumout\)) # (\inputB[2]~input_o\ & ((\P~18_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add6~14\ ))
--- \Add6~18\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~18_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~21_sumout\)) # (\inputB[2]~input_o\ & ((\P~18_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add6~14\ ))
+-- \P8|Add6~5_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~4_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~9_sumout\)) # (\B[2]~input_o\ & ((\P8|P~4_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add6~2\ ))
+-- \P8|Add6~6\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~4_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~9_sumout\)) # (\B[2]~input_o\ & ((\P8|P~4_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add6~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2838,19 +2921,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~21_sumout\,
-	datad => \ALT_INV_P~18_combout\,
-	dataf => \ALT_INV_Add0~17_sumout\,
-	cin => \Add6~14\,
-	sumout => \Add6~17_sumout\,
-	cout => \Add6~18\);
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~9_sumout\,
+	datad => \P8|ALT_INV_P~4_combout\,
+	dataf => \P8|ALT_INV_Add0~5_sumout\,
+	cin => \P8|Add6~2\,
+	sumout => \P8|Add6~5_sumout\,
+	cout => \P8|Add6~6\);
 
-\P~19\ : cyclonev_lcell_comb
+\P8|P~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~19_combout\ = ( \Add6~17_sumout\ & ( ((!\process_0~1_combout\ & ((\P~18_combout\))) # (\process_0~1_combout\ & (\Add3~21_sumout\))) # (\process_0~4_combout\) ) ) # ( !\Add6~17_sumout\ & ( (!\process_0~4_combout\ & ((!\process_0~1_combout\ & 
--- ((\P~18_combout\))) # (\process_0~1_combout\ & (\Add3~21_sumout\)))) ) )
+-- \P8|P~5_combout\ = ( \P8|Add6~5_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~4_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~9_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~5_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~4_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~9_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2859,17 +2942,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~1_combout\,
-	datab => \ALT_INV_process_0~4_combout\,
-	datac => \ALT_INV_Add3~21_sumout\,
-	datad => \ALT_INV_P~18_combout\,
-	datae => \ALT_INV_Add6~17_sumout\,
-	combout => \P~19_combout\);
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_process_0~4_combout\,
+	datac => \P8|ALT_INV_Add3~9_sumout\,
+	datad => \P8|ALT_INV_P~4_combout\,
+	datae => \P8|ALT_INV_Add6~5_sumout\,
+	combout => \P8|P~5_combout\);
 
-\Add7~13\ : cyclonev_lcell_comb
+\P8|Add7~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add7~13_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~19_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~17_sumout\)) # (\inputB[3]~input_o\ & ((\P~19_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add7~10\ ))
--- \Add7~14\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~19_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~17_sumout\)) # (\inputB[3]~input_o\ & ((\P~19_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add7~10\ ))
+-- \P8|Add7~1_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~5_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~5_sumout\)) # (\B[3]~input_o\ & ((\P8|P~5_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add7~2\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~5_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~5_sumout\)) # (\B[3]~input_o\ & ((\P8|P~5_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -2878,140 +2961,18 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~17_sumout\,
-	datad => \ALT_INV_P~19_combout\,
-	dataf => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add7~10\,
-	sumout => \Add7~13_sumout\,
-	cout => \Add7~14\);
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~5_sumout\,
+	datad => \P8|ALT_INV_P~5_combout\,
+	dataf => \ALT_INV_A[0]~input_o\,
+	cin => GND,
+	sumout => \P8|Add7~1_sumout\,
+	cout => \P8|Add7~2\);
 
-\Add8~13\ : cyclonev_lcell_comb
+\P8|process_0~6\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add8~13_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~19_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~17_sumout\)) # (\inputB[3]~input_o\ & ((\P~19_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add8~10\ ))
--- \Add8~14\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~19_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~17_sumout\)) # (\inputB[3]~input_o\ & ((\P~19_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add8~10\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~17_sumout\,
-	datad => \ALT_INV_P~19_combout\,
-	dataf => \ALT_INV_Add0~13_sumout\,
-	cin => \Add8~10\,
-	sumout => \Add8~13_sumout\,
-	cout => \Add8~14\);
-
-\P~20\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~20_combout\ = ( \Add8~13_sumout\ & ( ((!\process_0~3_combout\ & ((\P~19_combout\))) # (\process_0~3_combout\ & (\Add5~17_sumout\))) # (\process_0~6_combout\) ) ) # ( !\Add8~13_sumout\ & ( (!\process_0~6_combout\ & ((!\process_0~3_combout\ & 
--- ((\P~19_combout\))) # (\process_0~3_combout\ & (\Add5~17_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~3_combout\,
-	datab => \ALT_INV_process_0~6_combout\,
-	datac => \ALT_INV_Add5~17_sumout\,
-	datad => \ALT_INV_P~19_combout\,
-	datae => \ALT_INV_Add8~13_sumout\,
-	combout => \P~20_combout\);
-
-\Add9~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add9~9_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~20_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~13_sumout\)) # (\inputB[4]~input_o\ & ((\P~20_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add9~6\ ))
--- \Add9~10\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~20_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~13_sumout\)) # (\inputB[4]~input_o\ & ((\P~20_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add9~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~13_sumout\,
-	datad => \ALT_INV_P~20_combout\,
-	dataf => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add9~6\,
-	sumout => \Add9~9_sumout\,
-	cout => \Add9~10\);
-
-\Add10~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add10~9_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~20_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~13_sumout\)) # (\inputB[4]~input_o\ & ((\P~20_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add10~6\ ))
--- \Add10~10\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~20_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~13_sumout\)) # (\inputB[4]~input_o\ & ((\P~20_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add10~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~13_sumout\,
-	datad => \ALT_INV_P~20_combout\,
-	dataf => \ALT_INV_Add0~9_sumout\,
-	cin => \Add10~6\,
-	sumout => \Add10~9_sumout\,
-	cout => \Add10~10\);
-
-\P~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~21_combout\ = ( \Add10~9_sumout\ & ( ((!\process_0~5_combout\ & ((\P~20_combout\))) # (\process_0~5_combout\ & (\Add7~13_sumout\))) # (\process_0~8_combout\) ) ) # ( !\Add10~9_sumout\ & ( (!\process_0~8_combout\ & ((!\process_0~5_combout\ & 
--- ((\P~20_combout\))) # (\process_0~5_combout\ & (\Add7~13_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~5_combout\,
-	datab => \ALT_INV_process_0~8_combout\,
-	datac => \ALT_INV_Add7~13_sumout\,
-	datad => \ALT_INV_P~20_combout\,
-	datae => \ALT_INV_Add10~9_sumout\,
-	combout => \P~21_combout\);
-
-\Add11~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add11~5_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~21_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~9_sumout\)) # (\inputB[5]~input_o\ & ((\P~21_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add11~2\ ))
--- \Add11~6\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~21_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~9_sumout\)) # (\inputB[5]~input_o\ & ((\P~21_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add11~2\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~9_sumout\,
-	datad => \ALT_INV_P~21_combout\,
-	dataf => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add11~2\,
-	sumout => \Add11~5_sumout\,
-	cout => \Add11~6\);
-
-\process_0~7\ : cyclonev_lcell_comb
--- Equation(s):
--- \process_0~7_combout\ = (\inputB[4]~input_o\ & !\inputB[5]~input_o\)
+-- \P8|process_0~6_combout\ = (\B[4]~input_o\ & !\B[3]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3020,13 +2981,160 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	combout => \process_0~7_combout\);
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	combout => \P8|process_0~6_combout\);
 
-\process_0~9\ : cyclonev_lcell_comb
+\P8|Add8~1\ : cyclonev_lcell_comb
 -- Equation(s):
--- \process_0~9_combout\ = (!\inputB[5]~input_o\ & \inputB[6]~input_o\)
+-- \P8|Add8~1_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~5_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~5_sumout\)) # (\B[3]~input_o\ & ((\P8|P~5_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add8~2\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~5_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~5_sumout\)) # (\B[3]~input_o\ & ((\P8|P~5_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~5_sumout\,
+	datad => \P8|ALT_INV_P~5_combout\,
+	dataf => \P8|ALT_INV_Add0~1_sumout\,
+	cin => GND,
+	sumout => \P8|Add8~1_sumout\,
+	cout => \P8|Add8~2\);
+
+\P9|Mux15~20\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~20_combout\ = ( \P8|Add8~1_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~5_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~5_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~1_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~5_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~5_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001101100000000000110111111111100011011000000000001101111111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_Add5~5_sumout\,
+	datac => \P8|ALT_INV_P~5_combout\,
+	datad => \P8|ALT_INV_process_0~6_combout\,
+	datae => \P8|ALT_INV_Add8~1_sumout\,
+	combout => \P9|Mux15~20_combout\);
+
+\P9|Mux15~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~21_combout\ = ( \P9|Mux15~20_combout\ & ( (!\opcode[0]~input_o\ & (\A[6]~input_o\)) # (\opcode[0]~input_o\ & (((!\P8|process_0~5_combout\) # (\P8|Add7~1_sumout\)))) ) ) # ( !\P9|Mux15~20_combout\ & ( (!\opcode[0]~input_o\ & (\A[6]~input_o\)) # 
+-- (\opcode[0]~input_o\ & (((\P8|process_0~5_combout\ & \P8|Add7~1_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100111011100100111011100100010001001110111001001110111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[6]~input_o\,
+	datac => \P8|ALT_INV_process_0~5_combout\,
+	datad => \P8|ALT_INV_Add7~1_sumout\,
+	datae => \P9|ALT_INV_Mux15~20_combout\,
+	combout => \P9|Mux15~21_combout\);
+
+\P9|Mux11~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux11~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~21_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~19_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~18_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~17_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100000000000011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~17_combout\,
+	datab => \P9|ALT_INV_Mux15~18_combout\,
+	datac => \P9|ALT_INV_Mux15~19_combout\,
+	datad => \P9|ALT_INV_Mux15~21_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux11~0_combout\);
+
+\P9|Mux15~22\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~22_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[5]~input_o\) # (!\B[5]~input_o\))) # (\opcode[0]~input_o\ & (!\A[5]~input_o\ & !\B[5]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[5]~input_o\,
+	datad => \ALT_INV_B[5]~input_o\,
+	combout => \P9|Mux15~22_combout\);
+
+\P4|C~3\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~3_combout\ = (!\A[4]~input_o\ & (\P4|C~2_combout\ & (!\negate~input_o\ $ (!\B[4]~input_o\)))) # (\A[4]~input_o\ & ((!\negate~input_o\ $ (!\B[4]~input_o\)) # (\P4|C~2_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[4]~input_o\,
+	datac => \ALT_INV_B[4]~input_o\,
+	datad => \P4|ALT_INV_C~2_combout\,
+	combout => \P4|C~3_combout\);
+
+\P9|Mux15~23\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~23_combout\ = ( \P4|C~3_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[5]~input_o\ $ (!\B[5]~input_o\))) ) ) # ( !\P4|C~3_combout\ & ( !\negate~input_o\ $ (!\A[5]~input_o\ $ (\B[5]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[5]~input_o\,
+	datad => \ALT_INV_B[5]~input_o\,
+	datae => \P4|ALT_INV_C~3_combout\,
+	combout => \P9|Mux15~23_combout\);
+
+\P9|Mux15~24\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~24_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[3]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[3]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~24_combout\);
+
+\P8|process_0~7\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|process_0~7_combout\ = (!\B[5]~input_o\ & \B[4]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3035,147 +3143,31 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	combout => \process_0~9_combout\);
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	combout => \P8|process_0~7_combout\);
 
-\Add12~5\ : cyclonev_lcell_comb
+\P8|Add0~21\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add12~5_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~21_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~9_sumout\)) # (\inputB[5]~input_o\ & ((\P~21_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add12~2\ ))
--- \Add12~6\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~21_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~9_sumout\)) # (\inputB[5]~input_o\ & ((\P~21_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add12~2\ ))
+-- \P8|Add0~21_sumout\ = SUM(( !\A[5]~input_o\ ) + ( GND ) + ( \P8|Add0~18\ ))
+-- \P8|Add0~22\ = CARRY(( !\A[5]~input_o\ ) + ( GND ) + ( \P8|Add0~18\ ))
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0000000000000000111111111111111100000000000000001111111100000000",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~9_sumout\,
-	datad => \ALT_INV_P~21_combout\,
-	dataf => \ALT_INV_Add0~5_sumout\,
-	cin => \Add12~2\,
-	sumout => \Add12~5_sumout\,
-	cout => \Add12~6\);
+	datad => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add0~18\,
+	sumout => \P8|Add0~21_sumout\,
+	cout => \P8|Add0~22\);
 
-\P~50\ : cyclonev_lcell_comb
+\P8|Add1~17\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~50_combout\ = ( \Add12~5_sumout\ & ( ((!\process_0~7_combout\ & ((\P~21_combout\))) # (\process_0~7_combout\ & (\Add9~9_sumout\))) # (\process_0~9_combout\) ) ) # ( !\Add12~5_sumout\ & ( (!\process_0~9_combout\ & ((!\process_0~7_combout\ & 
--- ((\P~21_combout\))) # (\process_0~7_combout\ & (\Add9~9_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~7_combout\,
-	datab => \ALT_INV_process_0~9_combout\,
-	datac => \ALT_INV_Add9~9_sumout\,
-	datad => \ALT_INV_P~21_combout\,
-	datae => \ALT_INV_Add12~5_sumout\,
-	combout => \P~50_combout\);
-
-\Add14~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add14~1_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~50_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~5_sumout\)) # (\inputB[6]~input_o\ & ((\P~50_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
--- \Add14~2\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~50_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~5_sumout\)) # (\inputB[6]~input_o\ & ((\P~50_combout\))))) ) + ( \Add0~1_sumout\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~5_sumout\,
-	datad => \ALT_INV_P~50_combout\,
-	dataf => \ALT_INV_Add0~1_sumout\,
-	cin => GND,
-	sumout => \Add14~1_sumout\,
-	cout => \Add14~2\);
-
-\P~22\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~22_combout\ = ( \P~21_combout\ & ( \Add12~5_sumout\ & ( ((!\inputB[5]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~9_sumout\)))) # (\inputB[6]~input_o\) ) ) ) # ( !\P~21_combout\ & ( \Add12~5_sumout\ & ( (!\inputB[5]~input_o\ & (((\inputB[4]~input_o\ & 
--- \Add9~9_sumout\)) # (\inputB[6]~input_o\))) ) ) ) # ( \P~21_combout\ & ( !\Add12~5_sumout\ & ( (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~9_sumout\)))) # (\inputB[5]~input_o\ & (((\inputB[6]~input_o\)))) ) ) ) # ( 
--- !\P~21_combout\ & ( !\Add12~5_sumout\ & ( (\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & \Add9~9_sumout\))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000001000000100000111100001100001100010011001000111111001111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_inputB[6]~input_o\,
-	datad => \ALT_INV_Add9~9_sumout\,
-	datae => \ALT_INV_P~21_combout\,
-	dataf => \ALT_INV_Add12~5_sumout\,
-	combout => \P~22_combout\);
-
-\inputB[7]~input\ : cyclonev_io_ibuf
--- pragma translate_off
-GENERIC MAP (
-	bus_hold => "false",
-	simulate_z_as => "z")
--- pragma translate_on
-PORT MAP (
-	i => ww_inputB(7),
-	o => \inputB[7]~input_o\);
-
-\Add13~1\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~1_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~50_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~5_sumout\)) # (\inputB[6]~input_o\ & ((\P~50_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
--- \Add13~2\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~50_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~5_sumout\)) # (\inputB[6]~input_o\ & ((\P~50_combout\))))) ) + ( \inputA[0]~input_o\ ) + ( !VCC ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~5_sumout\,
-	datad => \ALT_INV_P~50_combout\,
-	dataf => \ALT_INV_inputA[0]~input_o\,
-	cin => GND,
-	sumout => \Add13~1_sumout\,
-	cout => \Add13~2\);
-
-\P~72\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~72_combout\ = ( !\inputB[7]~input_o\ & ( (!\inputB[6]~input_o\ & ((((\Add11~5_sumout\ & \inputB[5]~input_o\)) # (\P~22_combout\)))) # (\inputB[6]~input_o\ & ((((\Add13~1_sumout\))))) ) ) # ( \inputB[7]~input_o\ & ( (((!\inputB[6]~input_o\ & 
--- (\Add14~1_sumout\)) # (\inputB[6]~input_o\ & ((\P~22_combout\))))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "on",
-	lut_mask => "0001000111111111000011110000111100001111000011110000000011111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_Add11~5_sumout\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add14~1_sumout\,
-	datad => \ALT_INV_P~22_combout\,
-	datae => \ALT_INV_inputB[7]~input_o\,
-	dataf => \ALT_INV_inputB[6]~input_o\,
-	datag => \ALT_INV_Add13~1_sumout\,
-	combout => \P~72_combout\);
-
-\Add1~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add1~29_sumout\ = SUM(( (\inputB[0]~input_o\ & \Add0~29_sumout\) ) + ( \inputA[7]~input_o\ ) + ( \Add1~26\ ))
+-- \P8|Add1~17_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~21_sumout\) ) + ( \A[4]~input_o\ ) + ( \P8|Add1~14\ ))
+-- \P8|Add1~18\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~21_sumout\) ) + ( \A[4]~input_o\ ) + ( \P8|Add1~14\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3184,15 +3176,1541 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datad => \ALT_INV_Add0~29_sumout\,
-	dataf => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add1~26\,
-	sumout => \Add1~29_sumout\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~21_sumout\,
+	dataf => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add1~14\,
+	sumout => \P8|Add1~17_sumout\,
+	cout => \P8|Add1~18\);
 
-\Add2~29\ : cyclonev_lcell_comb
+\P8|Add2~17\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add2~29_sumout\ = SUM(( (\Add0~29_sumout\ & \inputB[0]~input_o\) ) + ( \Add0~29_sumout\ ) + ( \Add2~26\ ))
+-- \P8|Add2~17_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~21_sumout\) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add2~14\ ))
+-- \P8|Add2~18\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~21_sumout\) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add2~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~21_sumout\,
+	dataf => \P8|ALT_INV_Add0~17_sumout\,
+	cin => \P8|Add2~14\,
+	sumout => \P8|Add2~17_sumout\,
+	cout => \P8|Add2~18\);
+
+\P8|P~6\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~6_combout\ = (!\B[0]~input_o\ & (\B[1]~input_o\ & ((\P8|Add2~17_sumout\)))) # (\B[0]~input_o\ & (((\P8|Add0~21_sumout\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010100100111000001010010011100000101001001110000010100100111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add0~21_sumout\,
+	datad => \P8|ALT_INV_Add2~17_sumout\,
+	combout => \P8|P~6_combout\);
+
+\P8|Add3~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add3~13_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~6_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~17_sumout\)) # (\B[1]~input_o\ & ((\P8|P~6_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add3~10\ ))
+-- \P8|Add3~14\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~6_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~17_sumout\)) # (\B[1]~input_o\ & ((\P8|P~6_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add3~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~17_sumout\,
+	datad => \P8|ALT_INV_P~6_combout\,
+	dataf => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add3~10\,
+	sumout => \P8|Add3~13_sumout\,
+	cout => \P8|Add3~14\);
+
+\P8|Add4~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add4~13_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~6_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~17_sumout\)) # (\B[1]~input_o\ & ((\P8|P~6_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add4~10\ ))
+-- \P8|Add4~14\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~6_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~17_sumout\)) # (\B[1]~input_o\ & ((\P8|P~6_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add4~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~17_sumout\,
+	datad => \P8|ALT_INV_P~6_combout\,
+	dataf => \P8|ALT_INV_Add0~13_sumout\,
+	cin => \P8|Add4~10\,
+	sumout => \P8|Add4~13_sumout\,
+	cout => \P8|Add4~14\);
+
+\P8|P~7\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~7_combout\ = ( \P8|Add4~13_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~6_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~17_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~13_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~6_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~17_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_process_0~2_combout\,
+	datac => \P8|ALT_INV_Add1~17_sumout\,
+	datad => \P8|ALT_INV_P~6_combout\,
+	datae => \P8|ALT_INV_Add4~13_sumout\,
+	combout => \P8|P~7_combout\);
+
+\P8|Add5~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add5~9_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~7_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~13_sumout\)) # (\B[2]~input_o\ & ((\P8|P~7_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add5~6\ ))
+-- \P8|Add5~10\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~7_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~13_sumout\)) # (\B[2]~input_o\ & ((\P8|P~7_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add5~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~13_sumout\,
+	datad => \P8|ALT_INV_P~7_combout\,
+	dataf => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add5~6\,
+	sumout => \P8|Add5~9_sumout\,
+	cout => \P8|Add5~10\);
+
+\P8|Add6~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add6~9_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~7_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~13_sumout\)) # (\B[2]~input_o\ & ((\P8|P~7_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add6~6\ ))
+-- \P8|Add6~10\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~7_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~13_sumout\)) # (\B[2]~input_o\ & ((\P8|P~7_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add6~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~13_sumout\,
+	datad => \P8|ALT_INV_P~7_combout\,
+	dataf => \P8|ALT_INV_Add0~9_sumout\,
+	cin => \P8|Add6~6\,
+	sumout => \P8|Add6~9_sumout\,
+	cout => \P8|Add6~10\);
+
+\P8|P~8\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~8_combout\ = ( \P8|Add6~9_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~7_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~13_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~9_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~7_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~13_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_process_0~4_combout\,
+	datac => \P8|ALT_INV_Add3~13_sumout\,
+	datad => \P8|ALT_INV_P~7_combout\,
+	datae => \P8|ALT_INV_Add6~9_sumout\,
+	combout => \P8|P~8_combout\);
+
+\P8|Add7~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add7~5_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~8_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~9_sumout\)) # (\B[3]~input_o\ & ((\P8|P~8_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add7~2\ ))
+-- \P8|Add7~6\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~8_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~9_sumout\)) # (\B[3]~input_o\ & ((\P8|P~8_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add7~2\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~9_sumout\,
+	datad => \P8|ALT_INV_P~8_combout\,
+	dataf => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add7~2\,
+	sumout => \P8|Add7~5_sumout\,
+	cout => \P8|Add7~6\);
+
+\P8|Add8~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add8~5_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~8_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~9_sumout\)) # (\B[3]~input_o\ & ((\P8|P~8_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add8~2\ ))
+-- \P8|Add8~6\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~8_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~9_sumout\)) # (\B[3]~input_o\ & ((\P8|P~8_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add8~2\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~9_sumout\,
+	datad => \P8|ALT_INV_P~8_combout\,
+	dataf => \P8|ALT_INV_Add0~5_sumout\,
+	cin => \P8|Add8~2\,
+	sumout => \P8|Add8~5_sumout\,
+	cout => \P8|Add8~6\);
+
+\P8|P~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~9_combout\ = ( \P8|Add8~5_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~8_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~9_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~5_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~8_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~9_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_process_0~6_combout\,
+	datac => \P8|ALT_INV_Add5~9_sumout\,
+	datad => \P8|ALT_INV_P~8_combout\,
+	datae => \P8|ALT_INV_Add8~5_sumout\,
+	combout => \P8|P~9_combout\);
+
+\P8|Add9~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add9~1_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~9_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~5_sumout\)) # (\B[4]~input_o\ & ((\P8|P~9_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add9~2\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~9_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~5_sumout\)) # (\B[4]~input_o\ & ((\P8|P~9_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~5_sumout\,
+	datad => \P8|ALT_INV_P~9_combout\,
+	dataf => \ALT_INV_A[0]~input_o\,
+	cin => GND,
+	sumout => \P8|Add9~1_sumout\,
+	cout => \P8|Add9~2\);
+
+\P8|process_0~8\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|process_0~8_combout\ = (\B[5]~input_o\ & !\B[4]~input_o\)
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0100010001000100010001000100010001000100010001000100010001000100",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	combout => \P8|process_0~8_combout\);
+
+\P8|Add10~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add10~1_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~9_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~5_sumout\)) # (\B[4]~input_o\ & ((\P8|P~9_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add10~2\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~9_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~5_sumout\)) # (\B[4]~input_o\ & ((\P8|P~9_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~5_sumout\,
+	datad => \P8|ALT_INV_P~9_combout\,
+	dataf => \P8|ALT_INV_Add0~1_sumout\,
+	cin => GND,
+	sumout => \P8|Add10~1_sumout\,
+	cout => \P8|Add10~2\);
+
+\P9|Mux15~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~25_combout\ = ( \P8|Add10~1_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~9_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~5_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~1_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~9_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~5_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001101100000000000110111111111100011011000000000001101111111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_Add7~5_sumout\,
+	datac => \P8|ALT_INV_P~9_combout\,
+	datad => \P8|ALT_INV_process_0~8_combout\,
+	datae => \P8|ALT_INV_Add10~1_sumout\,
+	combout => \P9|Mux15~25_combout\);
+
+\P9|Mux15~26\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~26_combout\ = ( \P9|Mux15~25_combout\ & ( (!\opcode[0]~input_o\ & (\A[7]~input_o\)) # (\opcode[0]~input_o\ & (((!\P8|process_0~7_combout\) # (\P8|Add9~1_sumout\)))) ) ) # ( !\P9|Mux15~25_combout\ & ( (!\opcode[0]~input_o\ & (\A[7]~input_o\)) # 
+-- (\opcode[0]~input_o\ & (((\P8|process_0~7_combout\ & \P8|Add9~1_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100111011100100111011100100010001001110111001001110111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[7]~input_o\,
+	datac => \P8|ALT_INV_process_0~7_combout\,
+	datad => \P8|ALT_INV_Add9~1_sumout\,
+	datae => \P9|ALT_INV_Mux15~25_combout\,
+	combout => \P9|Mux15~26_combout\);
+
+\P9|Mux10~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux10~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~26_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~24_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~23_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~22_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100000000000011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~22_combout\,
+	datab => \P9|ALT_INV_Mux15~23_combout\,
+	datac => \P9|ALT_INV_Mux15~24_combout\,
+	datad => \P9|ALT_INV_Mux15~26_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux10~0_combout\);
+
+\P9|Mux15~27\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~27_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[6]~input_o\) # (!\B[6]~input_o\))) # (\opcode[0]~input_o\ & (!\A[6]~input_o\ & !\B[6]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[6]~input_o\,
+	datad => \ALT_INV_B[6]~input_o\,
+	combout => \P9|Mux15~27_combout\);
+
+\P4|C~4\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~4_combout\ = (!\A[5]~input_o\ & (\P4|C~3_combout\ & (!\negate~input_o\ $ (!\B[5]~input_o\)))) # (\A[5]~input_o\ & ((!\negate~input_o\ $ (!\B[5]~input_o\)) # (\P4|C~3_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[5]~input_o\,
+	datac => \ALT_INV_B[5]~input_o\,
+	datad => \P4|ALT_INV_C~3_combout\,
+	combout => \P4|C~4_combout\);
+
+\P9|Mux15~28\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~28_combout\ = ( \P4|C~4_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[6]~input_o\ $ (!\B[6]~input_o\))) ) ) # ( !\P4|C~4_combout\ & ( !\negate~input_o\ $ (!\A[6]~input_o\ $ (\B[6]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[6]~input_o\,
+	datad => \ALT_INV_B[6]~input_o\,
+	datae => \P4|ALT_INV_C~4_combout\,
+	combout => \P9|Mux15~28_combout\);
+
+\P9|Mux15~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~29_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[4]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[4]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~29_combout\);
+
+\P8|process_0~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|process_0~9_combout\ = (!\B[6]~input_o\ & \B[5]~input_o\)
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100010001000100010001000100010001000100010001000100010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[6]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	combout => \P8|process_0~9_combout\);
+
+\P8|Add0~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add0~25_sumout\ = SUM(( !\A[6]~input_o\ ) + ( GND ) + ( \P8|Add0~22\ ))
+-- \P8|Add0~26\ = CARRY(( !\A[6]~input_o\ ) + ( GND ) + ( \P8|Add0~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111111111111100000000000000001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	datad => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add0~22\,
+	sumout => \P8|Add0~25_sumout\,
+	cout => \P8|Add0~26\);
+
+\P8|Add1~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add1~21_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~25_sumout\) ) + ( \A[5]~input_o\ ) + ( \P8|Add1~18\ ))
+-- \P8|Add1~22\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~25_sumout\) ) + ( \A[5]~input_o\ ) + ( \P8|Add1~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~25_sumout\,
+	dataf => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add1~18\,
+	sumout => \P8|Add1~21_sumout\,
+	cout => \P8|Add1~22\);
+
+\P8|Add2~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add2~21_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~25_sumout\) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add2~18\ ))
+-- \P8|Add2~22\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~25_sumout\) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add2~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~25_sumout\,
+	dataf => \P8|ALT_INV_Add0~21_sumout\,
+	cin => \P8|Add2~18\,
+	sumout => \P8|Add2~21_sumout\,
+	cout => \P8|Add2~22\);
+
+\P8|P~10\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~10_combout\ = (!\B[0]~input_o\ & (\B[1]~input_o\ & ((\P8|Add2~21_sumout\)))) # (\B[0]~input_o\ & (((\P8|Add0~25_sumout\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010100100111000001010010011100000101001001110000010100100111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add0~25_sumout\,
+	datad => \P8|ALT_INV_Add2~21_sumout\,
+	combout => \P8|P~10_combout\);
+
+\P8|Add3~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add3~17_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~10_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~21_sumout\)) # (\B[1]~input_o\ & ((\P8|P~10_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add3~14\ ))
+-- \P8|Add3~18\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~10_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~21_sumout\)) # (\B[1]~input_o\ & ((\P8|P~10_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add3~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~21_sumout\,
+	datad => \P8|ALT_INV_P~10_combout\,
+	dataf => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add3~14\,
+	sumout => \P8|Add3~17_sumout\,
+	cout => \P8|Add3~18\);
+
+\P8|Add4~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add4~17_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~10_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~21_sumout\)) # (\B[1]~input_o\ & ((\P8|P~10_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add4~14\ ))
+-- \P8|Add4~18\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~10_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~21_sumout\)) # (\B[1]~input_o\ & ((\P8|P~10_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add4~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~21_sumout\,
+	datad => \P8|ALT_INV_P~10_combout\,
+	dataf => \P8|ALT_INV_Add0~17_sumout\,
+	cin => \P8|Add4~14\,
+	sumout => \P8|Add4~17_sumout\,
+	cout => \P8|Add4~18\);
+
+\P8|P~11\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~11_combout\ = ( \P8|Add4~17_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~10_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~21_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~17_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~10_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~21_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_process_0~2_combout\,
+	datac => \P8|ALT_INV_Add1~21_sumout\,
+	datad => \P8|ALT_INV_P~10_combout\,
+	datae => \P8|ALT_INV_Add4~17_sumout\,
+	combout => \P8|P~11_combout\);
+
+\P8|Add5~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add5~13_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~11_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~17_sumout\)) # (\B[2]~input_o\ & ((\P8|P~11_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add5~10\ ))
+-- \P8|Add5~14\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~11_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~17_sumout\)) # (\B[2]~input_o\ & ((\P8|P~11_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add5~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~17_sumout\,
+	datad => \P8|ALT_INV_P~11_combout\,
+	dataf => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add5~10\,
+	sumout => \P8|Add5~13_sumout\,
+	cout => \P8|Add5~14\);
+
+\P8|Add6~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add6~13_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~11_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~17_sumout\)) # (\B[2]~input_o\ & ((\P8|P~11_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add6~10\ ))
+-- \P8|Add6~14\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~11_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~17_sumout\)) # (\B[2]~input_o\ & ((\P8|P~11_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add6~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~17_sumout\,
+	datad => \P8|ALT_INV_P~11_combout\,
+	dataf => \P8|ALT_INV_Add0~13_sumout\,
+	cin => \P8|Add6~10\,
+	sumout => \P8|Add6~13_sumout\,
+	cout => \P8|Add6~14\);
+
+\P8|P~12\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~12_combout\ = ( \P8|Add6~13_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~11_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~17_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~13_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~11_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~17_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_process_0~4_combout\,
+	datac => \P8|ALT_INV_Add3~17_sumout\,
+	datad => \P8|ALT_INV_P~11_combout\,
+	datae => \P8|ALT_INV_Add6~13_sumout\,
+	combout => \P8|P~12_combout\);
+
+\P8|Add7~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add7~9_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~12_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~13_sumout\)) # (\B[3]~input_o\ & ((\P8|P~12_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add7~6\ ))
+-- \P8|Add7~10\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~12_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~13_sumout\)) # (\B[3]~input_o\ & ((\P8|P~12_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add7~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~13_sumout\,
+	datad => \P8|ALT_INV_P~12_combout\,
+	dataf => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add7~6\,
+	sumout => \P8|Add7~9_sumout\,
+	cout => \P8|Add7~10\);
+
+\P8|Add8~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add8~9_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~12_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~13_sumout\)) # (\B[3]~input_o\ & ((\P8|P~12_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add8~6\ ))
+-- \P8|Add8~10\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~12_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~13_sumout\)) # (\B[3]~input_o\ & ((\P8|P~12_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add8~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~13_sumout\,
+	datad => \P8|ALT_INV_P~12_combout\,
+	dataf => \P8|ALT_INV_Add0~9_sumout\,
+	cin => \P8|Add8~6\,
+	sumout => \P8|Add8~9_sumout\,
+	cout => \P8|Add8~10\);
+
+\P8|P~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~13_combout\ = ( \P8|Add8~9_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~12_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~13_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~9_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~12_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~13_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_process_0~6_combout\,
+	datac => \P8|ALT_INV_Add5~13_sumout\,
+	datad => \P8|ALT_INV_P~12_combout\,
+	datae => \P8|ALT_INV_Add8~9_sumout\,
+	combout => \P8|P~13_combout\);
+
+\P8|Add9~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add9~5_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~13_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~9_sumout\)) # (\B[4]~input_o\ & ((\P8|P~13_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add9~2\ ))
+-- \P8|Add9~6\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~13_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~9_sumout\)) # (\B[4]~input_o\ & ((\P8|P~13_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add9~2\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~9_sumout\,
+	datad => \P8|ALT_INV_P~13_combout\,
+	dataf => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add9~2\,
+	sumout => \P8|Add9~5_sumout\,
+	cout => \P8|Add9~6\);
+
+\P8|Add10~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add10~5_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~13_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~9_sumout\)) # (\B[4]~input_o\ & ((\P8|P~13_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add10~2\ ))
+-- \P8|Add10~6\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~13_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~9_sumout\)) # (\B[4]~input_o\ & ((\P8|P~13_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add10~2\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~9_sumout\,
+	datad => \P8|ALT_INV_P~13_combout\,
+	dataf => \P8|ALT_INV_Add0~5_sumout\,
+	cin => \P8|Add10~2\,
+	sumout => \P8|Add10~5_sumout\,
+	cout => \P8|Add10~6\);
+
+\P8|P~14\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~14_combout\ = ( \P8|Add10~5_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~13_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~9_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~5_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~13_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~9_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_process_0~8_combout\,
+	datac => \P8|ALT_INV_Add7~9_sumout\,
+	datad => \P8|ALT_INV_P~13_combout\,
+	datae => \P8|ALT_INV_Add10~5_sumout\,
+	combout => \P8|P~14_combout\);
+
+\P8|Add11~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add11~1_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~14_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~5_sumout\)) # (\B[5]~input_o\ & ((\P8|P~14_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add11~2\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~14_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~5_sumout\)) # (\B[5]~input_o\ & ((\P8|P~14_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~5_sumout\,
+	datad => \P8|ALT_INV_P~14_combout\,
+	dataf => \ALT_INV_A[0]~input_o\,
+	cin => GND,
+	sumout => \P8|Add11~1_sumout\,
+	cout => \P8|Add11~2\);
+
+\P8|process_0~10\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|process_0~10_combout\ = (\B[6]~input_o\ & !\B[5]~input_o\)
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0100010001000100010001000100010001000100010001000100010001000100",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[6]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	combout => \P8|process_0~10_combout\);
+
+\P8|Add12~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add12~1_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~14_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~5_sumout\)) # (\B[5]~input_o\ & ((\P8|P~14_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add12~2\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~14_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~5_sumout\)) # (\B[5]~input_o\ & ((\P8|P~14_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~5_sumout\,
+	datad => \P8|ALT_INV_P~14_combout\,
+	dataf => \P8|ALT_INV_Add0~1_sumout\,
+	cin => GND,
+	sumout => \P8|Add12~1_sumout\,
+	cout => \P8|Add12~2\);
+
+\P9|Mux15~30\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~30_combout\ = ( \P8|Add12~1_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~14_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~5_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~1_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~14_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~5_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001101100000000000110111111111100011011000000000001101111111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_Add9~5_sumout\,
+	datac => \P8|ALT_INV_P~14_combout\,
+	datad => \P8|ALT_INV_process_0~10_combout\,
+	datae => \P8|ALT_INV_Add12~1_sumout\,
+	combout => \P9|Mux15~30_combout\);
+
+\P9|Mux15~31\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~31_combout\ = ( \P9|Mux15~30_combout\ & ( (!\opcode[0]~input_o\ & (\A[8]~input_o\)) # (\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\) # (\P8|Add11~1_sumout\)))) ) ) # ( !\P9|Mux15~30_combout\ & ( (!\opcode[0]~input_o\ & (\A[8]~input_o\)) # 
+-- (\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & \P8|Add11~1_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100111011100100111011100100010001001110111001001110111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[8]~input_o\,
+	datac => \P8|ALT_INV_process_0~9_combout\,
+	datad => \P8|ALT_INV_Add11~1_sumout\,
+	datae => \P9|ALT_INV_Mux15~30_combout\,
+	combout => \P9|Mux15~31_combout\);
+
+\P9|Mux9~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux9~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~31_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~29_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~28_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~27_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100000000000011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~27_combout\,
+	datab => \P9|ALT_INV_Mux15~28_combout\,
+	datac => \P9|ALT_INV_Mux15~29_combout\,
+	datad => \P9|ALT_INV_Mux15~31_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux9~0_combout\);
+
+\P9|Mux15~32\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~32_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[7]~input_o\) # (!\B[7]~input_o\))) # (\opcode[0]~input_o\ & (!\A[7]~input_o\ & !\B[7]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[7]~input_o\,
+	datad => \ALT_INV_B[7]~input_o\,
+	combout => \P9|Mux15~32_combout\);
+
+\P4|C~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~5_combout\ = (!\A[6]~input_o\ & (\P4|C~4_combout\ & (!\negate~input_o\ $ (!\B[6]~input_o\)))) # (\A[6]~input_o\ & ((!\negate~input_o\ $ (!\B[6]~input_o\)) # (\P4|C~4_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[6]~input_o\,
+	datac => \ALT_INV_B[6]~input_o\,
+	datad => \P4|ALT_INV_C~4_combout\,
+	combout => \P4|C~5_combout\);
+
+\P9|Mux15~33\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~33_combout\ = ( \P4|C~5_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[7]~input_o\ $ (!\B[7]~input_o\))) ) ) # ( !\P4|C~5_combout\ & ( !\negate~input_o\ $ (!\A[7]~input_o\ $ (\B[7]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[7]~input_o\,
+	datad => \ALT_INV_B[7]~input_o\,
+	datae => \P4|ALT_INV_C~5_combout\,
+	combout => \P9|Mux15~33_combout\);
+
+\P9|Mux15~34\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~34_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[5]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[5]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~34_combout\);
+
+\P8|Add0~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add0~29_sumout\ = SUM(( !\A[7]~input_o\ ) + ( GND ) + ( \P8|Add0~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111111111111100000000000000001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	datad => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add0~26\,
+	sumout => \P8|Add0~29_sumout\);
+
+\P8|Add1~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add1~25_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~29_sumout\) ) + ( \A[6]~input_o\ ) + ( \P8|Add1~22\ ))
+-- \P8|Add1~26\ = CARRY(( (\B[0]~input_o\ & \P8|Add0~29_sumout\) ) + ( \A[6]~input_o\ ) + ( \P8|Add1~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~29_sumout\,
+	dataf => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add1~22\,
+	sumout => \P8|Add1~25_sumout\,
+	cout => \P8|Add1~26\);
+
+\P8|Add2~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add2~25_sumout\ = SUM(( (\P8|Add0~29_sumout\ & \B[0]~input_o\) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add2~22\ ))
+-- \P8|Add2~26\ = CARRY(( (\P8|Add0~29_sumout\ & \B[0]~input_o\) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add2~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_Add0~29_sumout\,
+	datad => \ALT_INV_B[0]~input_o\,
+	dataf => \P8|ALT_INV_Add0~25_sumout\,
+	cin => \P8|Add2~22\,
+	sumout => \P8|Add2~25_sumout\,
+	cout => \P8|Add2~26\);
+
+\P8|P~15\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~15_combout\ = (!\B[0]~input_o\ & (\B[1]~input_o\ & ((\P8|Add2~25_sumout\)))) # (\B[0]~input_o\ & (((\P8|Add0~29_sumout\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010100100111000001010010011100000101001001110000010100100111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add0~29_sumout\,
+	datad => \P8|ALT_INV_Add2~25_sumout\,
+	combout => \P8|P~15_combout\);
+
+\P8|Add3~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add3~21_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~15_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~25_sumout\)) # (\B[1]~input_o\ & ((\P8|P~15_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add3~18\ ))
+-- \P8|Add3~22\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~15_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~25_sumout\)) # (\B[1]~input_o\ & ((\P8|P~15_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add3~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~25_sumout\,
+	datad => \P8|ALT_INV_P~15_combout\,
+	dataf => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add3~18\,
+	sumout => \P8|Add3~21_sumout\,
+	cout => \P8|Add3~22\);
+
+\P8|Add4~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add4~21_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~15_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~25_sumout\)) # (\B[1]~input_o\ & ((\P8|P~15_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add4~18\ ))
+-- \P8|Add4~22\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~15_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~25_sumout\)) # (\B[1]~input_o\ & ((\P8|P~15_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add4~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~25_sumout\,
+	datad => \P8|ALT_INV_P~15_combout\,
+	dataf => \P8|ALT_INV_Add0~21_sumout\,
+	cin => \P8|Add4~18\,
+	sumout => \P8|Add4~21_sumout\,
+	cout => \P8|Add4~22\);
+
+\P8|P~16\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~16_combout\ = ( \P8|Add4~21_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~15_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~25_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~21_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~15_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~25_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_process_0~2_combout\,
+	datac => \P8|ALT_INV_Add1~25_sumout\,
+	datad => \P8|ALT_INV_P~15_combout\,
+	datae => \P8|ALT_INV_Add4~21_sumout\,
+	combout => \P8|P~16_combout\);
+
+\P8|Add5~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add5~17_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~16_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~21_sumout\)) # (\B[2]~input_o\ & ((\P8|P~16_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add5~14\ ))
+-- \P8|Add5~18\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~16_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~21_sumout\)) # (\B[2]~input_o\ & ((\P8|P~16_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add5~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~21_sumout\,
+	datad => \P8|ALT_INV_P~16_combout\,
+	dataf => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add5~14\,
+	sumout => \P8|Add5~17_sumout\,
+	cout => \P8|Add5~18\);
+
+\P8|Add6~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add6~17_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~16_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~21_sumout\)) # (\B[2]~input_o\ & ((\P8|P~16_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add6~14\ ))
+-- \P8|Add6~18\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~16_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~21_sumout\)) # (\B[2]~input_o\ & ((\P8|P~16_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add6~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~21_sumout\,
+	datad => \P8|ALT_INV_P~16_combout\,
+	dataf => \P8|ALT_INV_Add0~17_sumout\,
+	cin => \P8|Add6~14\,
+	sumout => \P8|Add6~17_sumout\,
+	cout => \P8|Add6~18\);
+
+\P8|P~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~17_combout\ = ( \P8|Add6~17_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~16_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~21_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~17_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~16_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~21_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_process_0~4_combout\,
+	datac => \P8|ALT_INV_Add3~21_sumout\,
+	datad => \P8|ALT_INV_P~16_combout\,
+	datae => \P8|ALT_INV_Add6~17_sumout\,
+	combout => \P8|P~17_combout\);
+
+\P8|Add7~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add7~13_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~17_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~17_sumout\)) # (\B[3]~input_o\ & ((\P8|P~17_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add7~10\ ))
+-- \P8|Add7~14\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~17_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~17_sumout\)) # (\B[3]~input_o\ & ((\P8|P~17_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add7~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~17_sumout\,
+	datad => \P8|ALT_INV_P~17_combout\,
+	dataf => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add7~10\,
+	sumout => \P8|Add7~13_sumout\,
+	cout => \P8|Add7~14\);
+
+\P8|Add8~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add8~13_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~17_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~17_sumout\)) # (\B[3]~input_o\ & ((\P8|P~17_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add8~10\ ))
+-- \P8|Add8~14\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~17_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~17_sumout\)) # (\B[3]~input_o\ & ((\P8|P~17_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add8~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~17_sumout\,
+	datad => \P8|ALT_INV_P~17_combout\,
+	dataf => \P8|ALT_INV_Add0~13_sumout\,
+	cin => \P8|Add8~10\,
+	sumout => \P8|Add8~13_sumout\,
+	cout => \P8|Add8~14\);
+
+\P8|P~18\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~18_combout\ = ( \P8|Add8~13_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~17_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~17_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~13_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~17_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~17_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_process_0~6_combout\,
+	datac => \P8|ALT_INV_Add5~17_sumout\,
+	datad => \P8|ALT_INV_P~17_combout\,
+	datae => \P8|ALT_INV_Add8~13_sumout\,
+	combout => \P8|P~18_combout\);
+
+\P8|Add9~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add9~9_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~18_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~13_sumout\)) # (\B[4]~input_o\ & ((\P8|P~18_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add9~6\ ))
+-- \P8|Add9~10\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~18_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~13_sumout\)) # (\B[4]~input_o\ & ((\P8|P~18_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add9~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~13_sumout\,
+	datad => \P8|ALT_INV_P~18_combout\,
+	dataf => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add9~6\,
+	sumout => \P8|Add9~9_sumout\,
+	cout => \P8|Add9~10\);
+
+\P8|Add10~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add10~9_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~18_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~13_sumout\)) # (\B[4]~input_o\ & ((\P8|P~18_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add10~6\ ))
+-- \P8|Add10~10\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~18_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~13_sumout\)) # (\B[4]~input_o\ & ((\P8|P~18_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add10~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~13_sumout\,
+	datad => \P8|ALT_INV_P~18_combout\,
+	dataf => \P8|ALT_INV_Add0~9_sumout\,
+	cin => \P8|Add10~6\,
+	sumout => \P8|Add10~9_sumout\,
+	cout => \P8|Add10~10\);
+
+\P8|P~19\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~19_combout\ = ( \P8|Add10~9_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~18_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~13_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~9_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~18_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~13_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_process_0~8_combout\,
+	datac => \P8|ALT_INV_Add7~13_sumout\,
+	datad => \P8|ALT_INV_P~18_combout\,
+	datae => \P8|ALT_INV_Add10~9_sumout\,
+	combout => \P8|P~19_combout\);
+
+\P8|Add11~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add11~5_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~19_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~9_sumout\)) # (\B[5]~input_o\ & ((\P8|P~19_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add11~2\ ))
+-- \P8|Add11~6\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~19_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~9_sumout\)) # (\B[5]~input_o\ & ((\P8|P~19_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add11~2\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~9_sumout\,
+	datad => \P8|ALT_INV_P~19_combout\,
+	dataf => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add11~2\,
+	sumout => \P8|Add11~5_sumout\,
+	cout => \P8|Add11~6\);
+
+\P8|Add12~5\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add12~5_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~19_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~9_sumout\)) # (\B[5]~input_o\ & ((\P8|P~19_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add12~2\ ))
+-- \P8|Add12~6\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~19_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~9_sumout\)) # (\B[5]~input_o\ & ((\P8|P~19_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add12~2\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~9_sumout\,
+	datad => \P8|ALT_INV_P~19_combout\,
+	dataf => \P8|ALT_INV_Add0~5_sumout\,
+	cin => \P8|Add12~2\,
+	sumout => \P8|Add12~5_sumout\,
+	cout => \P8|Add12~6\);
+
+\P8|P~20\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~20_combout\ = ( \P8|Add12~5_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~19_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~9_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~5_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~19_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~9_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_process_0~10_combout\,
+	datac => \P8|ALT_INV_Add9~9_sumout\,
+	datad => \P8|ALT_INV_P~19_combout\,
+	datae => \P8|ALT_INV_Add12~5_sumout\,
+	combout => \P8|P~20_combout\);
+
+\P8|Add13~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add13~1_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~20_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~5_sumout\)) # (\B[6]~input_o\ & ((\P8|P~20_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+-- \P8|Add13~2\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~20_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~5_sumout\)) # (\B[6]~input_o\ & ((\P8|P~20_combout\))))) ) + ( \A[0]~input_o\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~5_sumout\,
+	datad => \P8|ALT_INV_P~20_combout\,
+	dataf => \ALT_INV_A[0]~input_o\,
+	cin => GND,
+	sumout => \P8|Add13~1_sumout\,
+	cout => \P8|Add13~2\);
+
+\P9|Mux15~35\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~35_combout\ = (\opcode[0]~input_o\ & (!\B[7]~input_o\ & \B[6]~input_o\))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010000000100000001000000010000000100000001000000010000000100",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_B[7]~input_o\,
+	datac => \ALT_INV_B[6]~input_o\,
+	combout => \P9|Mux15~35_combout\);
+
+\P8|Add14~1\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add14~1_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~20_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~5_sumout\)) # (\B[6]~input_o\ & ((\P8|P~20_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+-- \P8|Add14~2\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~20_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~5_sumout\)) # (\B[6]~input_o\ & ((\P8|P~20_combout\))))) ) + ( \P8|Add0~1_sumout\ ) + ( !VCC ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~5_sumout\,
+	datad => \P8|ALT_INV_P~20_combout\,
+	dataf => \P8|ALT_INV_Add0~1_sumout\,
+	cin => GND,
+	sumout => \P8|Add14~1_sumout\,
+	cout => \P8|Add14~2\);
+
+\P9|Mux15~36\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~36_combout\ = (\opcode[0]~input_o\ & (\B[7]~input_o\ & !\B[6]~input_o\))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001000000010000000100000001000000010000000100000001000000010000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_B[7]~input_o\,
+	datac => \ALT_INV_B[6]~input_o\,
+	combout => \P9|Mux15~36_combout\);
+
+\P9|Mux15~37\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~37_combout\ = (\opcode[0]~input_o\ & (!\B[7]~input_o\ $ (\B[6]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0100000101000001010000010100000101000001010000010100000101000001",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_B[7]~input_o\,
+	datac => \ALT_INV_B[6]~input_o\,
+	combout => \P9|Mux15~37_combout\);
+
+\P9|Mux15~38\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~38_combout\ = ( \P8|P~20_combout\ & ( \P9|Mux15~37_combout\ & ( (!\P8|process_0~9_combout\) # (((!\opcode[0]~input_o\ & \A[9]~input_o\)) # (\P8|Add11~5_sumout\)) ) ) ) # ( !\P8|P~20_combout\ & ( \P9|Mux15~37_combout\ & ( (!\opcode[0]~input_o\ & 
+-- (((\P8|process_0~9_combout\ & \P8|Add11~5_sumout\)) # (\A[9]~input_o\))) # (\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & \P8|Add11~5_sumout\)))) ) ) ) # ( \P8|P~20_combout\ & ( !\P9|Mux15~37_combout\ & ( (!\opcode[0]~input_o\ & \A[9]~input_o\) ) ) 
+-- ) # ( !\P8|P~20_combout\ & ( !\P9|Mux15~37_combout\ & ( (!\opcode[0]~input_o\ & \A[9]~input_o\) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100010001000100010001000100010001011111111001011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[9]~input_o\,
+	datac => \P8|ALT_INV_process_0~9_combout\,
+	datad => \P8|ALT_INV_Add11~5_sumout\,
+	datae => \P8|ALT_INV_P~20_combout\,
+	dataf => \P9|ALT_INV_Mux15~37_combout\,
+	combout => \P9|Mux15~38_combout\);
+
+\P9|Mux15~39\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~39_combout\ = ( !\P9|Mux15~38_combout\ & ( (!\P8|Add13~1_sumout\ & (((!\P8|Add14~1_sumout\) # (!\P9|Mux15~36_combout\)))) # (\P8|Add13~1_sumout\ & (!\P9|Mux15~35_combout\ & ((!\P8|Add14~1_sumout\) # (!\P9|Mux15~36_combout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110111011100000000000000000000011101110111000000000000000000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_Add13~1_sumout\,
+	datab => \P9|ALT_INV_Mux15~35_combout\,
+	datac => \P8|ALT_INV_Add14~1_sumout\,
+	datad => \P9|ALT_INV_Mux15~36_combout\,
+	datae => \P9|ALT_INV_Mux15~38_combout\,
+	combout => \P9|Mux15~39_combout\);
+
+\P9|Mux8~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux8~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~39_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~34_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~33_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~32_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~32_combout\,
+	datab => \P9|ALT_INV_Mux15~33_combout\,
+	datac => \P9|ALT_INV_Mux15~34_combout\,
+	datad => \P9|ALT_INV_Mux15~39_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux8~0_combout\);
+
+\P9|Mux15~40\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~40_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[8]~input_o\) # (!\B[8]~input_o\))) # (\opcode[0]~input_o\ & (!\A[8]~input_o\ & !\B[8]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[8]~input_o\,
+	datad => \ALT_INV_B[8]~input_o\,
+	combout => \P9|Mux15~40_combout\);
+
+\P4|C~6\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~6_combout\ = (!\A[7]~input_o\ & (\P4|C~5_combout\ & (!\negate~input_o\ $ (!\B[7]~input_o\)))) # (\A[7]~input_o\ & ((!\negate~input_o\ $ (!\B[7]~input_o\)) # (\P4|C~5_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[7]~input_o\,
+	datac => \ALT_INV_B[7]~input_o\,
+	datad => \P4|ALT_INV_C~5_combout\,
+	combout => \P4|C~6_combout\);
+
+\P9|Mux15~41\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~41_combout\ = ( \P4|C~6_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[8]~input_o\ $ (!\B[8]~input_o\))) ) ) # ( !\P4|C~6_combout\ & ( !\negate~input_o\ $ (!\A[8]~input_o\ $ (\B[8]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[8]~input_o\,
+	datad => \ALT_INV_B[8]~input_o\,
+	datae => \P4|ALT_INV_C~6_combout\,
+	combout => \P9|Mux15~41_combout\);
+
+\P9|Mux15~42\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~42_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[6]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[6]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~42_combout\);
+
+\P8|Add1~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add1~29_sumout\ = SUM(( (\B[0]~input_o\ & \P8|Add0~29_sumout\) ) + ( \A[7]~input_o\ ) + ( \P8|Add1~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000000001010101",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datad => \P8|ALT_INV_Add0~29_sumout\,
+	dataf => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add1~26\,
+	sumout => \P8|Add1~29_sumout\);
+
+\P8|Add2~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add2~29_sumout\ = SUM(( (\P8|Add0~29_sumout\ & \B[0]~input_o\) ) + ( \P8|Add0~29_sumout\ ) + ( \P8|Add2~26\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3201,14 +4719,14 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_Add0~29_sumout\,
-	datad => \ALT_INV_inputB[0]~input_o\,
-	cin => \Add2~26\,
-	sumout => \Add2~29_sumout\);
+	dataa => \P8|ALT_INV_Add0~29_sumout\,
+	datad => \ALT_INV_B[0]~input_o\,
+	cin => \P8|Add2~26\,
+	sumout => \P8|Add2~29_sumout\);
 
-\P~23\ : cyclonev_lcell_comb
+\P8|P~21\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~23_combout\ = (!\inputB[0]~input_o\ & (\inputB[1]~input_o\ & ((\Add2~29_sumout\)))) # (\inputB[0]~input_o\ & (((\Add0~29_sumout\))))
+-- \P8|P~21_combout\ = (!\B[0]~input_o\ & (\B[1]~input_o\ & ((\P8|Add2~29_sumout\)))) # (\B[0]~input_o\ & (((\P8|Add0~29_sumout\))))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3217,16 +4735,16 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add0~29_sumout\,
-	datad => \ALT_INV_Add2~29_sumout\,
-	combout => \P~23_combout\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add0~29_sumout\,
+	datad => \P8|ALT_INV_Add2~29_sumout\,
+	combout => \P8|P~21_combout\);
 
-\Add3~25\ : cyclonev_lcell_comb
+\P8|Add3~25\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add3~25_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~23_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~29_sumout\)) # (\inputB[1]~input_o\ & ((\P~23_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add3~22\ ))
--- \Add3~26\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~23_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~29_sumout\)) # (\inputB[1]~input_o\ & ((\P~23_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add3~22\ ))
+-- \P8|Add3~25_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~21_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~29_sumout\)) # (\B[1]~input_o\ & ((\P8|P~21_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add3~22\ ))
+-- \P8|Add3~26\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~21_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~29_sumout\)) # (\B[1]~input_o\ & ((\P8|P~21_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add3~22\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3235,19 +4753,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~29_sumout\,
-	datad => \ALT_INV_P~23_combout\,
-	dataf => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add3~22\,
-	sumout => \Add3~25_sumout\,
-	cout => \Add3~26\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~29_sumout\,
+	datad => \P8|ALT_INV_P~21_combout\,
+	dataf => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add3~22\,
+	sumout => \P8|Add3~25_sumout\,
+	cout => \P8|Add3~26\);
 
-\Add4~25\ : cyclonev_lcell_comb
+\P8|Add4~25\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add4~25_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~23_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~29_sumout\)) # (\inputB[1]~input_o\ & ((\P~23_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add4~22\ ))
--- \Add4~26\ = CARRY(( (!\inputB[0]~input_o\ & (((\P~23_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~29_sumout\)) # (\inputB[1]~input_o\ & ((\P~23_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add4~22\ ))
+-- \P8|Add4~25_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~21_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~29_sumout\)) # (\B[1]~input_o\ & ((\P8|P~21_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add4~22\ ))
+-- \P8|Add4~26\ = CARRY(( (!\B[0]~input_o\ & (((\P8|P~21_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~29_sumout\)) # (\B[1]~input_o\ & ((\P8|P~21_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add4~22\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3256,19 +4774,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~29_sumout\,
-	datad => \ALT_INV_P~23_combout\,
-	dataf => \ALT_INV_Add0~25_sumout\,
-	cin => \Add4~22\,
-	sumout => \Add4~25_sumout\,
-	cout => \Add4~26\);
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~29_sumout\,
+	datad => \P8|ALT_INV_P~21_combout\,
+	dataf => \P8|ALT_INV_Add0~25_sumout\,
+	cin => \P8|Add4~22\,
+	sumout => \P8|Add4~25_sumout\,
+	cout => \P8|Add4~26\);
 
-\P~24\ : cyclonev_lcell_comb
+\P8|P~22\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~24_combout\ = ( \Add4~25_sumout\ & ( ((!\process_0~0_combout\ & ((\P~23_combout\))) # (\process_0~0_combout\ & (\Add1~29_sumout\))) # (\process_0~2_combout\) ) ) # ( !\Add4~25_sumout\ & ( (!\process_0~2_combout\ & ((!\process_0~0_combout\ & 
--- ((\P~23_combout\))) # (\process_0~0_combout\ & (\Add1~29_sumout\)))) ) )
+-- \P8|P~22_combout\ = ( \P8|Add4~25_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~21_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~29_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~25_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~21_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~29_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3277,17 +4795,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~0_combout\,
-	datab => \ALT_INV_process_0~2_combout\,
-	datac => \ALT_INV_Add1~29_sumout\,
-	datad => \ALT_INV_P~23_combout\,
-	datae => \ALT_INV_Add4~25_sumout\,
-	combout => \P~24_combout\);
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_process_0~2_combout\,
+	datac => \P8|ALT_INV_Add1~29_sumout\,
+	datad => \P8|ALT_INV_P~21_combout\,
+	datae => \P8|ALT_INV_Add4~25_sumout\,
+	combout => \P8|P~22_combout\);
 
-\Add5~21\ : cyclonev_lcell_comb
+\P8|Add5~21\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add5~21_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~24_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~25_sumout\)) # (\inputB[2]~input_o\ & ((\P~24_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add5~18\ ))
--- \Add5~22\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~24_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~25_sumout\)) # (\inputB[2]~input_o\ & ((\P~24_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add5~18\ ))
+-- \P8|Add5~21_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~22_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~25_sumout\)) # (\B[2]~input_o\ & ((\P8|P~22_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add5~18\ ))
+-- \P8|Add5~22\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~22_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~25_sumout\)) # (\B[2]~input_o\ & ((\P8|P~22_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add5~18\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3296,19 +4814,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~25_sumout\,
-	datad => \ALT_INV_P~24_combout\,
-	dataf => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add5~18\,
-	sumout => \Add5~21_sumout\,
-	cout => \Add5~22\);
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~25_sumout\,
+	datad => \P8|ALT_INV_P~22_combout\,
+	dataf => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add5~18\,
+	sumout => \P8|Add5~21_sumout\,
+	cout => \P8|Add5~22\);
 
-\Add6~21\ : cyclonev_lcell_comb
+\P8|Add6~21\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add6~21_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~24_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~25_sumout\)) # (\inputB[2]~input_o\ & ((\P~24_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add6~18\ ))
--- \Add6~22\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~24_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~25_sumout\)) # (\inputB[2]~input_o\ & ((\P~24_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add6~18\ ))
+-- \P8|Add6~21_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~22_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~25_sumout\)) # (\B[2]~input_o\ & ((\P8|P~22_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add6~18\ ))
+-- \P8|Add6~22\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~22_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~25_sumout\)) # (\B[2]~input_o\ & ((\P8|P~22_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add6~18\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3317,19 +4835,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~25_sumout\,
-	datad => \ALT_INV_P~24_combout\,
-	dataf => \ALT_INV_Add0~21_sumout\,
-	cin => \Add6~18\,
-	sumout => \Add6~21_sumout\,
-	cout => \Add6~22\);
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~25_sumout\,
+	datad => \P8|ALT_INV_P~22_combout\,
+	dataf => \P8|ALT_INV_Add0~21_sumout\,
+	cin => \P8|Add6~18\,
+	sumout => \P8|Add6~21_sumout\,
+	cout => \P8|Add6~22\);
 
-\P~25\ : cyclonev_lcell_comb
+\P8|P~23\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~25_combout\ = ( \Add6~21_sumout\ & ( ((!\process_0~1_combout\ & ((\P~24_combout\))) # (\process_0~1_combout\ & (\Add3~25_sumout\))) # (\process_0~4_combout\) ) ) # ( !\Add6~21_sumout\ & ( (!\process_0~4_combout\ & ((!\process_0~1_combout\ & 
--- ((\P~24_combout\))) # (\process_0~1_combout\ & (\Add3~25_sumout\)))) ) )
+-- \P8|P~23_combout\ = ( \P8|Add6~21_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~22_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~25_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~21_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~22_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~25_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3338,17 +4856,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~1_combout\,
-	datab => \ALT_INV_process_0~4_combout\,
-	datac => \ALT_INV_Add3~25_sumout\,
-	datad => \ALT_INV_P~24_combout\,
-	datae => \ALT_INV_Add6~21_sumout\,
-	combout => \P~25_combout\);
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_process_0~4_combout\,
+	datac => \P8|ALT_INV_Add3~25_sumout\,
+	datad => \P8|ALT_INV_P~22_combout\,
+	datae => \P8|ALT_INV_Add6~21_sumout\,
+	combout => \P8|P~23_combout\);
 
-\Add7~17\ : cyclonev_lcell_comb
+\P8|Add7~17\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add7~17_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~25_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~21_sumout\)) # (\inputB[3]~input_o\ & ((\P~25_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add7~14\ ))
--- \Add7~18\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~25_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~21_sumout\)) # (\inputB[3]~input_o\ & ((\P~25_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add7~14\ ))
+-- \P8|Add7~17_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~23_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~21_sumout\)) # (\B[3]~input_o\ & ((\P8|P~23_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add7~14\ ))
+-- \P8|Add7~18\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~23_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~21_sumout\)) # (\B[3]~input_o\ & ((\P8|P~23_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add7~14\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3357,19 +4875,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~21_sumout\,
-	datad => \ALT_INV_P~25_combout\,
-	dataf => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add7~14\,
-	sumout => \Add7~17_sumout\,
-	cout => \Add7~18\);
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~21_sumout\,
+	datad => \P8|ALT_INV_P~23_combout\,
+	dataf => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add7~14\,
+	sumout => \P8|Add7~17_sumout\,
+	cout => \P8|Add7~18\);
 
-\Add8~17\ : cyclonev_lcell_comb
+\P8|Add8~17\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add8~17_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~25_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~21_sumout\)) # (\inputB[3]~input_o\ & ((\P~25_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add8~14\ ))
--- \Add8~18\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~25_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~21_sumout\)) # (\inputB[3]~input_o\ & ((\P~25_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add8~14\ ))
+-- \P8|Add8~17_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~23_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~21_sumout\)) # (\B[3]~input_o\ & ((\P8|P~23_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add8~14\ ))
+-- \P8|Add8~18\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~23_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~21_sumout\)) # (\B[3]~input_o\ & ((\P8|P~23_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add8~14\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3378,19 +4896,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~21_sumout\,
-	datad => \ALT_INV_P~25_combout\,
-	dataf => \ALT_INV_Add0~17_sumout\,
-	cin => \Add8~14\,
-	sumout => \Add8~17_sumout\,
-	cout => \Add8~18\);
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~21_sumout\,
+	datad => \P8|ALT_INV_P~23_combout\,
+	dataf => \P8|ALT_INV_Add0~17_sumout\,
+	cin => \P8|Add8~14\,
+	sumout => \P8|Add8~17_sumout\,
+	cout => \P8|Add8~18\);
 
-\P~26\ : cyclonev_lcell_comb
+\P8|P~24\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~26_combout\ = ( \Add8~17_sumout\ & ( ((!\process_0~3_combout\ & ((\P~25_combout\))) # (\process_0~3_combout\ & (\Add5~21_sumout\))) # (\process_0~6_combout\) ) ) # ( !\Add8~17_sumout\ & ( (!\process_0~6_combout\ & ((!\process_0~3_combout\ & 
--- ((\P~25_combout\))) # (\process_0~3_combout\ & (\Add5~21_sumout\)))) ) )
+-- \P8|P~24_combout\ = ( \P8|Add8~17_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~23_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~21_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~17_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~23_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~21_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3399,17 +4917,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~3_combout\,
-	datab => \ALT_INV_process_0~6_combout\,
-	datac => \ALT_INV_Add5~21_sumout\,
-	datad => \ALT_INV_P~25_combout\,
-	datae => \ALT_INV_Add8~17_sumout\,
-	combout => \P~26_combout\);
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_process_0~6_combout\,
+	datac => \P8|ALT_INV_Add5~21_sumout\,
+	datad => \P8|ALT_INV_P~23_combout\,
+	datae => \P8|ALT_INV_Add8~17_sumout\,
+	combout => \P8|P~24_combout\);
 
-\Add9~13\ : cyclonev_lcell_comb
+\P8|Add9~13\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add9~13_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~26_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~17_sumout\)) # (\inputB[4]~input_o\ & ((\P~26_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add9~10\ ))
--- \Add9~14\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~26_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~17_sumout\)) # (\inputB[4]~input_o\ & ((\P~26_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add9~10\ ))
+-- \P8|Add9~13_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~24_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~17_sumout\)) # (\B[4]~input_o\ & ((\P8|P~24_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add9~10\ ))
+-- \P8|Add9~14\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~24_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~17_sumout\)) # (\B[4]~input_o\ & ((\P8|P~24_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add9~10\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3418,19 +4936,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~17_sumout\,
-	datad => \ALT_INV_P~26_combout\,
-	dataf => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add9~10\,
-	sumout => \Add9~13_sumout\,
-	cout => \Add9~14\);
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~17_sumout\,
+	datad => \P8|ALT_INV_P~24_combout\,
+	dataf => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add9~10\,
+	sumout => \P8|Add9~13_sumout\,
+	cout => \P8|Add9~14\);
 
-\Add10~13\ : cyclonev_lcell_comb
+\P8|Add10~13\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add10~13_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~26_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~17_sumout\)) # (\inputB[4]~input_o\ & ((\P~26_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add10~10\ ))
--- \Add10~14\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~26_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~17_sumout\)) # (\inputB[4]~input_o\ & ((\P~26_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add10~10\ ))
+-- \P8|Add10~13_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~24_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~17_sumout\)) # (\B[4]~input_o\ & ((\P8|P~24_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add10~10\ ))
+-- \P8|Add10~14\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~24_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~17_sumout\)) # (\B[4]~input_o\ & ((\P8|P~24_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add10~10\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3439,19 +4957,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~17_sumout\,
-	datad => \ALT_INV_P~26_combout\,
-	dataf => \ALT_INV_Add0~13_sumout\,
-	cin => \Add10~10\,
-	sumout => \Add10~13_sumout\,
-	cout => \Add10~14\);
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~17_sumout\,
+	datad => \P8|ALT_INV_P~24_combout\,
+	dataf => \P8|ALT_INV_Add0~13_sumout\,
+	cin => \P8|Add10~10\,
+	sumout => \P8|Add10~13_sumout\,
+	cout => \P8|Add10~14\);
 
-\P~27\ : cyclonev_lcell_comb
+\P8|P~25\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~27_combout\ = ( \Add10~13_sumout\ & ( ((!\process_0~5_combout\ & ((\P~26_combout\))) # (\process_0~5_combout\ & (\Add7~17_sumout\))) # (\process_0~8_combout\) ) ) # ( !\Add10~13_sumout\ & ( (!\process_0~8_combout\ & ((!\process_0~5_combout\ & 
--- ((\P~26_combout\))) # (\process_0~5_combout\ & (\Add7~17_sumout\)))) ) )
+-- \P8|P~25_combout\ = ( \P8|Add10~13_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~24_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~17_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~13_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~24_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~17_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3460,17 +4978,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~5_combout\,
-	datab => \ALT_INV_process_0~8_combout\,
-	datac => \ALT_INV_Add7~17_sumout\,
-	datad => \ALT_INV_P~26_combout\,
-	datae => \ALT_INV_Add10~13_sumout\,
-	combout => \P~27_combout\);
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_process_0~8_combout\,
+	datac => \P8|ALT_INV_Add7~17_sumout\,
+	datad => \P8|ALT_INV_P~24_combout\,
+	datae => \P8|ALT_INV_Add10~13_sumout\,
+	combout => \P8|P~25_combout\);
 
-\Add11~9\ : cyclonev_lcell_comb
+\P8|Add11~9\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add11~9_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~27_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~13_sumout\)) # (\inputB[5]~input_o\ & ((\P~27_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add11~6\ ))
--- \Add11~10\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~27_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~13_sumout\)) # (\inputB[5]~input_o\ & ((\P~27_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add11~6\ ))
+-- \P8|Add11~9_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~25_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~13_sumout\)) # (\B[5]~input_o\ & ((\P8|P~25_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add11~6\ ))
+-- \P8|Add11~10\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~25_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~13_sumout\)) # (\B[5]~input_o\ & ((\P8|P~25_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add11~6\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3479,19 +4997,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~13_sumout\,
-	datad => \ALT_INV_P~27_combout\,
-	dataf => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add11~6\,
-	sumout => \Add11~9_sumout\,
-	cout => \Add11~10\);
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~13_sumout\,
+	datad => \P8|ALT_INV_P~25_combout\,
+	dataf => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add11~6\,
+	sumout => \P8|Add11~9_sumout\,
+	cout => \P8|Add11~10\);
 
-\Add12~9\ : cyclonev_lcell_comb
+\P8|Add12~9\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add12~9_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~27_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~13_sumout\)) # (\inputB[5]~input_o\ & ((\P~27_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add12~6\ ))
--- \Add12~10\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~27_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~13_sumout\)) # (\inputB[5]~input_o\ & ((\P~27_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add12~6\ ))
+-- \P8|Add12~9_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~25_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~13_sumout\)) # (\B[5]~input_o\ & ((\P8|P~25_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add12~6\ ))
+-- \P8|Add12~10\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~25_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~13_sumout\)) # (\B[5]~input_o\ & ((\P8|P~25_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add12~6\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3500,19 +5018,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~13_sumout\,
-	datad => \ALT_INV_P~27_combout\,
-	dataf => \ALT_INV_Add0~9_sumout\,
-	cin => \Add12~6\,
-	sumout => \Add12~9_sumout\,
-	cout => \Add12~10\);
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~13_sumout\,
+	datad => \P8|ALT_INV_P~25_combout\,
+	dataf => \P8|ALT_INV_Add0~9_sumout\,
+	cin => \P8|Add12~6\,
+	sumout => \P8|Add12~9_sumout\,
+	cout => \P8|Add12~10\);
 
-\P~51\ : cyclonev_lcell_comb
+\P8|P~26\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~51_combout\ = ( \Add12~9_sumout\ & ( ((!\process_0~7_combout\ & ((\P~27_combout\))) # (\process_0~7_combout\ & (\Add9~13_sumout\))) # (\process_0~9_combout\) ) ) # ( !\Add12~9_sumout\ & ( (!\process_0~9_combout\ & ((!\process_0~7_combout\ & 
--- ((\P~27_combout\))) # (\process_0~7_combout\ & (\Add9~13_sumout\)))) ) )
+-- \P8|P~26_combout\ = ( \P8|Add12~9_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~25_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~13_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~9_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~25_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~13_sumout\)))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3521,17 +5039,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~7_combout\,
-	datab => \ALT_INV_process_0~9_combout\,
-	datac => \ALT_INV_Add9~13_sumout\,
-	datad => \ALT_INV_P~27_combout\,
-	datae => \ALT_INV_Add12~9_sumout\,
-	combout => \P~51_combout\);
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_process_0~10_combout\,
+	datac => \P8|ALT_INV_Add9~13_sumout\,
+	datad => \P8|ALT_INV_P~25_combout\,
+	datae => \P8|ALT_INV_Add12~9_sumout\,
+	combout => \P8|P~26_combout\);
 
-\Add14~5\ : cyclonev_lcell_comb
+\P8|Add13~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add14~5_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~51_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~9_sumout\)) # (\inputB[6]~input_o\ & ((\P~51_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add14~2\ ))
--- \Add14~6\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~51_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~9_sumout\)) # (\inputB[6]~input_o\ & ((\P~51_combout\))))) ) + ( \Add0~5_sumout\ ) + ( \Add14~2\ ))
+-- \P8|Add13~5_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~26_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~9_sumout\)) # (\B[6]~input_o\ & ((\P8|P~26_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add13~2\ ))
+-- \P8|Add13~6\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~26_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~9_sumout\)) # (\B[6]~input_o\ & ((\P8|P~26_combout\))))) ) + ( \A[1]~input_o\ ) + ( \P8|Add13~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3540,40 +5058,19 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~9_sumout\,
-	datad => \ALT_INV_P~51_combout\,
-	dataf => \ALT_INV_Add0~5_sumout\,
-	cin => \Add14~2\,
-	sumout => \Add14~5_sumout\,
-	cout => \Add14~6\);
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~9_sumout\,
+	datad => \P8|ALT_INV_P~26_combout\,
+	dataf => \ALT_INV_A[1]~input_o\,
+	cin => \P8|Add13~2\,
+	sumout => \P8|Add13~5_sumout\,
+	cout => \P8|Add13~6\);
 
-\P~28\ : cyclonev_lcell_comb
+\P8|Add14~5\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~28_combout\ = ( \P~27_combout\ & ( \Add12~9_sumout\ & ( ((!\inputB[5]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~13_sumout\)))) # (\inputB[6]~input_o\) ) ) ) # ( !\P~27_combout\ & ( \Add12~9_sumout\ & ( (!\inputB[5]~input_o\ & (((\inputB[4]~input_o\ & 
--- \Add9~13_sumout\)) # (\inputB[6]~input_o\))) ) ) ) # ( \P~27_combout\ & ( !\Add12~9_sumout\ & ( (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~13_sumout\)))) # (\inputB[5]~input_o\ & (((\inputB[6]~input_o\)))) ) ) ) # ( 
--- !\P~27_combout\ & ( !\Add12~9_sumout\ & ( (\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & \Add9~13_sumout\))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000001000000100000111100001100001100010011001000111111001111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_inputB[6]~input_o\,
-	datad => \ALT_INV_Add9~13_sumout\,
-	datae => \ALT_INV_P~27_combout\,
-	dataf => \ALT_INV_Add12~9_sumout\,
-	combout => \P~28_combout\);
-
-\Add13~5\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~5_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~51_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~9_sumout\)) # (\inputB[6]~input_o\ & ((\P~51_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add13~2\ ))
--- \Add13~6\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~51_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~9_sumout\)) # (\inputB[6]~input_o\ & ((\P~51_combout\))))) ) + ( \inputA[1]~input_o\ ) + ( \Add13~2\ ))
+-- \P8|Add14~5_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~26_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~9_sumout\)) # (\B[6]~input_o\ & ((\P8|P~26_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add14~2\ ))
+-- \P8|Add14~6\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~26_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~9_sumout\)) # (\B[6]~input_o\ & ((\P8|P~26_combout\))))) ) + ( \P8|Add0~5_sumout\ ) + ( \P8|Add14~2\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3582,158 +5079,1897 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~9_sumout\,
-	datad => \ALT_INV_P~51_combout\,
-	dataf => \ALT_INV_inputA[1]~input_o\,
-	cin => \Add13~2\,
-	sumout => \Add13~5_sumout\,
-	cout => \Add13~6\);
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~9_sumout\,
+	datad => \P8|ALT_INV_P~26_combout\,
+	dataf => \P8|ALT_INV_Add0~5_sumout\,
+	cin => \P8|Add14~2\,
+	sumout => \P8|Add14~5_sumout\,
+	cout => \P8|Add14~6\);
 
-\P~68\ : cyclonev_lcell_comb
+\P9|Mux15~43\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~68_combout\ = ( !\inputB[7]~input_o\ & ( (!\inputB[6]~input_o\ & ((((\Add11~9_sumout\ & \inputB[5]~input_o\)) # (\P~28_combout\)))) # (\inputB[6]~input_o\ & ((((\Add13~5_sumout\))))) ) ) # ( \inputB[7]~input_o\ & ( (((!\inputB[6]~input_o\ & 
--- (\Add14~5_sumout\)) # (\inputB[6]~input_o\ & ((\P~28_combout\))))) ) )
+-- \P9|Mux15~43_combout\ = ( \P8|Add11~9_sumout\ & ( \P8|P~26_combout\ & ( ((!\opcode[0]~input_o\ & \A[10]~input_o\)) # (\P9|Mux15~37_combout\) ) ) ) # ( !\P8|Add11~9_sumout\ & ( \P8|P~26_combout\ & ( (!\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[10]~input_o\))) # (\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( \P8|Add11~9_sumout\ & ( !\P8|P~26_combout\ & ( (!\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[10]~input_o\))) # (\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( !\P8|Add11~9_sumout\ & ( !\P8|P~26_combout\ & ( (!\opcode[0]~input_o\ & \A[10]~input_o\) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100010001000100010111100100010111100100010001011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[10]~input_o\,
+	datac => \P8|ALT_INV_process_0~9_combout\,
+	datad => \P9|ALT_INV_Mux15~37_combout\,
+	datae => \P8|ALT_INV_Add11~9_sumout\,
+	dataf => \P8|ALT_INV_P~26_combout\,
+	combout => \P9|Mux15~43_combout\);
+
+\P9|Mux15~44\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~44_combout\ = ( !\P9|Mux15~43_combout\ & ( (!\P9|Mux15~35_combout\ & ((!\P9|Mux15~36_combout\) # ((!\P8|Add14~5_sumout\)))) # (\P9|Mux15~35_combout\ & (!\P8|Add13~5_sumout\ & ((!\P9|Mux15~36_combout\) # (!\P8|Add14~5_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1111101011001000000000000000000011111010110010000000000000000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~35_combout\,
+	datab => \P9|ALT_INV_Mux15~36_combout\,
+	datac => \P8|ALT_INV_Add13~5_sumout\,
+	datad => \P8|ALT_INV_Add14~5_sumout\,
+	datae => \P9|ALT_INV_Mux15~43_combout\,
+	combout => \P9|Mux15~44_combout\);
+
+\P9|Mux7~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux7~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~44_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~42_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~41_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~40_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~40_combout\,
+	datab => \P9|ALT_INV_Mux15~41_combout\,
+	datac => \P9|ALT_INV_Mux15~42_combout\,
+	datad => \P9|ALT_INV_Mux15~44_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux7~0_combout\);
+
+\P9|Mux15~45\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~45_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[9]~input_o\) # (!\B[9]~input_o\))) # (\opcode[0]~input_o\ & (!\A[9]~input_o\ & !\B[9]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[9]~input_o\,
+	datad => \ALT_INV_B[9]~input_o\,
+	combout => \P9|Mux15~45_combout\);
+
+\P4|C~7\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~7_combout\ = (!\A[8]~input_o\ & (\P4|C~6_combout\ & (!\negate~input_o\ $ (!\B[8]~input_o\)))) # (\A[8]~input_o\ & ((!\negate~input_o\ $ (!\B[8]~input_o\)) # (\P4|C~6_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[8]~input_o\,
+	datac => \ALT_INV_B[8]~input_o\,
+	datad => \P4|ALT_INV_C~6_combout\,
+	combout => \P4|C~7_combout\);
+
+\P9|Mux15~46\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~46_combout\ = ( \P4|C~7_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[9]~input_o\ $ (!\B[9]~input_o\))) ) ) # ( !\P4|C~7_combout\ & ( !\negate~input_o\ $ (!\A[9]~input_o\ $ (\B[9]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[9]~input_o\,
+	datad => \ALT_INV_B[9]~input_o\,
+	datae => \P4|ALT_INV_C~7_combout\,
+	combout => \P9|Mux15~46_combout\);
+
+\P9|Mux15~47\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~47_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[7]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[7]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~47_combout\);
+
+\P8|Add3~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add3~29_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~21_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~29_sumout\)) # (\B[1]~input_o\ & ((\P8|P~21_combout\))))) ) + ( \A[7]~input_o\ ) + ( \P8|Add3~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~29_sumout\,
+	datad => \P8|ALT_INV_P~21_combout\,
+	dataf => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add3~26\,
+	sumout => \P8|Add3~29_sumout\);
+
+\P8|Add4~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add4~29_sumout\ = SUM(( (!\B[0]~input_o\ & (((\P8|P~21_combout\)))) # (\B[0]~input_o\ & ((!\B[1]~input_o\ & (\P8|Add1~29_sumout\)) # (\B[1]~input_o\ & ((\P8|P~21_combout\))))) ) + ( \P8|Add0~29_sumout\ ) + ( \P8|Add4~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[0]~input_o\,
+	datab => \ALT_INV_B[1]~input_o\,
+	datac => \P8|ALT_INV_Add1~29_sumout\,
+	datad => \P8|ALT_INV_P~21_combout\,
+	dataf => \P8|ALT_INV_Add0~29_sumout\,
+	cin => \P8|Add4~26\,
+	sumout => \P8|Add4~29_sumout\);
+
+\P8|P~27\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~27_combout\ = ( \P8|Add4~29_sumout\ & ( ((!\P8|process_0~1_combout\ & ((\P8|P~21_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~29_sumout\))) # (\P8|process_0~2_combout\) ) ) # ( !\P8|Add4~29_sumout\ & ( (!\P8|process_0~2_combout\ & 
+-- ((!\P8|process_0~1_combout\ & ((\P8|P~21_combout\))) # (\P8|process_0~1_combout\ & (\P8|Add1~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~1_combout\,
+	datab => \P8|ALT_INV_process_0~2_combout\,
+	datac => \P8|ALT_INV_Add1~29_sumout\,
+	datad => \P8|ALT_INV_P~21_combout\,
+	datae => \P8|ALT_INV_Add4~29_sumout\,
+	combout => \P8|P~27_combout\);
+
+\P8|Add5~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add5~25_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~27_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~29_sumout\)) # (\B[2]~input_o\ & ((\P8|P~27_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add5~22\ ))
+-- \P8|Add5~26\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~27_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~29_sumout\)) # (\B[2]~input_o\ & ((\P8|P~27_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add5~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~29_sumout\,
+	datad => \P8|ALT_INV_P~27_combout\,
+	dataf => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add5~22\,
+	sumout => \P8|Add5~25_sumout\,
+	cout => \P8|Add5~26\);
+
+\P8|Add6~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add6~25_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~27_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~29_sumout\)) # (\B[2]~input_o\ & ((\P8|P~27_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add6~22\ ))
+-- \P8|Add6~26\ = CARRY(( (!\B[1]~input_o\ & (((\P8|P~27_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~29_sumout\)) # (\B[2]~input_o\ & ((\P8|P~27_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add6~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~29_sumout\,
+	datad => \P8|ALT_INV_P~27_combout\,
+	dataf => \P8|ALT_INV_Add0~25_sumout\,
+	cin => \P8|Add6~22\,
+	sumout => \P8|Add6~25_sumout\,
+	cout => \P8|Add6~26\);
+
+\P8|P~28\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~28_combout\ = ( \P8|Add6~25_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~27_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~29_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~25_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~27_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_process_0~4_combout\,
+	datac => \P8|ALT_INV_Add3~29_sumout\,
+	datad => \P8|ALT_INV_P~27_combout\,
+	datae => \P8|ALT_INV_Add6~25_sumout\,
+	combout => \P8|P~28_combout\);
+
+\P8|Add7~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add7~21_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~28_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~25_sumout\)) # (\B[3]~input_o\ & ((\P8|P~28_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add7~18\ ))
+-- \P8|Add7~22\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~28_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~25_sumout\)) # (\B[3]~input_o\ & ((\P8|P~28_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add7~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~25_sumout\,
+	datad => \P8|ALT_INV_P~28_combout\,
+	dataf => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add7~18\,
+	sumout => \P8|Add7~21_sumout\,
+	cout => \P8|Add7~22\);
+
+\P8|Add8~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add8~21_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~28_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~25_sumout\)) # (\B[3]~input_o\ & ((\P8|P~28_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add8~18\ ))
+-- \P8|Add8~22\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~28_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~25_sumout\)) # (\B[3]~input_o\ & ((\P8|P~28_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add8~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~25_sumout\,
+	datad => \P8|ALT_INV_P~28_combout\,
+	dataf => \P8|ALT_INV_Add0~21_sumout\,
+	cin => \P8|Add8~18\,
+	sumout => \P8|Add8~21_sumout\,
+	cout => \P8|Add8~22\);
+
+\P8|P~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~29_combout\ = ( \P8|Add8~21_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~28_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~25_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~21_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~28_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~25_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_process_0~6_combout\,
+	datac => \P8|ALT_INV_Add5~25_sumout\,
+	datad => \P8|ALT_INV_P~28_combout\,
+	datae => \P8|ALT_INV_Add8~21_sumout\,
+	combout => \P8|P~29_combout\);
+
+\P8|Add9~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add9~17_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~29_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~21_sumout\)) # (\B[4]~input_o\ & ((\P8|P~29_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add9~14\ ))
+-- \P8|Add9~18\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~29_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~21_sumout\)) # (\B[4]~input_o\ & ((\P8|P~29_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add9~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~21_sumout\,
+	datad => \P8|ALT_INV_P~29_combout\,
+	dataf => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add9~14\,
+	sumout => \P8|Add9~17_sumout\,
+	cout => \P8|Add9~18\);
+
+\P8|Add10~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add10~17_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~29_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~21_sumout\)) # (\B[4]~input_o\ & ((\P8|P~29_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add10~14\ ))
+-- \P8|Add10~18\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~29_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~21_sumout\)) # (\B[4]~input_o\ & ((\P8|P~29_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add10~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~21_sumout\,
+	datad => \P8|ALT_INV_P~29_combout\,
+	dataf => \P8|ALT_INV_Add0~17_sumout\,
+	cin => \P8|Add10~14\,
+	sumout => \P8|Add10~17_sumout\,
+	cout => \P8|Add10~18\);
+
+\P8|P~30\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~30_combout\ = ( \P8|Add10~17_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~29_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~21_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~17_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~29_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~21_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_process_0~8_combout\,
+	datac => \P8|ALT_INV_Add7~21_sumout\,
+	datad => \P8|ALT_INV_P~29_combout\,
+	datae => \P8|ALT_INV_Add10~17_sumout\,
+	combout => \P8|P~30_combout\);
+
+\P8|Add11~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add11~13_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~30_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~17_sumout\)) # (\B[5]~input_o\ & ((\P8|P~30_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add11~10\ ))
+-- \P8|Add11~14\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~30_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~17_sumout\)) # (\B[5]~input_o\ & ((\P8|P~30_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add11~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~17_sumout\,
+	datad => \P8|ALT_INV_P~30_combout\,
+	dataf => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add11~10\,
+	sumout => \P8|Add11~13_sumout\,
+	cout => \P8|Add11~14\);
+
+\P8|Add12~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add12~13_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~30_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~17_sumout\)) # (\B[5]~input_o\ & ((\P8|P~30_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add12~10\ ))
+-- \P8|Add12~14\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~30_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~17_sumout\)) # (\B[5]~input_o\ & ((\P8|P~30_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add12~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~17_sumout\,
+	datad => \P8|ALT_INV_P~30_combout\,
+	dataf => \P8|ALT_INV_Add0~13_sumout\,
+	cin => \P8|Add12~10\,
+	sumout => \P8|Add12~13_sumout\,
+	cout => \P8|Add12~14\);
+
+\P8|P~31\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~31_combout\ = ( \P8|Add12~13_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~30_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~17_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~13_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~30_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~17_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_process_0~10_combout\,
+	datac => \P8|ALT_INV_Add9~17_sumout\,
+	datad => \P8|ALT_INV_P~30_combout\,
+	datae => \P8|ALT_INV_Add12~13_sumout\,
+	combout => \P8|P~31_combout\);
+
+\P8|Add13~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add13~9_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~31_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~13_sumout\)) # (\B[6]~input_o\ & ((\P8|P~31_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add13~6\ ))
+-- \P8|Add13~10\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~31_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~13_sumout\)) # (\B[6]~input_o\ & ((\P8|P~31_combout\))))) ) + ( \A[2]~input_o\ ) + ( \P8|Add13~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~13_sumout\,
+	datad => \P8|ALT_INV_P~31_combout\,
+	dataf => \ALT_INV_A[2]~input_o\,
+	cin => \P8|Add13~6\,
+	sumout => \P8|Add13~9_sumout\,
+	cout => \P8|Add13~10\);
+
+\P8|Add14~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add14~9_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~31_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~13_sumout\)) # (\B[6]~input_o\ & ((\P8|P~31_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add14~6\ ))
+-- \P8|Add14~10\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~31_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~13_sumout\)) # (\B[6]~input_o\ & ((\P8|P~31_combout\))))) ) + ( \P8|Add0~9_sumout\ ) + ( \P8|Add14~6\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~13_sumout\,
+	datad => \P8|ALT_INV_P~31_combout\,
+	dataf => \P8|ALT_INV_Add0~9_sumout\,
+	cin => \P8|Add14~6\,
+	sumout => \P8|Add14~9_sumout\,
+	cout => \P8|Add14~10\);
+
+\P9|Mux15~48\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~48_combout\ = ( \P8|Add11~13_sumout\ & ( \P8|P~31_combout\ & ( ((!\opcode[0]~input_o\ & \A[11]~input_o\)) # (\P9|Mux15~37_combout\) ) ) ) # ( !\P8|Add11~13_sumout\ & ( \P8|P~31_combout\ & ( (!\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[11]~input_o\))) # (\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( \P8|Add11~13_sumout\ & ( !\P8|P~31_combout\ & ( (!\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[11]~input_o\))) # (\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( !\P8|Add11~13_sumout\ & ( !\P8|P~31_combout\ & ( (!\opcode[0]~input_o\ & \A[11]~input_o\) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100010001000100010111100100010111100100010001011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[11]~input_o\,
+	datac => \P8|ALT_INV_process_0~9_combout\,
+	datad => \P9|ALT_INV_Mux15~37_combout\,
+	datae => \P8|ALT_INV_Add11~13_sumout\,
+	dataf => \P8|ALT_INV_P~31_combout\,
+	combout => \P9|Mux15~48_combout\);
+
+\P9|Mux15~49\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~49_combout\ = ( !\P9|Mux15~48_combout\ & ( (!\P9|Mux15~35_combout\ & ((!\P9|Mux15~36_combout\) # ((!\P8|Add14~9_sumout\)))) # (\P9|Mux15~35_combout\ & (!\P8|Add13~9_sumout\ & ((!\P9|Mux15~36_combout\) # (!\P8|Add14~9_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1111101011001000000000000000000011111010110010000000000000000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~35_combout\,
+	datab => \P9|ALT_INV_Mux15~36_combout\,
+	datac => \P8|ALT_INV_Add13~9_sumout\,
+	datad => \P8|ALT_INV_Add14~9_sumout\,
+	datae => \P9|ALT_INV_Mux15~48_combout\,
+	combout => \P9|Mux15~49_combout\);
+
+\P9|Mux6~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux6~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~49_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~47_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~46_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~45_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~45_combout\,
+	datab => \P9|ALT_INV_Mux15~46_combout\,
+	datac => \P9|ALT_INV_Mux15~47_combout\,
+	datad => \P9|ALT_INV_Mux15~49_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux6~0_combout\);
+
+\P9|Mux15~50\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~50_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[10]~input_o\) # (!\B[10]~input_o\))) # (\opcode[0]~input_o\ & (!\A[10]~input_o\ & !\B[10]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[10]~input_o\,
+	datad => \ALT_INV_B[10]~input_o\,
+	combout => \P9|Mux15~50_combout\);
+
+\P4|C~8\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~8_combout\ = (!\A[9]~input_o\ & (\P4|C~7_combout\ & (!\negate~input_o\ $ (!\B[9]~input_o\)))) # (\A[9]~input_o\ & ((!\negate~input_o\ $ (!\B[9]~input_o\)) # (\P4|C~7_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[9]~input_o\,
+	datac => \ALT_INV_B[9]~input_o\,
+	datad => \P4|ALT_INV_C~7_combout\,
+	combout => \P4|C~8_combout\);
+
+\P9|Mux15~51\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~51_combout\ = ( \P4|C~8_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[10]~input_o\ $ (!\B[10]~input_o\))) ) ) # ( !\P4|C~8_combout\ & ( !\negate~input_o\ $ (!\A[10]~input_o\ $ (\B[10]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[10]~input_o\,
+	datad => \ALT_INV_B[10]~input_o\,
+	datae => \P4|ALT_INV_C~8_combout\,
+	combout => \P9|Mux15~51_combout\);
+
+\P9|Mux15~52\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~52_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[8]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[8]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~52_combout\);
+
+\P8|Add5~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add5~29_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~27_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~29_sumout\)) # (\B[2]~input_o\ & ((\P8|P~27_combout\))))) ) + ( \A[7]~input_o\ ) + ( \P8|Add5~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~29_sumout\,
+	datad => \P8|ALT_INV_P~27_combout\,
+	dataf => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add5~26\,
+	sumout => \P8|Add5~29_sumout\);
+
+\P8|Add6~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add6~29_sumout\ = SUM(( (!\B[1]~input_o\ & (((\P8|P~27_combout\)))) # (\B[1]~input_o\ & ((!\B[2]~input_o\ & (\P8|Add3~29_sumout\)) # (\B[2]~input_o\ & ((\P8|P~27_combout\))))) ) + ( \P8|Add0~29_sumout\ ) + ( \P8|Add6~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[1]~input_o\,
+	datab => \ALT_INV_B[2]~input_o\,
+	datac => \P8|ALT_INV_Add3~29_sumout\,
+	datad => \P8|ALT_INV_P~27_combout\,
+	dataf => \P8|ALT_INV_Add0~29_sumout\,
+	cin => \P8|Add6~26\,
+	sumout => \P8|Add6~29_sumout\);
+
+\P8|P~32\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~32_combout\ = ( \P8|Add6~29_sumout\ & ( ((!\P8|process_0~0_combout\ & ((\P8|P~27_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~29_sumout\))) # (\P8|process_0~4_combout\) ) ) # ( !\P8|Add6~29_sumout\ & ( (!\P8|process_0~4_combout\ & 
+-- ((!\P8|process_0~0_combout\ & ((\P8|P~27_combout\))) # (\P8|process_0~0_combout\ & (\P8|Add3~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~0_combout\,
+	datab => \P8|ALT_INV_process_0~4_combout\,
+	datac => \P8|ALT_INV_Add3~29_sumout\,
+	datad => \P8|ALT_INV_P~27_combout\,
+	datae => \P8|ALT_INV_Add6~29_sumout\,
+	combout => \P8|P~32_combout\);
+
+\P8|Add7~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add7~25_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~32_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~29_sumout\)) # (\B[3]~input_o\ & ((\P8|P~32_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add7~22\ ))
+-- \P8|Add7~26\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~32_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~29_sumout\)) # (\B[3]~input_o\ & ((\P8|P~32_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add7~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~29_sumout\,
+	datad => \P8|ALT_INV_P~32_combout\,
+	dataf => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add7~22\,
+	sumout => \P8|Add7~25_sumout\,
+	cout => \P8|Add7~26\);
+
+\P8|Add8~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add8~25_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~32_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~29_sumout\)) # (\B[3]~input_o\ & ((\P8|P~32_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add8~22\ ))
+-- \P8|Add8~26\ = CARRY(( (!\B[2]~input_o\ & (((\P8|P~32_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~29_sumout\)) # (\B[3]~input_o\ & ((\P8|P~32_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add8~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~29_sumout\,
+	datad => \P8|ALT_INV_P~32_combout\,
+	dataf => \P8|ALT_INV_Add0~25_sumout\,
+	cin => \P8|Add8~22\,
+	sumout => \P8|Add8~25_sumout\,
+	cout => \P8|Add8~26\);
+
+\P8|P~33\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~33_combout\ = ( \P8|Add8~25_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~32_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~29_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~25_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~32_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_process_0~6_combout\,
+	datac => \P8|ALT_INV_Add5~29_sumout\,
+	datad => \P8|ALT_INV_P~32_combout\,
+	datae => \P8|ALT_INV_Add8~25_sumout\,
+	combout => \P8|P~33_combout\);
+
+\P8|Add9~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add9~21_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~33_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~25_sumout\)) # (\B[4]~input_o\ & ((\P8|P~33_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add9~18\ ))
+-- \P8|Add9~22\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~33_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~25_sumout\)) # (\B[4]~input_o\ & ((\P8|P~33_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add9~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~25_sumout\,
+	datad => \P8|ALT_INV_P~33_combout\,
+	dataf => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add9~18\,
+	sumout => \P8|Add9~21_sumout\,
+	cout => \P8|Add9~22\);
+
+\P8|Add10~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add10~21_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~33_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~25_sumout\)) # (\B[4]~input_o\ & ((\P8|P~33_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add10~18\ ))
+-- \P8|Add10~22\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~33_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~25_sumout\)) # (\B[4]~input_o\ & ((\P8|P~33_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add10~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~25_sumout\,
+	datad => \P8|ALT_INV_P~33_combout\,
+	dataf => \P8|ALT_INV_Add0~21_sumout\,
+	cin => \P8|Add10~18\,
+	sumout => \P8|Add10~21_sumout\,
+	cout => \P8|Add10~22\);
+
+\P8|P~34\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~34_combout\ = ( \P8|Add10~21_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~33_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~25_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~21_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~33_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~25_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_process_0~8_combout\,
+	datac => \P8|ALT_INV_Add7~25_sumout\,
+	datad => \P8|ALT_INV_P~33_combout\,
+	datae => \P8|ALT_INV_Add10~21_sumout\,
+	combout => \P8|P~34_combout\);
+
+\P8|Add11~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add11~17_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~34_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~21_sumout\)) # (\B[5]~input_o\ & ((\P8|P~34_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add11~14\ ))
+-- \P8|Add11~18\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~34_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~21_sumout\)) # (\B[5]~input_o\ & ((\P8|P~34_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add11~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~21_sumout\,
+	datad => \P8|ALT_INV_P~34_combout\,
+	dataf => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add11~14\,
+	sumout => \P8|Add11~17_sumout\,
+	cout => \P8|Add11~18\);
+
+\P8|Add12~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add12~17_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~34_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~21_sumout\)) # (\B[5]~input_o\ & ((\P8|P~34_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add12~14\ ))
+-- \P8|Add12~18\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~34_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~21_sumout\)) # (\B[5]~input_o\ & ((\P8|P~34_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add12~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~21_sumout\,
+	datad => \P8|ALT_INV_P~34_combout\,
+	dataf => \P8|ALT_INV_Add0~17_sumout\,
+	cin => \P8|Add12~14\,
+	sumout => \P8|Add12~17_sumout\,
+	cout => \P8|Add12~18\);
+
+\P8|P~35\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~35_combout\ = ( \P8|Add12~17_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~34_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~21_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~17_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~34_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~21_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_process_0~10_combout\,
+	datac => \P8|ALT_INV_Add9~21_sumout\,
+	datad => \P8|ALT_INV_P~34_combout\,
+	datae => \P8|ALT_INV_Add12~17_sumout\,
+	combout => \P8|P~35_combout\);
+
+\P8|Add13~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add13~13_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~35_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~17_sumout\)) # (\B[6]~input_o\ & ((\P8|P~35_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add13~10\ ))
+-- \P8|Add13~14\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~35_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~17_sumout\)) # (\B[6]~input_o\ & ((\P8|P~35_combout\))))) ) + ( \A[3]~input_o\ ) + ( \P8|Add13~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~17_sumout\,
+	datad => \P8|ALT_INV_P~35_combout\,
+	dataf => \ALT_INV_A[3]~input_o\,
+	cin => \P8|Add13~10\,
+	sumout => \P8|Add13~13_sumout\,
+	cout => \P8|Add13~14\);
+
+\P8|Add14~13\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add14~13_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~35_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~17_sumout\)) # (\B[6]~input_o\ & ((\P8|P~35_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add14~10\ ))
+-- \P8|Add14~14\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~35_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~17_sumout\)) # (\B[6]~input_o\ & ((\P8|P~35_combout\))))) ) + ( \P8|Add0~13_sumout\ ) + ( \P8|Add14~10\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~17_sumout\,
+	datad => \P8|ALT_INV_P~35_combout\,
+	dataf => \P8|ALT_INV_Add0~13_sumout\,
+	cin => \P8|Add14~10\,
+	sumout => \P8|Add14~13_sumout\,
+	cout => \P8|Add14~14\);
+
+\P9|Mux15~53\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~53_combout\ = ( \P8|Add11~17_sumout\ & ( \P8|P~35_combout\ & ( ((!\opcode[0]~input_o\ & \A[12]~input_o\)) # (\P9|Mux15~37_combout\) ) ) ) # ( !\P8|Add11~17_sumout\ & ( \P8|P~35_combout\ & ( (!\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[12]~input_o\))) # (\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( \P8|Add11~17_sumout\ & ( !\P8|P~35_combout\ & ( (!\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[12]~input_o\))) # (\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( !\P8|Add11~17_sumout\ & ( !\P8|P~35_combout\ & ( (!\opcode[0]~input_o\ & \A[12]~input_o\) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100010001000100010111100100010111100100010001011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[12]~input_o\,
+	datac => \P8|ALT_INV_process_0~9_combout\,
+	datad => \P9|ALT_INV_Mux15~37_combout\,
+	datae => \P8|ALT_INV_Add11~17_sumout\,
+	dataf => \P8|ALT_INV_P~35_combout\,
+	combout => \P9|Mux15~53_combout\);
+
+\P9|Mux15~54\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~54_combout\ = ( !\P9|Mux15~53_combout\ & ( (!\P9|Mux15~35_combout\ & ((!\P9|Mux15~36_combout\) # ((!\P8|Add14~13_sumout\)))) # (\P9|Mux15~35_combout\ & (!\P8|Add13~13_sumout\ & ((!\P9|Mux15~36_combout\) # (!\P8|Add14~13_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1111101011001000000000000000000011111010110010000000000000000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~35_combout\,
+	datab => \P9|ALT_INV_Mux15~36_combout\,
+	datac => \P8|ALT_INV_Add13~13_sumout\,
+	datad => \P8|ALT_INV_Add14~13_sumout\,
+	datae => \P9|ALT_INV_Mux15~53_combout\,
+	combout => \P9|Mux15~54_combout\);
+
+\P9|Mux5~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux5~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~54_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~52_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~51_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~50_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~50_combout\,
+	datab => \P9|ALT_INV_Mux15~51_combout\,
+	datac => \P9|ALT_INV_Mux15~52_combout\,
+	datad => \P9|ALT_INV_Mux15~54_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux5~0_combout\);
+
+\P9|Mux15~55\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~55_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[11]~input_o\) # (!\B[11]~input_o\))) # (\opcode[0]~input_o\ & (!\A[11]~input_o\ & !\B[11]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[11]~input_o\,
+	datad => \ALT_INV_B[11]~input_o\,
+	combout => \P9|Mux15~55_combout\);
+
+\P4|C~9\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~9_combout\ = (!\A[10]~input_o\ & (\P4|C~8_combout\ & (!\negate~input_o\ $ (!\B[10]~input_o\)))) # (\A[10]~input_o\ & ((!\negate~input_o\ $ (!\B[10]~input_o\)) # (\P4|C~8_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[10]~input_o\,
+	datac => \ALT_INV_B[10]~input_o\,
+	datad => \P4|ALT_INV_C~8_combout\,
+	combout => \P4|C~9_combout\);
+
+\P9|Mux15~56\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~56_combout\ = ( \P4|C~9_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[11]~input_o\ $ (!\B[11]~input_o\))) ) ) # ( !\P4|C~9_combout\ & ( !\negate~input_o\ $ (!\A[11]~input_o\ $ (\B[11]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[11]~input_o\,
+	datad => \ALT_INV_B[11]~input_o\,
+	datae => \P4|ALT_INV_C~9_combout\,
+	combout => \P9|Mux15~56_combout\);
+
+\P9|Mux15~57\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~57_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[9]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[9]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~57_combout\);
+
+\P8|Add7~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add7~29_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~32_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~29_sumout\)) # (\B[3]~input_o\ & ((\P8|P~32_combout\))))) ) + ( \A[7]~input_o\ ) + ( \P8|Add7~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~29_sumout\,
+	datad => \P8|ALT_INV_P~32_combout\,
+	dataf => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add7~26\,
+	sumout => \P8|Add7~29_sumout\);
+
+\P8|Add8~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add8~29_sumout\ = SUM(( (!\B[2]~input_o\ & (((\P8|P~32_combout\)))) # (\B[2]~input_o\ & ((!\B[3]~input_o\ & (\P8|Add5~29_sumout\)) # (\B[3]~input_o\ & ((\P8|P~32_combout\))))) ) + ( \P8|Add0~29_sumout\ ) + ( \P8|Add8~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[2]~input_o\,
+	datab => \ALT_INV_B[3]~input_o\,
+	datac => \P8|ALT_INV_Add5~29_sumout\,
+	datad => \P8|ALT_INV_P~32_combout\,
+	dataf => \P8|ALT_INV_Add0~29_sumout\,
+	cin => \P8|Add8~26\,
+	sumout => \P8|Add8~29_sumout\);
+
+\P8|P~36\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~36_combout\ = ( \P8|Add8~29_sumout\ & ( ((!\P8|process_0~3_combout\ & ((\P8|P~32_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~29_sumout\))) # (\P8|process_0~6_combout\) ) ) # ( !\P8|Add8~29_sumout\ & ( (!\P8|process_0~6_combout\ & 
+-- ((!\P8|process_0~3_combout\ & ((\P8|P~32_combout\))) # (\P8|process_0~3_combout\ & (\P8|Add5~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~3_combout\,
+	datab => \P8|ALT_INV_process_0~6_combout\,
+	datac => \P8|ALT_INV_Add5~29_sumout\,
+	datad => \P8|ALT_INV_P~32_combout\,
+	datae => \P8|ALT_INV_Add8~29_sumout\,
+	combout => \P8|P~36_combout\);
+
+\P8|Add9~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add9~25_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~36_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~29_sumout\)) # (\B[4]~input_o\ & ((\P8|P~36_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add9~22\ ))
+-- \P8|Add9~26\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~36_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~29_sumout\)) # (\B[4]~input_o\ & ((\P8|P~36_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add9~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~29_sumout\,
+	datad => \P8|ALT_INV_P~36_combout\,
+	dataf => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add9~22\,
+	sumout => \P8|Add9~25_sumout\,
+	cout => \P8|Add9~26\);
+
+\P8|Add10~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add10~25_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~36_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~29_sumout\)) # (\B[4]~input_o\ & ((\P8|P~36_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add10~22\ ))
+-- \P8|Add10~26\ = CARRY(( (!\B[3]~input_o\ & (((\P8|P~36_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~29_sumout\)) # (\B[4]~input_o\ & ((\P8|P~36_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add10~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~29_sumout\,
+	datad => \P8|ALT_INV_P~36_combout\,
+	dataf => \P8|ALT_INV_Add0~25_sumout\,
+	cin => \P8|Add10~22\,
+	sumout => \P8|Add10~25_sumout\,
+	cout => \P8|Add10~26\);
+
+\P8|P~37\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~37_combout\ = ( \P8|Add10~25_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~36_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~29_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~25_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~36_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_process_0~8_combout\,
+	datac => \P8|ALT_INV_Add7~29_sumout\,
+	datad => \P8|ALT_INV_P~36_combout\,
+	datae => \P8|ALT_INV_Add10~25_sumout\,
+	combout => \P8|P~37_combout\);
+
+\P8|Add11~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add11~21_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~37_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~25_sumout\)) # (\B[5]~input_o\ & ((\P8|P~37_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add11~18\ ))
+-- \P8|Add11~22\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~37_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~25_sumout\)) # (\B[5]~input_o\ & ((\P8|P~37_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add11~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~25_sumout\,
+	datad => \P8|ALT_INV_P~37_combout\,
+	dataf => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add11~18\,
+	sumout => \P8|Add11~21_sumout\,
+	cout => \P8|Add11~22\);
+
+\P8|Add12~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add12~21_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~37_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~25_sumout\)) # (\B[5]~input_o\ & ((\P8|P~37_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add12~18\ ))
+-- \P8|Add12~22\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~37_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~25_sumout\)) # (\B[5]~input_o\ & ((\P8|P~37_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add12~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~25_sumout\,
+	datad => \P8|ALT_INV_P~37_combout\,
+	dataf => \P8|ALT_INV_Add0~21_sumout\,
+	cin => \P8|Add12~18\,
+	sumout => \P8|Add12~21_sumout\,
+	cout => \P8|Add12~22\);
+
+\P8|P~38\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~38_combout\ = ( \P8|Add12~21_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~37_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~25_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~21_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~37_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~25_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_process_0~10_combout\,
+	datac => \P8|ALT_INV_Add9~25_sumout\,
+	datad => \P8|ALT_INV_P~37_combout\,
+	datae => \P8|ALT_INV_Add12~21_sumout\,
+	combout => \P8|P~38_combout\);
+
+\P8|Add13~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add13~17_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~38_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~21_sumout\)) # (\B[6]~input_o\ & ((\P8|P~38_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add13~14\ ))
+-- \P8|Add13~18\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~38_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~21_sumout\)) # (\B[6]~input_o\ & ((\P8|P~38_combout\))))) ) + ( \A[4]~input_o\ ) + ( \P8|Add13~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~21_sumout\,
+	datad => \P8|ALT_INV_P~38_combout\,
+	dataf => \ALT_INV_A[4]~input_o\,
+	cin => \P8|Add13~14\,
+	sumout => \P8|Add13~17_sumout\,
+	cout => \P8|Add13~18\);
+
+\P8|Add14~17\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add14~17_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~38_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~21_sumout\)) # (\B[6]~input_o\ & ((\P8|P~38_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add14~14\ ))
+-- \P8|Add14~18\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~38_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~21_sumout\)) # (\B[6]~input_o\ & ((\P8|P~38_combout\))))) ) + ( \P8|Add0~17_sumout\ ) + ( \P8|Add14~14\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~21_sumout\,
+	datad => \P8|ALT_INV_P~38_combout\,
+	dataf => \P8|ALT_INV_Add0~17_sumout\,
+	cin => \P8|Add14~14\,
+	sumout => \P8|Add14~17_sumout\,
+	cout => \P8|Add14~18\);
+
+\P9|Mux15~58\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~58_combout\ = ( \P8|Add11~21_sumout\ & ( \P8|P~38_combout\ & ( ((!\opcode[0]~input_o\ & \A[13]~input_o\)) # (\P9|Mux15~37_combout\) ) ) ) # ( !\P8|Add11~21_sumout\ & ( \P8|P~38_combout\ & ( (!\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[13]~input_o\))) # (\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( \P8|Add11~21_sumout\ & ( !\P8|P~38_combout\ & ( (!\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[13]~input_o\))) # (\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( !\P8|Add11~21_sumout\ & ( !\P8|P~38_combout\ & ( (!\opcode[0]~input_o\ & \A[13]~input_o\) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100010001000100010111100100010111100100010001011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[13]~input_o\,
+	datac => \P8|ALT_INV_process_0~9_combout\,
+	datad => \P9|ALT_INV_Mux15~37_combout\,
+	datae => \P8|ALT_INV_Add11~21_sumout\,
+	dataf => \P8|ALT_INV_P~38_combout\,
+	combout => \P9|Mux15~58_combout\);
+
+\P9|Mux15~59\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~59_combout\ = ( !\P9|Mux15~58_combout\ & ( (!\P9|Mux15~35_combout\ & ((!\P9|Mux15~36_combout\) # ((!\P8|Add14~17_sumout\)))) # (\P9|Mux15~35_combout\ & (!\P8|Add13~17_sumout\ & ((!\P9|Mux15~36_combout\) # (!\P8|Add14~17_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1111101011001000000000000000000011111010110010000000000000000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~35_combout\,
+	datab => \P9|ALT_INV_Mux15~36_combout\,
+	datac => \P8|ALT_INV_Add13~17_sumout\,
+	datad => \P8|ALT_INV_Add14~17_sumout\,
+	datae => \P9|ALT_INV_Mux15~58_combout\,
+	combout => \P9|Mux15~59_combout\);
+
+\P9|Mux4~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux4~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~59_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~57_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~56_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~55_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~55_combout\,
+	datab => \P9|ALT_INV_Mux15~56_combout\,
+	datac => \P9|ALT_INV_Mux15~57_combout\,
+	datad => \P9|ALT_INV_Mux15~59_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux4~0_combout\);
+
+\P9|Mux15~60\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~60_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[12]~input_o\) # (!\B[12]~input_o\))) # (\opcode[0]~input_o\ & (!\A[12]~input_o\ & !\B[12]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[12]~input_o\,
+	datad => \ALT_INV_B[12]~input_o\,
+	combout => \P9|Mux15~60_combout\);
+
+\P4|C~10\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~10_combout\ = ( \B[10]~input_o\ & ( \P4|C~8_combout\ & ( (!\B[11]~input_o\ & (((\negate~input_o\ & \A[10]~input_o\)) # (\A[11]~input_o\))) # (\B[11]~input_o\ & ((!\negate~input_o\) # ((\A[11]~input_o\ & \A[10]~input_o\)))) ) ) ) # ( !\B[10]~input_o\ 
+-- & ( \P4|C~8_combout\ & ( (!\B[11]~input_o\ & (((\A[11]~input_o\ & \A[10]~input_o\)) # (\negate~input_o\))) # (\B[11]~input_o\ & (((!\negate~input_o\ & \A[10]~input_o\)) # (\A[11]~input_o\))) ) ) ) # ( \B[10]~input_o\ & ( !\P4|C~8_combout\ & ( 
+-- (!\B[11]~input_o\ & (\A[11]~input_o\ & ((\A[10]~input_o\) # (\negate~input_o\)))) # (\B[11]~input_o\ & (!\negate~input_o\ & ((\A[10]~input_o\) # (\A[11]~input_o\)))) ) ) ) # ( !\B[10]~input_o\ & ( !\P4|C~8_combout\ & ( (!\B[11]~input_o\ & 
+-- (\negate~input_o\ & ((\A[10]~input_o\) # (\A[11]~input_o\)))) # (\B[11]~input_o\ & (\A[11]~input_o\ & ((!\negate~input_o\) # (\A[10]~input_o\)))) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001010011000100100011101001010011011110110011101001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[11]~input_o\,
+	datac => \ALT_INV_B[11]~input_o\,
+	datad => \ALT_INV_A[10]~input_o\,
+	datae => \ALT_INV_B[10]~input_o\,
+	dataf => \P4|ALT_INV_C~8_combout\,
+	combout => \P4|C~10_combout\);
+
+\P9|Mux15~61\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~61_combout\ = ( \P4|C~10_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[12]~input_o\ $ (!\B[12]~input_o\))) ) ) # ( !\P4|C~10_combout\ & ( !\negate~input_o\ $ (!\A[12]~input_o\ $ (\B[12]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[12]~input_o\,
+	datad => \ALT_INV_B[12]~input_o\,
+	datae => \P4|ALT_INV_C~10_combout\,
+	combout => \P9|Mux15~61_combout\);
+
+\P9|Mux15~62\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~62_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[10]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[10]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~62_combout\);
+
+\P8|Add9~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add9~29_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~36_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~29_sumout\)) # (\B[4]~input_o\ & ((\P8|P~36_combout\))))) ) + ( \A[7]~input_o\ ) + ( \P8|Add9~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~29_sumout\,
+	datad => \P8|ALT_INV_P~36_combout\,
+	dataf => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add9~26\,
+	sumout => \P8|Add9~29_sumout\);
+
+\P8|Add10~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add10~29_sumout\ = SUM(( (!\B[3]~input_o\ & (((\P8|P~36_combout\)))) # (\B[3]~input_o\ & ((!\B[4]~input_o\ & (\P8|Add7~29_sumout\)) # (\B[4]~input_o\ & ((\P8|P~36_combout\))))) ) + ( \P8|Add0~29_sumout\ ) + ( \P8|Add10~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[3]~input_o\,
+	datab => \ALT_INV_B[4]~input_o\,
+	datac => \P8|ALT_INV_Add7~29_sumout\,
+	datad => \P8|ALT_INV_P~36_combout\,
+	dataf => \P8|ALT_INV_Add0~29_sumout\,
+	cin => \P8|Add10~26\,
+	sumout => \P8|Add10~29_sumout\);
+
+\P8|P~39\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~39_combout\ = ( \P8|Add10~29_sumout\ & ( ((!\P8|process_0~5_combout\ & ((\P8|P~36_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~29_sumout\))) # (\P8|process_0~8_combout\) ) ) # ( !\P8|Add10~29_sumout\ & ( (!\P8|process_0~8_combout\ & 
+-- ((!\P8|process_0~5_combout\ & ((\P8|P~36_combout\))) # (\P8|process_0~5_combout\ & (\P8|Add7~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~5_combout\,
+	datab => \P8|ALT_INV_process_0~8_combout\,
+	datac => \P8|ALT_INV_Add7~29_sumout\,
+	datad => \P8|ALT_INV_P~36_combout\,
+	datae => \P8|ALT_INV_Add10~29_sumout\,
+	combout => \P8|P~39_combout\);
+
+\P8|Add11~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add11~25_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~39_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~29_sumout\)) # (\B[5]~input_o\ & ((\P8|P~39_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add11~22\ ))
+-- \P8|Add11~26\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~39_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~29_sumout\)) # (\B[5]~input_o\ & ((\P8|P~39_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add11~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~29_sumout\,
+	datad => \P8|ALT_INV_P~39_combout\,
+	dataf => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add11~22\,
+	sumout => \P8|Add11~25_sumout\,
+	cout => \P8|Add11~26\);
+
+\P8|Add12~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add12~25_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~39_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~29_sumout\)) # (\B[5]~input_o\ & ((\P8|P~39_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add12~22\ ))
+-- \P8|Add12~26\ = CARRY(( (!\B[4]~input_o\ & (((\P8|P~39_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~29_sumout\)) # (\B[5]~input_o\ & ((\P8|P~39_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add12~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~29_sumout\,
+	datad => \P8|ALT_INV_P~39_combout\,
+	dataf => \P8|ALT_INV_Add0~25_sumout\,
+	cin => \P8|Add12~22\,
+	sumout => \P8|Add12~25_sumout\,
+	cout => \P8|Add12~26\);
+
+\P8|P~40\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~40_combout\ = ( \P8|Add12~25_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~39_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~29_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~25_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~39_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_process_0~10_combout\,
+	datac => \P8|ALT_INV_Add9~29_sumout\,
+	datad => \P8|ALT_INV_P~39_combout\,
+	datae => \P8|ALT_INV_Add12~25_sumout\,
+	combout => \P8|P~40_combout\);
+
+\P8|Add13~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add13~21_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~40_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~25_sumout\)) # (\B[6]~input_o\ & ((\P8|P~40_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add13~18\ ))
+-- \P8|Add13~22\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~40_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~25_sumout\)) # (\B[6]~input_o\ & ((\P8|P~40_combout\))))) ) + ( \A[5]~input_o\ ) + ( \P8|Add13~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~25_sumout\,
+	datad => \P8|ALT_INV_P~40_combout\,
+	dataf => \ALT_INV_A[5]~input_o\,
+	cin => \P8|Add13~18\,
+	sumout => \P8|Add13~21_sumout\,
+	cout => \P8|Add13~22\);
+
+\P8|Add14~21\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add14~21_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~40_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~25_sumout\)) # (\B[6]~input_o\ & ((\P8|P~40_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add14~18\ ))
+-- \P8|Add14~22\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~40_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~25_sumout\)) # (\B[6]~input_o\ & ((\P8|P~40_combout\))))) ) + ( \P8|Add0~21_sumout\ ) + ( \P8|Add14~18\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~25_sumout\,
+	datad => \P8|ALT_INV_P~40_combout\,
+	dataf => \P8|ALT_INV_Add0~21_sumout\,
+	cin => \P8|Add14~18\,
+	sumout => \P8|Add14~21_sumout\,
+	cout => \P8|Add14~22\);
+
+\P9|Mux15~63\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~63_combout\ = ( \P8|Add11~25_sumout\ & ( \P8|P~40_combout\ & ( ((!\opcode[0]~input_o\ & \A[14]~input_o\)) # (\P9|Mux15~37_combout\) ) ) ) # ( !\P8|Add11~25_sumout\ & ( \P8|P~40_combout\ & ( (!\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[14]~input_o\))) # (\opcode[0]~input_o\ & (((!\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( \P8|Add11~25_sumout\ & ( !\P8|P~40_combout\ & ( (!\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & 
+-- \P9|Mux15~37_combout\)) # (\A[14]~input_o\))) # (\opcode[0]~input_o\ & (((\P8|process_0~9_combout\ & \P9|Mux15~37_combout\)))) ) ) ) # ( !\P8|Add11~25_sumout\ & ( !\P8|P~40_combout\ & ( (!\opcode[0]~input_o\ & \A[14]~input_o\) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0010001000100010001000100010111100100010111100100010001011111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[14]~input_o\,
+	datac => \P8|ALT_INV_process_0~9_combout\,
+	datad => \P9|ALT_INV_Mux15~37_combout\,
+	datae => \P8|ALT_INV_Add11~25_sumout\,
+	dataf => \P8|ALT_INV_P~40_combout\,
+	combout => \P9|Mux15~63_combout\);
+
+\P9|Mux15~64\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~64_combout\ = ( !\P9|Mux15~63_combout\ & ( (!\P9|Mux15~35_combout\ & ((!\P9|Mux15~36_combout\) # ((!\P8|Add14~21_sumout\)))) # (\P9|Mux15~35_combout\ & (!\P8|Add13~21_sumout\ & ((!\P9|Mux15~36_combout\) # (!\P8|Add14~21_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1111101011001000000000000000000011111010110010000000000000000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~35_combout\,
+	datab => \P9|ALT_INV_Mux15~36_combout\,
+	datac => \P8|ALT_INV_Add13~21_sumout\,
+	datad => \P8|ALT_INV_Add14~21_sumout\,
+	datae => \P9|ALT_INV_Mux15~63_combout\,
+	combout => \P9|Mux15~64_combout\);
+
+\P9|Mux3~0\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux3~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~64_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~62_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~61_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~60_combout\ ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P9|ALT_INV_Mux15~60_combout\,
+	datab => \P9|ALT_INV_Mux15~61_combout\,
+	datac => \P9|ALT_INV_Mux15~62_combout\,
+	datad => \P9|ALT_INV_Mux15~64_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux3~0_combout\);
+
+\P9|Mux15~65\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~65_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[13]~input_o\) # (!\B[13]~input_o\))) # (\opcode[0]~input_o\ & (!\A[13]~input_o\ & !\B[13]~input_o\))))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[13]~input_o\,
+	datad => \ALT_INV_B[13]~input_o\,
+	combout => \P9|Mux15~65_combout\);
+
+\P4|C~11\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P4|C~11_combout\ = (!\A[12]~input_o\ & (\P4|C~10_combout\ & (!\negate~input_o\ $ (!\B[12]~input_o\)))) # (\A[12]~input_o\ & ((!\negate~input_o\ $ (!\B[12]~input_o\)) # (\P4|C~10_combout\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0001001001111011000100100111101100010010011110110001001001111011",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[12]~input_o\,
+	datac => \ALT_INV_B[12]~input_o\,
+	datad => \P4|ALT_INV_C~10_combout\,
+	combout => \P4|C~11_combout\);
+
+\P9|Mux15~66\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~66_combout\ = ( \P4|C~11_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[13]~input_o\ $ (!\B[13]~input_o\))) ) ) # ( !\P4|C~11_combout\ & ( !\negate~input_o\ $ (!\A[13]~input_o\ $ (\B[13]~input_o\)) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[13]~input_o\,
+	datad => \ALT_INV_B[13]~input_o\,
+	datae => \P4|ALT_INV_C~11_combout\,
+	combout => \P9|Mux15~66_combout\);
+
+\P9|Mux15~67\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~67_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[11]~input_o\)))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[11]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~67_combout\);
+
+\P8|Add11~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add11~29_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~39_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~29_sumout\)) # (\B[5]~input_o\ & ((\P8|P~39_combout\))))) ) + ( \A[7]~input_o\ ) + ( \P8|Add11~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~29_sumout\,
+	datad => \P8|ALT_INV_P~39_combout\,
+	dataf => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add11~26\,
+	sumout => \P8|Add11~29_sumout\);
+
+\P8|Add12~29\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add12~29_sumout\ = SUM(( (!\B[4]~input_o\ & (((\P8|P~39_combout\)))) # (\B[4]~input_o\ & ((!\B[5]~input_o\ & (\P8|Add9~29_sumout\)) # (\B[5]~input_o\ & ((\P8|P~39_combout\))))) ) + ( \P8|Add0~29_sumout\ ) + ( \P8|Add12~26\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[4]~input_o\,
+	datab => \ALT_INV_B[5]~input_o\,
+	datac => \P8|ALT_INV_Add9~29_sumout\,
+	datad => \P8|ALT_INV_P~39_combout\,
+	dataf => \P8|ALT_INV_Add0~29_sumout\,
+	cin => \P8|Add12~26\,
+	sumout => \P8|Add12~29_sumout\);
+
+\P8|P~41\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|P~41_combout\ = ( \P8|Add12~29_sumout\ & ( ((!\P8|process_0~7_combout\ & ((\P8|P~39_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~29_sumout\))) # (\P8|process_0~10_combout\) ) ) # ( !\P8|Add12~29_sumout\ & ( (!\P8|process_0~10_combout\ & 
+-- ((!\P8|process_0~7_combout\ & ((\P8|P~39_combout\))) # (\P8|process_0~7_combout\ & (\P8|Add9~29_sumout\)))) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \P8|ALT_INV_process_0~7_combout\,
+	datab => \P8|ALT_INV_process_0~10_combout\,
+	datac => \P8|ALT_INV_Add9~29_sumout\,
+	datad => \P8|ALT_INV_P~39_combout\,
+	datae => \P8|ALT_INV_Add12~29_sumout\,
+	combout => \P8|P~41_combout\);
+
+\P8|Add13~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add13~25_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~41_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~29_sumout\)) # (\B[6]~input_o\ & ((\P8|P~41_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add13~22\ ))
+-- \P8|Add13~26\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~41_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~29_sumout\)) # (\B[6]~input_o\ & ((\P8|P~41_combout\))))) ) + ( \A[6]~input_o\ ) + ( \P8|Add13~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~29_sumout\,
+	datad => \P8|ALT_INV_P~41_combout\,
+	dataf => \ALT_INV_A[6]~input_o\,
+	cin => \P8|Add13~22\,
+	sumout => \P8|Add13~25_sumout\,
+	cout => \P8|Add13~26\);
+
+\P9|Mux15~68\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~68_combout\ = ( \P8|Add11~29_sumout\ & ( \P8|P~41_combout\ & ( (\opcode[0]~input_o\ & (!\B[7]~input_o\ $ (\B[6]~input_o\))) ) ) ) # ( !\P8|Add11~29_sumout\ & ( \P8|P~41_combout\ & ( (\opcode[0]~input_o\ & ((!\B[7]~input_o\ & (!\B[6]~input_o\ & 
+-- !\B[5]~input_o\)) # (\B[7]~input_o\ & (\B[6]~input_o\)))) ) ) ) # ( \P8|Add11~29_sumout\ & ( !\P8|P~41_combout\ & ( (\opcode[0]~input_o\ & (!\B[7]~input_o\ & (!\B[6]~input_o\ & \B[5]~input_o\))) ) ) )
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000000000000100000001000001000000010100000101000001",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_B[7]~input_o\,
+	datac => \ALT_INV_B[6]~input_o\,
+	datad => \ALT_INV_B[5]~input_o\,
+	datae => \P8|ALT_INV_Add11~29_sumout\,
+	dataf => \P8|ALT_INV_P~41_combout\,
+	combout => \P9|Mux15~68_combout\);
+
+\P8|Add14~25\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P8|Add14~25_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~41_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~29_sumout\)) # (\B[6]~input_o\ & ((\P8|P~41_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add14~22\ ))
+-- \P8|Add14~26\ = CARRY(( (!\B[5]~input_o\ & (((\P8|P~41_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~29_sumout\)) # (\B[6]~input_o\ & ((\P8|P~41_combout\))))) ) + ( \P8|Add0~25_sumout\ ) + ( \P8|Add14~22\ ))
+
+-- pragma translate_off
+GENERIC MAP (
+	extended_lut => "off",
+	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	shared_arith => "off")
+-- pragma translate_on
+PORT MAP (
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~29_sumout\,
+	datad => \P8|ALT_INV_P~41_combout\,
+	dataf => \P8|ALT_INV_Add0~25_sumout\,
+	cin => \P8|Add14~22\,
+	sumout => \P8|Add14~25_sumout\,
+	cout => \P8|Add14~26\);
+
+\P9|Mux15~76\ : cyclonev_lcell_comb
+-- Equation(s):
+-- \P9|Mux15~76_combout\ = ( !\B[6]~input_o\ & ( ((!\opcode[0]~input_o\ & (\A[15]~input_o\)) # (\opcode[0]~input_o\ & (((\B[7]~input_o\ & \P8|Add14~25_sumout\))))) # (\P9|Mux15~68_combout\) ) ) # ( \B[6]~input_o\ & ( ((!\opcode[0]~input_o\ & 
+-- (\A[15]~input_o\)) # (\opcode[0]~input_o\ & (((!\B[7]~input_o\ & \P8|Add13~25_sumout\))))) # (\P9|Mux15~68_combout\) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "on",
-	lut_mask => "0001000111111111000011110000111100001111000011110000000011111111",
+	lut_mask => "0101010100000011010101010000110011111111111111111111111111111111",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_Add11~9_sumout\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add14~5_sumout\,
-	datad => \ALT_INV_P~28_combout\,
-	datae => \ALT_INV_inputB[7]~input_o\,
-	dataf => \ALT_INV_inputB[6]~input_o\,
-	datag => \ALT_INV_Add13~5_sumout\,
-	combout => \P~68_combout\);
+	dataa => \ALT_INV_A[15]~input_o\,
+	datab => \ALT_INV_B[7]~input_o\,
+	datac => \P8|ALT_INV_Add13~25_sumout\,
+	datad => \ALT_INV_opcode[0]~input_o\,
+	datae => \ALT_INV_B[6]~input_o\,
+	dataf => \P9|ALT_INV_Mux15~68_combout\,
+	datag => \P8|ALT_INV_Add14~25_sumout\,
+	combout => \P9|Mux15~76_combout\);
 
-\Add3~29\ : cyclonev_lcell_comb
+\P9|Mux2~0\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add3~29_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~23_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~29_sumout\)) # (\inputB[1]~input_o\ & ((\P~23_combout\))))) ) + ( \inputA[7]~input_o\ ) + ( \Add3~26\ ))
+-- \P9|Mux2~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( \P9|Mux15~76_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~67_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~66_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~65_combout\ ) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0101010101010101001100110011001111110000111100000000000011111111",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~29_sumout\,
-	datad => \ALT_INV_P~23_combout\,
-	dataf => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add3~26\,
-	sumout => \Add3~29_sumout\);
+	dataa => \P9|ALT_INV_Mux15~65_combout\,
+	datab => \P9|ALT_INV_Mux15~66_combout\,
+	datac => \P9|ALT_INV_Mux15~67_combout\,
+	datad => \P9|ALT_INV_Mux15~76_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux2~0_combout\);
 
-\Add4~29\ : cyclonev_lcell_comb
+\P9|Mux15~69\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add4~29_sumout\ = SUM(( (!\inputB[0]~input_o\ & (((\P~23_combout\)))) # (\inputB[0]~input_o\ & ((!\inputB[1]~input_o\ & (\Add1~29_sumout\)) # (\inputB[1]~input_o\ & ((\P~23_combout\))))) ) + ( \Add0~29_sumout\ ) + ( \Add4~26\ ))
+-- \P9|Mux15~69_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[14]~input_o\) # (!\B[14]~input_o\))) # (\opcode[0]~input_o\ & (!\A[14]~input_o\ & !\B[14]~input_o\))))
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[0]~input_o\,
-	datab => \ALT_INV_inputB[1]~input_o\,
-	datac => \ALT_INV_Add1~29_sumout\,
-	datad => \ALT_INV_P~23_combout\,
-	dataf => \ALT_INV_Add0~29_sumout\,
-	cin => \Add4~26\,
-	sumout => \Add4~29_sumout\);
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[14]~input_o\,
+	datad => \ALT_INV_B[14]~input_o\,
+	combout => \P9|Mux15~69_combout\);
 
-\P~29\ : cyclonev_lcell_comb
+\P4|C~12\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~29_combout\ = ( \Add4~29_sumout\ & ( ((!\process_0~0_combout\ & ((\P~23_combout\))) # (\process_0~0_combout\ & (\Add1~29_sumout\))) # (\process_0~2_combout\) ) ) # ( !\Add4~29_sumout\ & ( (!\process_0~2_combout\ & ((!\process_0~0_combout\ & 
--- ((\P~23_combout\))) # (\process_0~0_combout\ & (\Add1~29_sumout\)))) ) )
+-- \P4|C~12_combout\ = ( \B[12]~input_o\ & ( \P4|C~10_combout\ & ( (!\B[13]~input_o\ & (((\negate~input_o\ & \A[12]~input_o\)) # (\A[13]~input_o\))) # (\B[13]~input_o\ & ((!\negate~input_o\) # ((\A[13]~input_o\ & \A[12]~input_o\)))) ) ) ) # ( 
+-- !\B[12]~input_o\ & ( \P4|C~10_combout\ & ( (!\B[13]~input_o\ & (((\A[13]~input_o\ & \A[12]~input_o\)) # (\negate~input_o\))) # (\B[13]~input_o\ & (((!\negate~input_o\ & \A[12]~input_o\)) # (\A[13]~input_o\))) ) ) ) # ( \B[12]~input_o\ & ( 
+-- !\P4|C~10_combout\ & ( (!\B[13]~input_o\ & (\A[13]~input_o\ & ((\A[12]~input_o\) # (\negate~input_o\)))) # (\B[13]~input_o\ & (!\negate~input_o\ & ((\A[12]~input_o\) # (\A[13]~input_o\)))) ) ) ) # ( !\B[12]~input_o\ & ( !\P4|C~10_combout\ & ( 
+-- (!\B[13]~input_o\ & (\negate~input_o\ & ((\A[12]~input_o\) # (\A[13]~input_o\)))) # (\B[13]~input_o\ & (\A[13]~input_o\ & ((!\negate~input_o\) # (\A[12]~input_o\)))) ) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	lut_mask => "0001001001010011000100100011101001010011011110110011101001111011",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~0_combout\,
-	datab => \ALT_INV_process_0~2_combout\,
-	datac => \ALT_INV_Add1~29_sumout\,
-	datad => \ALT_INV_P~23_combout\,
-	datae => \ALT_INV_Add4~29_sumout\,
-	combout => \P~29_combout\);
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_A[13]~input_o\,
+	datac => \ALT_INV_B[13]~input_o\,
+	datad => \ALT_INV_A[12]~input_o\,
+	datae => \ALT_INV_B[12]~input_o\,
+	dataf => \P4|ALT_INV_C~10_combout\,
+	combout => \P4|C~12_combout\);
 
-\Add5~25\ : cyclonev_lcell_comb
+\P9|Mux15~70\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add5~25_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~29_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~29_sumout\)) # (\inputB[2]~input_o\ & ((\P~29_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add5~22\ ))
--- \Add5~26\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~29_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~29_sumout\)) # (\inputB[2]~input_o\ & ((\P~29_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add5~22\ ))
+-- \P9|Mux15~70_combout\ = ( \P4|C~12_combout\ & ( !\negate~input_o\ $ (!\opcode[0]~input_o\ $ (!\A[14]~input_o\ $ (!\B[14]~input_o\))) ) ) # ( !\P4|C~12_combout\ & ( !\negate~input_o\ $ (!\A[14]~input_o\ $ (\B[14]~input_o\)) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0101101010100101011010011001011001011010101001010110100110010110",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~29_sumout\,
-	datad => \ALT_INV_P~29_combout\,
-	dataf => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add5~22\,
-	sumout => \Add5~25_sumout\,
-	cout => \Add5~26\);
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[14]~input_o\,
+	datad => \ALT_INV_B[14]~input_o\,
+	datae => \P4|ALT_INV_C~12_combout\,
+	combout => \P9|Mux15~70_combout\);
 
-\Add6~25\ : cyclonev_lcell_comb
+\P9|Mux15~71\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add6~25_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~29_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~29_sumout\)) # (\inputB[2]~input_o\ & ((\P~29_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add6~22\ ))
--- \Add6~26\ = CARRY(( (!\inputB[1]~input_o\ & (((\P~29_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~29_sumout\)) # (\inputB[2]~input_o\ & ((\P~29_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add6~22\ ))
+-- \P9|Mux15~71_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[12]~input_o\)))
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~29_sumout\,
-	datad => \ALT_INV_P~29_combout\,
-	dataf => \ALT_INV_Add0~25_sumout\,
-	cin => \Add6~22\,
-	sumout => \Add6~25_sumout\,
-	cout => \Add6~26\);
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[12]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~71_combout\);
 
-\P~30\ : cyclonev_lcell_comb
+\P8|Add13~29\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~30_combout\ = ( \Add6~25_sumout\ & ( ((!\process_0~1_combout\ & ((\P~29_combout\))) # (\process_0~1_combout\ & (\Add3~29_sumout\))) # (\process_0~4_combout\) ) ) # ( !\Add6~25_sumout\ & ( (!\process_0~4_combout\ & ((!\process_0~1_combout\ & 
--- ((\P~29_combout\))) # (\process_0~1_combout\ & (\Add3~29_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~1_combout\,
-	datab => \ALT_INV_process_0~4_combout\,
-	datac => \ALT_INV_Add3~29_sumout\,
-	datad => \ALT_INV_P~29_combout\,
-	datae => \ALT_INV_Add6~25_sumout\,
-	combout => \P~30_combout\);
-
-\Add7~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add7~21_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~30_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~25_sumout\)) # (\inputB[3]~input_o\ & ((\P~30_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add7~18\ ))
--- \Add7~22\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~30_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~25_sumout\)) # (\inputB[3]~input_o\ & ((\P~30_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add7~18\ ))
+-- \P8|Add13~29_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~41_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~29_sumout\)) # (\B[6]~input_o\ & ((\P8|P~41_combout\))))) ) + ( \A[7]~input_o\ ) + ( \P8|Add13~26\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3742,19 +6978,17 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~25_sumout\,
-	datad => \ALT_INV_P~30_combout\,
-	dataf => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add7~18\,
-	sumout => \Add7~21_sumout\,
-	cout => \Add7~22\);
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~29_sumout\,
+	datad => \P8|ALT_INV_P~41_combout\,
+	dataf => \ALT_INV_A[7]~input_o\,
+	cin => \P8|Add13~26\,
+	sumout => \P8|Add13~29_sumout\);
 
-\Add8~21\ : cyclonev_lcell_comb
+\P8|Add14~29\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add8~21_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~30_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~25_sumout\)) # (\inputB[3]~input_o\ & ((\P~30_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add8~18\ ))
--- \Add8~22\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~30_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~25_sumout\)) # (\inputB[3]~input_o\ & ((\P~30_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add8~18\ ))
+-- \P8|Add14~29_sumout\ = SUM(( (!\B[5]~input_o\ & (((\P8|P~41_combout\)))) # (\B[5]~input_o\ & ((!\B[6]~input_o\ & (\P8|Add11~29_sumout\)) # (\B[6]~input_o\ & ((\P8|P~41_combout\))))) ) + ( \P8|Add0~29_sumout\ ) + ( \P8|Add14~26\ ))
 
 -- pragma translate_off
 GENERIC MAP (
@@ -3763,1283 +6997,142 @@ GENERIC MAP (
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~25_sumout\,
-	datad => \ALT_INV_P~30_combout\,
-	dataf => \ALT_INV_Add0~21_sumout\,
-	cin => \Add8~18\,
-	sumout => \Add8~21_sumout\,
-	cout => \Add8~22\);
+	dataa => \ALT_INV_B[5]~input_o\,
+	datab => \ALT_INV_B[6]~input_o\,
+	datac => \P8|ALT_INV_Add11~29_sumout\,
+	datad => \P8|ALT_INV_P~41_combout\,
+	dataf => \P8|ALT_INV_Add0~29_sumout\,
+	cin => \P8|Add14~26\,
+	sumout => \P8|Add14~29_sumout\);
 
-\P~31\ : cyclonev_lcell_comb
+\P9|Mux15~72\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~31_combout\ = ( \Add8~21_sumout\ & ( ((!\process_0~3_combout\ & ((\P~30_combout\))) # (\process_0~3_combout\ & (\Add5~25_sumout\))) # (\process_0~6_combout\) ) ) # ( !\Add8~21_sumout\ & ( (!\process_0~6_combout\ & ((!\process_0~3_combout\ & 
--- ((\P~30_combout\))) # (\process_0~3_combout\ & (\Add5~25_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~3_combout\,
-	datab => \ALT_INV_process_0~6_combout\,
-	datac => \ALT_INV_Add5~25_sumout\,
-	datad => \ALT_INV_P~30_combout\,
-	datae => \ALT_INV_Add8~21_sumout\,
-	combout => \P~31_combout\);
-
-\Add9~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add9~17_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~31_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~21_sumout\)) # (\inputB[4]~input_o\ & ((\P~31_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add9~14\ ))
--- \Add9~18\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~31_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~21_sumout\)) # (\inputB[4]~input_o\ & ((\P~31_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add9~14\ ))
+-- \P9|Mux15~72_combout\ = ( \P8|Add14~29_sumout\ & ( (!\P9|Mux15~36_combout\ & (!\P9|Mux15~68_combout\ & ((!\P9|Mux15~35_combout\) # (!\P8|Add13~29_sumout\)))) ) ) # ( !\P8|Add14~29_sumout\ & ( (!\P9|Mux15~68_combout\ & ((!\P9|Mux15~35_combout\) # 
+-- (!\P8|Add13~29_sumout\))) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "1111000010100000110000001000000011110000101000001100000010000000",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~21_sumout\,
-	datad => \ALT_INV_P~31_combout\,
-	dataf => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add9~14\,
-	sumout => \Add9~17_sumout\,
-	cout => \Add9~18\);
+	dataa => \P9|ALT_INV_Mux15~35_combout\,
+	datab => \P9|ALT_INV_Mux15~36_combout\,
+	datac => \P9|ALT_INV_Mux15~68_combout\,
+	datad => \P8|ALT_INV_Add13~29_sumout\,
+	datae => \P8|ALT_INV_Add14~29_sumout\,
+	combout => \P9|Mux15~72_combout\);
 
-\Add10~17\ : cyclonev_lcell_comb
+\P9|Mux1~0\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add10~17_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~31_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~21_sumout\)) # (\inputB[4]~input_o\ & ((\P~31_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add10~14\ ))
--- \Add10~18\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~31_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~21_sumout\)) # (\inputB[4]~input_o\ & ((\P~31_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add10~14\ ))
+-- \P9|Mux1~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~72_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~71_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~70_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~69_combout\ ) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~21_sumout\,
-	datad => \ALT_INV_P~31_combout\,
-	dataf => \ALT_INV_Add0~17_sumout\,
-	cin => \Add10~14\,
-	sumout => \Add10~17_sumout\,
-	cout => \Add10~18\);
+	dataa => \P9|ALT_INV_Mux15~69_combout\,
+	datab => \P9|ALT_INV_Mux15~70_combout\,
+	datac => \P9|ALT_INV_Mux15~71_combout\,
+	datad => \P9|ALT_INV_Mux15~72_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux1~0_combout\);
 
-\P~32\ : cyclonev_lcell_comb
+\P9|Mux15~73\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~32_combout\ = ( \Add10~17_sumout\ & ( ((!\process_0~5_combout\ & ((\P~31_combout\))) # (\process_0~5_combout\ & (\Add7~21_sumout\))) # (\process_0~8_combout\) ) ) # ( !\Add10~17_sumout\ & ( (!\process_0~8_combout\ & ((!\process_0~5_combout\ & 
--- ((\P~31_combout\))) # (\process_0~5_combout\ & (\Add7~21_sumout\)))) ) )
+-- \P9|Mux15~73_combout\ = !\negate~input_o\ $ (((!\opcode[0]~input_o\ & ((!\A[15]~input_o\) # (!\B[15]~input_o\))) # (\opcode[0]~input_o\ & (!\A[15]~input_o\ & !\B[15]~input_o\))))
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	lut_mask => "0101011001101010010101100110101001010110011010100101011001101010",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~5_combout\,
-	datab => \ALT_INV_process_0~8_combout\,
-	datac => \ALT_INV_Add7~21_sumout\,
-	datad => \ALT_INV_P~31_combout\,
-	datae => \ALT_INV_Add10~17_sumout\,
-	combout => \P~32_combout\);
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[15]~input_o\,
+	datad => \ALT_INV_B[15]~input_o\,
+	combout => \P9|Mux15~73_combout\);
 
-\Add11~13\ : cyclonev_lcell_comb
+\P5|LessThan0~7\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add11~13_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~32_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~17_sumout\)) # (\inputB[5]~input_o\ & ((\P~32_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add11~10\ ))
--- \Add11~14\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~32_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~17_sumout\)) # (\inputB[5]~input_o\ & ((\P~32_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add11~10\ ))
+-- \P5|LessThan0~7_combout\ = !\A[15]~input_o\ $ (!\B[15]~input_o\)
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0110011001100110011001100110011001100110011001100110011001100110",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~17_sumout\,
-	datad => \ALT_INV_P~32_combout\,
-	dataf => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add11~10\,
-	sumout => \Add11~13_sumout\,
-	cout => \Add11~14\);
+	dataa => \ALT_INV_A[15]~input_o\,
+	datab => \ALT_INV_B[15]~input_o\,
+	combout => \P5|LessThan0~7_combout\);
 
-\Add12~13\ : cyclonev_lcell_comb
+\P9|Mux15~74\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add12~13_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~32_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~17_sumout\)) # (\inputB[5]~input_o\ & ((\P~32_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add12~10\ ))
--- \Add12~14\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~32_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~17_sumout\)) # (\inputB[5]~input_o\ & ((\P~32_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add12~10\ ))
+-- \P9|Mux15~74_combout\ = ( \P5|LessThan0~7_combout\ & ( \P4|C~12_combout\ & ( (!\opcode[0]~input_o\ & (!\negate~input_o\)) # (\opcode[0]~input_o\ & ((!\A[14]~input_o\ & ((!\B[14]~input_o\))) # (\A[14]~input_o\ & (\negate~input_o\)))) ) ) ) # ( 
+-- !\P5|LessThan0~7_combout\ & ( \P4|C~12_combout\ & ( (!\opcode[0]~input_o\ & (\negate~input_o\)) # (\opcode[0]~input_o\ & ((!\A[14]~input_o\ & ((\B[14]~input_o\))) # (\A[14]~input_o\ & (!\negate~input_o\)))) ) ) ) # ( \P5|LessThan0~7_combout\ & ( 
+-- !\P4|C~12_combout\ & ( (!\opcode[0]~input_o\ & (!\negate~input_o\)) # (\opcode[0]~input_o\ & ((!\A[14]~input_o\ & (!\negate~input_o\)) # (\A[14]~input_o\ & ((!\B[14]~input_o\))))) ) ) ) # ( !\P5|LessThan0~7_combout\ & ( !\P4|C~12_combout\ & ( 
+-- (!\opcode[0]~input_o\ & (\negate~input_o\)) # (\opcode[0]~input_o\ & ((!\A[14]~input_o\ & (\negate~input_o\)) # (\A[14]~input_o\ & ((\B[14]~input_o\))))) ) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0101010001010111101010111010100001000110011101101011100110001001",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~17_sumout\,
-	datad => \ALT_INV_P~32_combout\,
-	dataf => \ALT_INV_Add0~13_sumout\,
-	cin => \Add12~10\,
-	sumout => \Add12~13_sumout\,
-	cout => \Add12~14\);
+	dataa => \ALT_INV_negate~input_o\,
+	datab => \ALT_INV_opcode[0]~input_o\,
+	datac => \ALT_INV_A[14]~input_o\,
+	datad => \ALT_INV_B[14]~input_o\,
+	datae => \P5|ALT_INV_LessThan0~7_combout\,
+	dataf => \P4|ALT_INV_C~12_combout\,
+	combout => \P9|Mux15~74_combout\);
 
-\P~52\ : cyclonev_lcell_comb
+\P9|Mux15~75\ : cyclonev_lcell_comb
 -- Equation(s):
--- \P~52_combout\ = ( \Add12~13_sumout\ & ( ((!\process_0~7_combout\ & ((\P~32_combout\))) # (\process_0~7_combout\ & (\Add9~17_sumout\))) # (\process_0~9_combout\) ) ) # ( !\Add12~13_sumout\ & ( (!\process_0~9_combout\ & ((!\process_0~7_combout\ & 
--- ((\P~32_combout\))) # (\process_0~7_combout\ & (\Add9~17_sumout\)))) ) )
+-- \P9|Mux15~75_combout\ = (!\P9|Mux15~2_combout\ & ((!\opcode[0]~input_o\) # (!\A[13]~input_o\)))
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
+	lut_mask => "1110000011100000111000001110000011100000111000001110000011100000",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_process_0~7_combout\,
-	datab => \ALT_INV_process_0~9_combout\,
-	datac => \ALT_INV_Add9~17_sumout\,
-	datad => \ALT_INV_P~32_combout\,
-	datae => \ALT_INV_Add12~13_sumout\,
-	combout => \P~52_combout\);
+	dataa => \ALT_INV_opcode[0]~input_o\,
+	datab => \ALT_INV_A[13]~input_o\,
+	datac => \P9|ALT_INV_Mux15~2_combout\,
+	combout => \P9|Mux15~75_combout\);
 
-\Add14~9\ : cyclonev_lcell_comb
+\P9|Mux0~0\ : cyclonev_lcell_comb
 -- Equation(s):
--- \Add14~9_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~52_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~13_sumout\)) # (\inputB[6]~input_o\ & ((\P~52_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add14~6\ ))
--- \Add14~10\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~52_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~13_sumout\)) # (\inputB[6]~input_o\ & ((\P~52_combout\))))) ) + ( \Add0~9_sumout\ ) + ( \Add14~6\ ))
+-- \P9|Mux0~0_combout\ = ( \opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~72_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( \opcode[2]~input_o\ & ( !\P9|Mux15~75_combout\ ) ) ) # ( \opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( 
+-- \P9|Mux15~74_combout\ ) ) ) # ( !\opcode[1]~input_o\ & ( !\opcode[2]~input_o\ & ( \P9|Mux15~73_combout\ ) ) )
 
 -- pragma translate_off
 GENERIC MAP (
 	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
+	lut_mask => "0101010101010101001100110011001111110000111100001111111100000000",
 	shared_arith => "off")
 -- pragma translate_on
 PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~13_sumout\,
-	datad => \ALT_INV_P~52_combout\,
-	dataf => \ALT_INV_Add0~9_sumout\,
-	cin => \Add14~6\,
-	sumout => \Add14~9_sumout\,
-	cout => \Add14~10\);
-
-\P~33\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~33_combout\ = ( \P~32_combout\ & ( \Add12~13_sumout\ & ( ((!\inputB[5]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~17_sumout\)))) # (\inputB[6]~input_o\) ) ) ) # ( !\P~32_combout\ & ( \Add12~13_sumout\ & ( (!\inputB[5]~input_o\ & (((\inputB[4]~input_o\ 
--- & \Add9~17_sumout\)) # (\inputB[6]~input_o\))) ) ) ) # ( \P~32_combout\ & ( !\Add12~13_sumout\ & ( (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~17_sumout\)))) # (\inputB[5]~input_o\ & (((\inputB[6]~input_o\)))) ) ) ) # 
--- ( !\P~32_combout\ & ( !\Add12~13_sumout\ & ( (\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & \Add9~17_sumout\))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000001000000100000111100001100001100010011001000111111001111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_inputB[6]~input_o\,
-	datad => \ALT_INV_Add9~17_sumout\,
-	datae => \ALT_INV_P~32_combout\,
-	dataf => \ALT_INV_Add12~13_sumout\,
-	combout => \P~33_combout\);
-
-\Add13~9\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~9_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~52_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~13_sumout\)) # (\inputB[6]~input_o\ & ((\P~52_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add13~6\ ))
--- \Add13~10\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~52_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~13_sumout\)) # (\inputB[6]~input_o\ & ((\P~52_combout\))))) ) + ( \inputA[2]~input_o\ ) + ( \Add13~6\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~13_sumout\,
-	datad => \ALT_INV_P~52_combout\,
-	dataf => \ALT_INV_inputA[2]~input_o\,
-	cin => \Add13~6\,
-	sumout => \Add13~9_sumout\,
-	cout => \Add13~10\);
-
-\P~64\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~64_combout\ = ( !\inputB[7]~input_o\ & ( (!\inputB[6]~input_o\ & ((((\Add11~13_sumout\ & \inputB[5]~input_o\)) # (\P~33_combout\)))) # (\inputB[6]~input_o\ & ((((\Add13~9_sumout\))))) ) ) # ( \inputB[7]~input_o\ & ( (((!\inputB[6]~input_o\ & 
--- (\Add14~9_sumout\)) # (\inputB[6]~input_o\ & ((\P~33_combout\))))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "on",
-	lut_mask => "0001000111111111000011110000111100001111000011110000000011111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_Add11~13_sumout\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add14~9_sumout\,
-	datad => \ALT_INV_P~33_combout\,
-	datae => \ALT_INV_inputB[7]~input_o\,
-	dataf => \ALT_INV_inputB[6]~input_o\,
-	datag => \ALT_INV_Add13~9_sumout\,
-	combout => \P~64_combout\);
-
-\Add5~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add5~29_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~29_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~29_sumout\)) # (\inputB[2]~input_o\ & ((\P~29_combout\))))) ) + ( \inputA[7]~input_o\ ) + ( \Add5~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~29_sumout\,
-	datad => \ALT_INV_P~29_combout\,
-	dataf => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add5~26\,
-	sumout => \Add5~29_sumout\);
-
-\Add6~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add6~29_sumout\ = SUM(( (!\inputB[1]~input_o\ & (((\P~29_combout\)))) # (\inputB[1]~input_o\ & ((!\inputB[2]~input_o\ & (\Add3~29_sumout\)) # (\inputB[2]~input_o\ & ((\P~29_combout\))))) ) + ( \Add0~29_sumout\ ) + ( \Add6~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[1]~input_o\,
-	datab => \ALT_INV_inputB[2]~input_o\,
-	datac => \ALT_INV_Add3~29_sumout\,
-	datad => \ALT_INV_P~29_combout\,
-	dataf => \ALT_INV_Add0~29_sumout\,
-	cin => \Add6~26\,
-	sumout => \Add6~29_sumout\);
-
-\P~34\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~34_combout\ = ( \Add6~29_sumout\ & ( ((!\process_0~1_combout\ & ((\P~29_combout\))) # (\process_0~1_combout\ & (\Add3~29_sumout\))) # (\process_0~4_combout\) ) ) # ( !\Add6~29_sumout\ & ( (!\process_0~4_combout\ & ((!\process_0~1_combout\ & 
--- ((\P~29_combout\))) # (\process_0~1_combout\ & (\Add3~29_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~1_combout\,
-	datab => \ALT_INV_process_0~4_combout\,
-	datac => \ALT_INV_Add3~29_sumout\,
-	datad => \ALT_INV_P~29_combout\,
-	datae => \ALT_INV_Add6~29_sumout\,
-	combout => \P~34_combout\);
-
-\Add7~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add7~25_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~34_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~29_sumout\)) # (\inputB[3]~input_o\ & ((\P~34_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add7~22\ ))
--- \Add7~26\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~34_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~29_sumout\)) # (\inputB[3]~input_o\ & ((\P~34_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add7~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~29_sumout\,
-	datad => \ALT_INV_P~34_combout\,
-	dataf => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add7~22\,
-	sumout => \Add7~25_sumout\,
-	cout => \Add7~26\);
-
-\Add8~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add8~25_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~34_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~29_sumout\)) # (\inputB[3]~input_o\ & ((\P~34_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add8~22\ ))
--- \Add8~26\ = CARRY(( (!\inputB[2]~input_o\ & (((\P~34_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~29_sumout\)) # (\inputB[3]~input_o\ & ((\P~34_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add8~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~29_sumout\,
-	datad => \ALT_INV_P~34_combout\,
-	dataf => \ALT_INV_Add0~25_sumout\,
-	cin => \Add8~22\,
-	sumout => \Add8~25_sumout\,
-	cout => \Add8~26\);
-
-\P~35\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~35_combout\ = ( \Add8~25_sumout\ & ( ((!\process_0~3_combout\ & ((\P~34_combout\))) # (\process_0~3_combout\ & (\Add5~29_sumout\))) # (\process_0~6_combout\) ) ) # ( !\Add8~25_sumout\ & ( (!\process_0~6_combout\ & ((!\process_0~3_combout\ & 
--- ((\P~34_combout\))) # (\process_0~3_combout\ & (\Add5~29_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~3_combout\,
-	datab => \ALT_INV_process_0~6_combout\,
-	datac => \ALT_INV_Add5~29_sumout\,
-	datad => \ALT_INV_P~34_combout\,
-	datae => \ALT_INV_Add8~25_sumout\,
-	combout => \P~35_combout\);
-
-\Add9~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add9~21_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~35_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~25_sumout\)) # (\inputB[4]~input_o\ & ((\P~35_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add9~18\ ))
--- \Add9~22\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~35_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~25_sumout\)) # (\inputB[4]~input_o\ & ((\P~35_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add9~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~25_sumout\,
-	datad => \ALT_INV_P~35_combout\,
-	dataf => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add9~18\,
-	sumout => \Add9~21_sumout\,
-	cout => \Add9~22\);
-
-\Add10~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add10~21_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~35_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~25_sumout\)) # (\inputB[4]~input_o\ & ((\P~35_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add10~18\ ))
--- \Add10~22\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~35_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~25_sumout\)) # (\inputB[4]~input_o\ & ((\P~35_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add10~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~25_sumout\,
-	datad => \ALT_INV_P~35_combout\,
-	dataf => \ALT_INV_Add0~21_sumout\,
-	cin => \Add10~18\,
-	sumout => \Add10~21_sumout\,
-	cout => \Add10~22\);
-
-\P~36\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~36_combout\ = ( \Add10~21_sumout\ & ( ((!\process_0~5_combout\ & ((\P~35_combout\))) # (\process_0~5_combout\ & (\Add7~25_sumout\))) # (\process_0~8_combout\) ) ) # ( !\Add10~21_sumout\ & ( (!\process_0~8_combout\ & ((!\process_0~5_combout\ & 
--- ((\P~35_combout\))) # (\process_0~5_combout\ & (\Add7~25_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~5_combout\,
-	datab => \ALT_INV_process_0~8_combout\,
-	datac => \ALT_INV_Add7~25_sumout\,
-	datad => \ALT_INV_P~35_combout\,
-	datae => \ALT_INV_Add10~21_sumout\,
-	combout => \P~36_combout\);
-
-\Add11~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add11~17_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~36_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~21_sumout\)) # (\inputB[5]~input_o\ & ((\P~36_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add11~14\ ))
--- \Add11~18\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~36_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~21_sumout\)) # (\inputB[5]~input_o\ & ((\P~36_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add11~14\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~21_sumout\,
-	datad => \ALT_INV_P~36_combout\,
-	dataf => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add11~14\,
-	sumout => \Add11~17_sumout\,
-	cout => \Add11~18\);
-
-\Add12~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add12~17_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~36_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~21_sumout\)) # (\inputB[5]~input_o\ & ((\P~36_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add12~14\ ))
--- \Add12~18\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~36_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~21_sumout\)) # (\inputB[5]~input_o\ & ((\P~36_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add12~14\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~21_sumout\,
-	datad => \ALT_INV_P~36_combout\,
-	dataf => \ALT_INV_Add0~17_sumout\,
-	cin => \Add12~14\,
-	sumout => \Add12~17_sumout\,
-	cout => \Add12~18\);
-
-\P~53\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~53_combout\ = ( \Add12~17_sumout\ & ( ((!\process_0~7_combout\ & ((\P~36_combout\))) # (\process_0~7_combout\ & (\Add9~21_sumout\))) # (\process_0~9_combout\) ) ) # ( !\Add12~17_sumout\ & ( (!\process_0~9_combout\ & ((!\process_0~7_combout\ & 
--- ((\P~36_combout\))) # (\process_0~7_combout\ & (\Add9~21_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~7_combout\,
-	datab => \ALT_INV_process_0~9_combout\,
-	datac => \ALT_INV_Add9~21_sumout\,
-	datad => \ALT_INV_P~36_combout\,
-	datae => \ALT_INV_Add12~17_sumout\,
-	combout => \P~53_combout\);
-
-\Add14~13\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add14~13_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~53_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~17_sumout\)) # (\inputB[6]~input_o\ & ((\P~53_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add14~10\ ))
--- \Add14~14\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~53_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~17_sumout\)) # (\inputB[6]~input_o\ & ((\P~53_combout\))))) ) + ( \Add0~13_sumout\ ) + ( \Add14~10\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~17_sumout\,
-	datad => \ALT_INV_P~53_combout\,
-	dataf => \ALT_INV_Add0~13_sumout\,
-	cin => \Add14~10\,
-	sumout => \Add14~13_sumout\,
-	cout => \Add14~14\);
-
-\P~37\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~37_combout\ = ( \P~36_combout\ & ( \Add12~17_sumout\ & ( ((!\inputB[5]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~21_sumout\)))) # (\inputB[6]~input_o\) ) ) ) # ( !\P~36_combout\ & ( \Add12~17_sumout\ & ( (!\inputB[5]~input_o\ & (((\inputB[4]~input_o\ 
--- & \Add9~21_sumout\)) # (\inputB[6]~input_o\))) ) ) ) # ( \P~36_combout\ & ( !\Add12~17_sumout\ & ( (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & ((!\inputB[4]~input_o\) # (\Add9~21_sumout\)))) # (\inputB[5]~input_o\ & (((\inputB[6]~input_o\)))) ) ) ) # 
--- ( !\P~36_combout\ & ( !\Add12~17_sumout\ & ( (\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & \Add9~21_sumout\))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000001000000100000111100001100001100010011001000111111001111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_inputB[6]~input_o\,
-	datad => \ALT_INV_Add9~21_sumout\,
-	datae => \ALT_INV_P~36_combout\,
-	dataf => \ALT_INV_Add12~17_sumout\,
-	combout => \P~37_combout\);
-
-\Add13~13\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~13_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~53_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~17_sumout\)) # (\inputB[6]~input_o\ & ((\P~53_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add13~10\ ))
--- \Add13~14\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~53_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~17_sumout\)) # (\inputB[6]~input_o\ & ((\P~53_combout\))))) ) + ( \inputA[3]~input_o\ ) + ( \Add13~10\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~17_sumout\,
-	datad => \ALT_INV_P~53_combout\,
-	dataf => \ALT_INV_inputA[3]~input_o\,
-	cin => \Add13~10\,
-	sumout => \Add13~13_sumout\,
-	cout => \Add13~14\);
-
-\P~60\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~60_combout\ = ( !\inputB[7]~input_o\ & ( (!\inputB[6]~input_o\ & ((((\Add11~17_sumout\ & \inputB[5]~input_o\)) # (\P~37_combout\)))) # (\inputB[6]~input_o\ & ((((\Add13~13_sumout\))))) ) ) # ( \inputB[7]~input_o\ & ( (((!\inputB[6]~input_o\ & 
--- (\Add14~13_sumout\)) # (\inputB[6]~input_o\ & ((\P~37_combout\))))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "on",
-	lut_mask => "0001000111111111000011110000111100001111000011110000000011111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_Add11~17_sumout\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add14~13_sumout\,
-	datad => \ALT_INV_P~37_combout\,
-	datae => \ALT_INV_inputB[7]~input_o\,
-	dataf => \ALT_INV_inputB[6]~input_o\,
-	datag => \ALT_INV_Add13~13_sumout\,
-	combout => \P~60_combout\);
-
-\Add7~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add7~29_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~34_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~29_sumout\)) # (\inputB[3]~input_o\ & ((\P~34_combout\))))) ) + ( \inputA[7]~input_o\ ) + ( \Add7~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~29_sumout\,
-	datad => \ALT_INV_P~34_combout\,
-	dataf => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add7~26\,
-	sumout => \Add7~29_sumout\);
-
-\Add8~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add8~29_sumout\ = SUM(( (!\inputB[2]~input_o\ & (((\P~34_combout\)))) # (\inputB[2]~input_o\ & ((!\inputB[3]~input_o\ & (\Add5~29_sumout\)) # (\inputB[3]~input_o\ & ((\P~34_combout\))))) ) + ( \Add0~29_sumout\ ) + ( \Add8~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_Add5~29_sumout\,
-	datad => \ALT_INV_P~34_combout\,
-	dataf => \ALT_INV_Add0~29_sumout\,
-	cin => \Add8~26\,
-	sumout => \Add8~29_sumout\);
-
-\P~56\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~56_combout\ = ( \Add8~29_sumout\ & ( ((!\process_0~3_combout\ & ((\P~34_combout\))) # (\process_0~3_combout\ & (\Add5~29_sumout\))) # (\process_0~6_combout\) ) ) # ( !\Add8~29_sumout\ & ( (!\process_0~6_combout\ & ((!\process_0~3_combout\ & 
--- ((\P~34_combout\))) # (\process_0~3_combout\ & (\Add5~29_sumout\)))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010010001100001101111011111100000100100011000011011110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~3_combout\,
-	datab => \ALT_INV_process_0~6_combout\,
-	datac => \ALT_INV_Add5~29_sumout\,
-	datad => \ALT_INV_P~34_combout\,
-	datae => \ALT_INV_Add8~29_sumout\,
-	combout => \P~56_combout\);
-
-\Add9~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add9~25_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~56_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~29_sumout\)) # (\inputB[4]~input_o\ & ((\P~56_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add9~22\ ))
--- \Add9~26\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~56_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~29_sumout\)) # (\inputB[4]~input_o\ & ((\P~56_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add9~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~29_sumout\,
-	datad => \ALT_INV_P~56_combout\,
-	dataf => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add9~22\,
-	sumout => \Add9~25_sumout\,
-	cout => \Add9~26\);
-
-\Add10~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add10~25_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~56_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~29_sumout\)) # (\inputB[4]~input_o\ & ((\P~56_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add10~22\ ))
--- \Add10~26\ = CARRY(( (!\inputB[3]~input_o\ & (((\P~56_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~29_sumout\)) # (\inputB[4]~input_o\ & ((\P~56_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add10~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~29_sumout\,
-	datad => \ALT_INV_P~56_combout\,
-	dataf => \ALT_INV_Add0~25_sumout\,
-	cin => \Add10~22\,
-	sumout => \Add10~25_sumout\,
-	cout => \Add10~26\);
-
-\P~38\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~38_combout\ = (\process_0~5_combout\ & \Add7~29_sumout\)
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0001000100010001000100010001000100010001000100010001000100010001",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~5_combout\,
-	datab => \ALT_INV_Add7~29_sumout\,
-	combout => \P~38_combout\);
-
-\P~39\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~39_combout\ = ( \P~34_combout\ & ( \Add8~29_sumout\ & ( ((!\inputB[3]~input_o\ & ((!\inputB[2]~input_o\) # (\Add5~29_sumout\)))) # (\inputB[4]~input_o\) ) ) ) # ( !\P~34_combout\ & ( \Add8~29_sumout\ & ( (!\inputB[3]~input_o\ & (((\inputB[2]~input_o\ & 
--- \Add5~29_sumout\)) # (\inputB[4]~input_o\))) ) ) ) # ( \P~34_combout\ & ( !\Add8~29_sumout\ & ( (!\inputB[3]~input_o\ & (!\inputB[4]~input_o\ & ((!\inputB[2]~input_o\) # (\Add5~29_sumout\)))) # (\inputB[3]~input_o\ & (((\inputB[4]~input_o\)))) ) ) ) # ( 
--- !\P~34_combout\ & ( !\Add8~29_sumout\ & ( (\inputB[2]~input_o\ & (!\inputB[3]~input_o\ & (!\inputB[4]~input_o\ & \Add5~29_sumout\))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000001000000100000111100001100001100010011001000111111001111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[2]~input_o\,
-	datab => \ALT_INV_inputB[3]~input_o\,
-	datac => \ALT_INV_inputB[4]~input_o\,
-	datad => \ALT_INV_Add5~29_sumout\,
-	datae => \ALT_INV_P~34_combout\,
-	dataf => \ALT_INV_Add8~29_sumout\,
-	combout => \P~39_combout\);
-
-\P~55\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~55_combout\ = (!\process_0~8_combout\ & (((\P~39_combout\) # (\P~38_combout\)))) # (\process_0~8_combout\ & (\Add10~25_sumout\))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0001101110111011000110111011101100011011101110110001101110111011",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~8_combout\,
-	datab => \ALT_INV_Add10~25_sumout\,
-	datac => \ALT_INV_P~38_combout\,
-	datad => \ALT_INV_P~39_combout\,
-	combout => \P~55_combout\);
-
-\Add11~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add11~21_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~55_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~25_sumout\)) # (\inputB[5]~input_o\ & ((\P~55_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add11~18\ ))
--- \Add11~22\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~55_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~25_sumout\)) # (\inputB[5]~input_o\ & ((\P~55_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add11~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~25_sumout\,
-	datad => \ALT_INV_P~55_combout\,
-	dataf => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add11~18\,
-	sumout => \Add11~21_sumout\,
-	cout => \Add11~22\);
-
-\Add12~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add12~21_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~55_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~25_sumout\)) # (\inputB[5]~input_o\ & ((\P~55_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add12~18\ ))
--- \Add12~22\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~55_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~25_sumout\)) # (\inputB[5]~input_o\ & ((\P~55_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add12~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~25_sumout\,
-	datad => \ALT_INV_P~55_combout\,
-	dataf => \ALT_INV_Add0~21_sumout\,
-	cin => \Add12~18\,
-	sumout => \Add12~21_sumout\,
-	cout => \Add12~22\);
-
-\P~40\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~40_combout\ = ( \P~38_combout\ & ( \P~39_combout\ & ( (!\inputB[4]~input_o\ & (\inputB[5]~input_o\ & ((!\Add10~25_sumout\)))) # (\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & (!\Add9~25_sumout\))) ) ) ) # ( !\P~38_combout\ & ( \P~39_combout\ & ( 
--- (!\inputB[4]~input_o\ & (\inputB[5]~input_o\ & ((!\Add10~25_sumout\)))) # (\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & (!\Add9~25_sumout\))) ) ) ) # ( \P~38_combout\ & ( !\P~39_combout\ & ( (!\inputB[4]~input_o\ & (\inputB[5]~input_o\ & 
--- ((!\Add10~25_sumout\)))) # (\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & (!\Add9~25_sumout\))) ) ) ) # ( !\P~38_combout\ & ( !\P~39_combout\ & ( (!\inputB[4]~input_o\ & ((!\inputB[5]~input_o\) # ((!\Add10~25_sumout\)))) # (\inputB[4]~input_o\ & 
--- (((!\Add9~25_sumout\)) # (\inputB[5]~input_o\))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1111101111011001011000100100000001100010010000000110001001000000",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~25_sumout\,
-	datad => \ALT_INV_Add10~25_sumout\,
-	datae => \ALT_INV_P~38_combout\,
-	dataf => \ALT_INV_P~39_combout\,
-	combout => \P~40_combout\);
-
-\P~54\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~54_combout\ = (!\process_0~9_combout\ & ((!\P~40_combout\))) # (\process_0~9_combout\ & (\Add12~21_sumout\))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1011000110110001101100011011000110110001101100011011000110110001",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~9_combout\,
-	datab => \ALT_INV_Add12~21_sumout\,
-	datac => \ALT_INV_P~40_combout\,
-	combout => \P~54_combout\);
-
-\Add13~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~17_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~54_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~21_sumout\)) # (\inputB[6]~input_o\ & ((\P~54_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add13~14\ ))
--- \Add13~18\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~54_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~21_sumout\)) # (\inputB[6]~input_o\ & ((\P~54_combout\))))) ) + ( \inputA[4]~input_o\ ) + ( \Add13~14\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~21_sumout\,
-	datad => \ALT_INV_P~54_combout\,
-	dataf => \ALT_INV_inputA[4]~input_o\,
-	cin => \Add13~14\,
-	sumout => \Add13~17_sumout\,
-	cout => \Add13~18\);
-
-\Add14~17\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add14~17_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~54_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~21_sumout\)) # (\inputB[6]~input_o\ & ((\P~54_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add14~14\ ))
--- \Add14~18\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~54_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~21_sumout\)) # (\inputB[6]~input_o\ & ((\P~54_combout\))))) ) + ( \Add0~17_sumout\ ) + ( \Add14~14\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~21_sumout\,
-	datad => \ALT_INV_P~54_combout\,
-	dataf => \ALT_INV_Add0~17_sumout\,
-	cin => \Add14~14\,
-	sumout => \Add14~17_sumout\,
-	cout => \Add14~18\);
-
-\P~41\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~41_combout\ = ( \P~40_combout\ & ( (!\inputB[5]~input_o\ & (\inputB[6]~input_o\ & ((\Add12~21_sumout\)))) # (\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & (\Add11~21_sumout\))) ) ) # ( !\P~40_combout\ & ( (!\inputB[5]~input_o\ & ((!\inputB[6]~input_o\) 
--- # ((\Add12~21_sumout\)))) # (\inputB[5]~input_o\ & (((\Add11~21_sumout\)) # (\inputB[6]~input_o\))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1001110110111111000001000010011010011101101111110000010000100110",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~21_sumout\,
-	datad => \ALT_INV_Add12~21_sumout\,
-	datae => \ALT_INV_P~40_combout\,
-	combout => \P~41_combout\);
-
-\P~42\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~42_combout\ = ( \P~41_combout\ & ( (!\inputB[6]~input_o\ & ((!\inputB[7]~input_o\) # ((\Add14~17_sumout\)))) # (\inputB[6]~input_o\ & (((\Add13~17_sumout\)) # (\inputB[7]~input_o\))) ) ) # ( !\P~41_combout\ & ( (!\inputB[6]~input_o\ & 
--- (\inputB[7]~input_o\ & ((\Add14~17_sumout\)))) # (\inputB[6]~input_o\ & (!\inputB[7]~input_o\ & (\Add13~17_sumout\))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010000100110100111011011111100000100001001101001110110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[6]~input_o\,
-	datab => \ALT_INV_inputB[7]~input_o\,
-	datac => \ALT_INV_Add13~17_sumout\,
-	datad => \ALT_INV_Add14~17_sumout\,
-	datae => \ALT_INV_P~41_combout\,
-	combout => \P~42_combout\);
-
-\Add9~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add9~29_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~56_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~29_sumout\)) # (\inputB[4]~input_o\ & ((\P~56_combout\))))) ) + ( \inputA[7]~input_o\ ) + ( \Add9~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~29_sumout\,
-	datad => \ALT_INV_P~56_combout\,
-	dataf => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add9~26\,
-	sumout => \Add9~29_sumout\);
-
-\Add10~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add10~29_sumout\ = SUM(( (!\inputB[3]~input_o\ & (((\P~56_combout\)))) # (\inputB[3]~input_o\ & ((!\inputB[4]~input_o\ & (\Add7~29_sumout\)) # (\inputB[4]~input_o\ & ((\P~56_combout\))))) ) + ( \Add0~29_sumout\ ) + ( \Add10~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[3]~input_o\,
-	datab => \ALT_INV_inputB[4]~input_o\,
-	datac => \ALT_INV_Add7~29_sumout\,
-	datad => \ALT_INV_P~56_combout\,
-	dataf => \ALT_INV_Add0~29_sumout\,
-	cin => \Add10~26\,
-	sumout => \Add10~29_sumout\);
-
-\P~58\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~58_combout\ = (!\process_0~8_combout\ & (((\P~39_combout\)) # (\P~38_combout\))) # (\process_0~8_combout\ & (((\Add10~29_sumout\))))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0010101001111111001010100111111100101010011111110010101001111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~8_combout\,
-	datab => \ALT_INV_P~38_combout\,
-	datac => \ALT_INV_P~39_combout\,
-	datad => \ALT_INV_Add10~29_sumout\,
-	combout => \P~58_combout\);
-
-\Add11~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add11~25_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~58_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~29_sumout\)) # (\inputB[5]~input_o\ & ((\P~58_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add11~22\ ))
--- \Add11~26\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~58_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~29_sumout\)) # (\inputB[5]~input_o\ & ((\P~58_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add11~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~29_sumout\,
-	datad => \ALT_INV_P~58_combout\,
-	dataf => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add11~22\,
-	sumout => \Add11~25_sumout\,
-	cout => \Add11~26\);
-
-\Add12~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add12~25_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~58_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~29_sumout\)) # (\inputB[5]~input_o\ & ((\P~58_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add12~22\ ))
--- \Add12~26\ = CARRY(( (!\inputB[4]~input_o\ & (((\P~58_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~29_sumout\)) # (\inputB[5]~input_o\ & ((\P~58_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add12~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~29_sumout\,
-	datad => \ALT_INV_P~58_combout\,
-	dataf => \ALT_INV_Add0~25_sumout\,
-	cin => \Add12~22\,
-	sumout => \Add12~25_sumout\,
-	cout => \Add12~26\);
-
-\P~43\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~43_combout\ = ( \Add9~29_sumout\ & ( \Add10~29_sumout\ & ( (!\P~38_combout\ & (!\P~39_combout\ & (!\inputB[4]~input_o\ $ (\inputB[5]~input_o\)))) ) ) ) # ( !\Add9~29_sumout\ & ( \Add10~29_sumout\ & ( (!\inputB[4]~input_o\ & (!\inputB[5]~input_o\ & 
--- (!\P~38_combout\ & !\P~39_combout\))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\) # ((!\P~38_combout\ & !\P~39_combout\)))) ) ) ) # ( \Add9~29_sumout\ & ( !\Add10~29_sumout\ & ( (!\inputB[4]~input_o\ & (((!\P~38_combout\ & !\P~39_combout\)) # 
--- (\inputB[5]~input_o\))) # (\inputB[4]~input_o\ & (\inputB[5]~input_o\ & (!\P~38_combout\ & !\P~39_combout\))) ) ) ) # ( !\Add9~29_sumout\ & ( !\Add10~29_sumout\ & ( (!\P~38_combout\ & ((!\P~39_combout\) # (!\inputB[4]~input_o\ $ (!\inputB[5]~input_o\)))) 
--- # (\P~38_combout\ & (!\inputB[4]~input_o\ $ ((!\inputB[5]~input_o\)))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1111011001100110101100100010001011010100010001001001000000000000",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_P~38_combout\,
-	datad => \ALT_INV_P~39_combout\,
-	datae => \ALT_INV_Add9~29_sumout\,
-	dataf => \ALT_INV_Add10~29_sumout\,
-	combout => \P~43_combout\);
-
-\P~57\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~57_combout\ = (!\process_0~9_combout\ & ((!\P~43_combout\))) # (\process_0~9_combout\ & (\Add12~25_sumout\))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1011000110110001101100011011000110110001101100011011000110110001",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~9_combout\,
-	datab => \ALT_INV_Add12~25_sumout\,
-	datac => \ALT_INV_P~43_combout\,
-	combout => \P~57_combout\);
-
-\Add13~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~21_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~57_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~25_sumout\)) # (\inputB[6]~input_o\ & ((\P~57_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add13~18\ ))
--- \Add13~22\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~57_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~25_sumout\)) # (\inputB[6]~input_o\ & ((\P~57_combout\))))) ) + ( \inputA[5]~input_o\ ) + ( \Add13~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~25_sumout\,
-	datad => \ALT_INV_P~57_combout\,
-	dataf => \ALT_INV_inputA[5]~input_o\,
-	cin => \Add13~18\,
-	sumout => \Add13~21_sumout\,
-	cout => \Add13~22\);
-
-\Add14~21\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add14~21_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~57_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~25_sumout\)) # (\inputB[6]~input_o\ & ((\P~57_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add14~18\ ))
--- \Add14~22\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~57_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~25_sumout\)) # (\inputB[6]~input_o\ & ((\P~57_combout\))))) ) + ( \Add0~21_sumout\ ) + ( \Add14~18\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~25_sumout\,
-	datad => \ALT_INV_P~57_combout\,
-	dataf => \ALT_INV_Add0~21_sumout\,
-	cin => \Add14~18\,
-	sumout => \Add14~21_sumout\,
-	cout => \Add14~22\);
-
-\P~44\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~44_combout\ = ( \P~43_combout\ & ( (!\inputB[5]~input_o\ & (\inputB[6]~input_o\ & ((\Add12~25_sumout\)))) # (\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & (\Add11~25_sumout\))) ) ) # ( !\P~43_combout\ & ( (!\inputB[5]~input_o\ & ((!\inputB[6]~input_o\) 
--- # ((\Add12~25_sumout\)))) # (\inputB[5]~input_o\ & (((\Add11~25_sumout\)) # (\inputB[6]~input_o\))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1001110110111111000001000010011010011101101111110000010000100110",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~25_sumout\,
-	datad => \ALT_INV_Add12~25_sumout\,
-	datae => \ALT_INV_P~43_combout\,
-	combout => \P~44_combout\);
-
-\P~45\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~45_combout\ = ( \P~44_combout\ & ( (!\inputB[6]~input_o\ & ((!\inputB[7]~input_o\) # ((\Add14~21_sumout\)))) # (\inputB[6]~input_o\ & (((\Add13~21_sumout\)) # (\inputB[7]~input_o\))) ) ) # ( !\P~44_combout\ & ( (!\inputB[6]~input_o\ & 
--- (\inputB[7]~input_o\ & ((\Add14~21_sumout\)))) # (\inputB[6]~input_o\ & (!\inputB[7]~input_o\ & (\Add13~21_sumout\))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010000100110100111011011111100000100001001101001110110111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[6]~input_o\,
-	datab => \ALT_INV_inputB[7]~input_o\,
-	datac => \ALT_INV_Add13~21_sumout\,
-	datad => \ALT_INV_Add14~21_sumout\,
-	datae => \ALT_INV_P~44_combout\,
-	combout => \P~45_combout\);
-
-\Add11~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add11~29_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~58_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~29_sumout\)) # (\inputB[5]~input_o\ & ((\P~58_combout\))))) ) + ( \inputA[7]~input_o\ ) + ( \Add11~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~29_sumout\,
-	datad => \ALT_INV_P~58_combout\,
-	dataf => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add11~26\,
-	sumout => \Add11~29_sumout\);
-
-\Add12~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add12~29_sumout\ = SUM(( (!\inputB[4]~input_o\ & (((\P~58_combout\)))) # (\inputB[4]~input_o\ & ((!\inputB[5]~input_o\ & (\Add9~29_sumout\)) # (\inputB[5]~input_o\ & ((\P~58_combout\))))) ) + ( \Add0~29_sumout\ ) + ( \Add12~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[4]~input_o\,
-	datab => \ALT_INV_inputB[5]~input_o\,
-	datac => \ALT_INV_Add9~29_sumout\,
-	datad => \ALT_INV_P~58_combout\,
-	dataf => \ALT_INV_Add0~29_sumout\,
-	cin => \Add12~26\,
-	sumout => \Add12~29_sumout\);
-
-\P~59\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~59_combout\ = (!\process_0~9_combout\ & (!\P~43_combout\)) # (\process_0~9_combout\ & ((\Add12~29_sumout\)))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1000110110001101100011011000110110001101100011011000110110001101",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_process_0~9_combout\,
-	datab => \ALT_INV_P~43_combout\,
-	datac => \ALT_INV_Add12~29_sumout\,
-	combout => \P~59_combout\);
-
-\Add13~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~25_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~59_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~29_sumout\)) # (\inputB[6]~input_o\ & ((\P~59_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add13~22\ ))
--- \Add13~26\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~59_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~29_sumout\)) # (\inputB[6]~input_o\ & ((\P~59_combout\))))) ) + ( \inputA[6]~input_o\ ) + ( \Add13~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~29_sumout\,
-	datad => \ALT_INV_P~59_combout\,
-	dataf => \ALT_INV_inputA[6]~input_o\,
-	cin => \Add13~22\,
-	sumout => \Add13~25_sumout\,
-	cout => \Add13~26\);
-
-\Add14~25\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add14~25_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~59_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~29_sumout\)) # (\inputB[6]~input_o\ & ((\P~59_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add14~22\ ))
--- \Add14~26\ = CARRY(( (!\inputB[5]~input_o\ & (((\P~59_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~29_sumout\)) # (\inputB[6]~input_o\ & ((\P~59_combout\))))) ) + ( \Add0~25_sumout\ ) + ( \Add14~22\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~29_sumout\,
-	datad => \ALT_INV_P~59_combout\,
-	dataf => \ALT_INV_Add0~25_sumout\,
-	cin => \Add14~22\,
-	sumout => \Add14~25_sumout\,
-	cout => \Add14~26\);
-
-\P~46\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~46_combout\ = ( \Add11~29_sumout\ & ( \Add12~29_sumout\ & ( (!\inputB[6]~input_o\ & (!\inputB[7]~input_o\ & ((!\P~43_combout\) # (\inputB[5]~input_o\)))) # (\inputB[6]~input_o\ & (\inputB[7]~input_o\ & ((!\inputB[5]~input_o\) # (!\P~43_combout\)))) ) ) 
--- ) # ( !\Add11~29_sumout\ & ( \Add12~29_sumout\ & ( (!\inputB[6]~input_o\ & (!\inputB[5]~input_o\ & (!\inputB[7]~input_o\ & !\P~43_combout\))) # (\inputB[6]~input_o\ & (\inputB[7]~input_o\ & ((!\inputB[5]~input_o\) # (!\P~43_combout\)))) ) ) ) # ( 
--- \Add11~29_sumout\ & ( !\Add12~29_sumout\ & ( (!\inputB[6]~input_o\ & (!\inputB[7]~input_o\ & ((!\P~43_combout\) # (\inputB[5]~input_o\)))) # (\inputB[6]~input_o\ & (\inputB[5]~input_o\ & (\inputB[7]~input_o\ & !\P~43_combout\))) ) ) ) # ( 
--- !\Add11~29_sumout\ & ( !\Add12~29_sumout\ & ( (!\P~43_combout\ & ((!\inputB[5]~input_o\ & (!\inputB[6]~input_o\ & !\inputB[7]~input_o\)) # (\inputB[5]~input_o\ & (\inputB[6]~input_o\ & \inputB[7]~input_o\)))) ) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "1000000100000000110000010100000010000011000000101100001101000010",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_inputB[7]~input_o\,
-	datad => \ALT_INV_P~43_combout\,
-	datae => \ALT_INV_Add11~29_sumout\,
-	dataf => \ALT_INV_Add12~29_sumout\,
-	combout => \P~46_combout\);
-
-\P~47\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~47_combout\ = ( \P~46_combout\ ) # ( !\P~46_combout\ & ( (!\inputB[6]~input_o\ & (\inputB[7]~input_o\ & ((\Add14~25_sumout\)))) # (\inputB[6]~input_o\ & (!\inputB[7]~input_o\ & (\Add13~25_sumout\))) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000010000100110111111111111111100000100001001101111111111111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[6]~input_o\,
-	datab => \ALT_INV_inputB[7]~input_o\,
-	datac => \ALT_INV_Add13~25_sumout\,
-	datad => \ALT_INV_Add14~25_sumout\,
-	datae => \ALT_INV_P~46_combout\,
-	combout => \P~47_combout\);
-
-\Add13~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add13~29_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~59_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~29_sumout\)) # (\inputB[6]~input_o\ & ((\P~59_combout\))))) ) + ( \inputA[7]~input_o\ ) + ( \Add13~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~29_sumout\,
-	datad => \ALT_INV_P~59_combout\,
-	dataf => \ALT_INV_inputA[7]~input_o\,
-	cin => \Add13~26\,
-	sumout => \Add13~29_sumout\);
-
-\Add14~29\ : cyclonev_lcell_comb
--- Equation(s):
--- \Add14~29_sumout\ = SUM(( (!\inputB[5]~input_o\ & (((\P~59_combout\)))) # (\inputB[5]~input_o\ & ((!\inputB[6]~input_o\ & (\Add11~29_sumout\)) # (\inputB[6]~input_o\ & ((\P~59_combout\))))) ) + ( \Add0~29_sumout\ ) + ( \Add14~26\ ))
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000000000000000111111110000000000000000000000000000010010111111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[5]~input_o\,
-	datab => \ALT_INV_inputB[6]~input_o\,
-	datac => \ALT_INV_Add11~29_sumout\,
-	datad => \ALT_INV_P~59_combout\,
-	dataf => \ALT_INV_Add0~29_sumout\,
-	cin => \Add14~26\,
-	sumout => \Add14~29_sumout\);
-
-\P~48\ : cyclonev_lcell_comb
--- Equation(s):
--- \P~48_combout\ = ( \Add14~29_sumout\ & ( ((!\inputB[6]~input_o\ & (\inputB[7]~input_o\)) # (\inputB[6]~input_o\ & (!\inputB[7]~input_o\ & \Add13~29_sumout\))) # (\P~46_combout\) ) ) # ( !\Add14~29_sumout\ & ( ((\inputB[6]~input_o\ & (!\inputB[7]~input_o\ 
--- & \Add13~29_sumout\))) # (\P~46_combout\) ) )
-
--- pragma translate_off
-GENERIC MAP (
-	extended_lut => "off",
-	lut_mask => "0000111101001111001011110110111100001111010011110010111101101111",
-	shared_arith => "off")
--- pragma translate_on
-PORT MAP (
-	dataa => \ALT_INV_inputB[6]~input_o\,
-	datab => \ALT_INV_inputB[7]~input_o\,
-	datac => \ALT_INV_P~46_combout\,
-	datad => \ALT_INV_Add13~29_sumout\,
-	datae => \ALT_INV_Add14~29_sumout\,
-	combout => \P~48_combout\);
+	dataa => \P9|ALT_INV_Mux15~73_combout\,
+	datab => \P9|ALT_INV_Mux15~74_combout\,
+	datac => \P9|ALT_INV_Mux15~75_combout\,
+	datad => \P9|ALT_INV_Mux15~72_combout\,
+	datae => \ALT_INV_opcode[1]~input_o\,
+	dataf => \ALT_INV_opcode[2]~input_o\,
+	combout => \P9|Mux0~0_combout\);
 
 ww_Saida(0) <= \Saida[0]~output_o\;
 
